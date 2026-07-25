@@ -15,7 +15,7 @@ async function textOf(download: Download): Promise<string> {
 }
 
 async function openExportTab(page: import("@playwright/test").Page) {
-  await page.goto("/app?demo=1");
+  await page.goto("app?demo=1");
   await page.getByRole("tab", { name: "Export" }).click();
 }
 
@@ -70,7 +70,7 @@ test("downloads the calendar as an .ics that starts on the chosen Monday", async
 
 test("copies one asset body to the clipboard", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.goto("/app?demo=1");
+  await page.goto("app?demo=1");
   await page.getByRole("tab", { name: "Copy" }).click();
 
   const first = page.getByRole("button", { name: "Copy", exact: true }).first();
@@ -84,7 +84,7 @@ test("copies one asset body to the clipboard", async ({ page, context }) => {
 test("keyboard alone walks the intake and focus follows to the next step", async ({
   page,
 }) => {
-  await page.goto("/app");
+  await page.goto("app");
 
   await page.locator("#api-key").fill(KEY);
   await page.getByRole("button", { name: "Continue" }).click();

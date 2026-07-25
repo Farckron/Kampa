@@ -3,8 +3,8 @@ import { expect, test } from "@playwright/test";
 // Tier-1 guards from CLAUDE.md: landing pages ship zero client JS and make
 // zero third-party requests. These must fail loudly, not drift.
 
-// BASE is "/" today; if astro.config.mjs gets a sub-path base, prefix these.
-const PAGES = ["/", "/faq", "/samples/riga-coffee-shop"];
+// Relative to baseURL, which carries the site base path.
+const PAGES = [".", "faq", "samples/riga-coffee-shop"];
 
 test("landing pages ship no executable scripts", async ({ request }) => {
   for (const path of PAGES) {

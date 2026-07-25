@@ -180,7 +180,7 @@ const stageSection = (page: Page, stage: string) =>
 test("demo mode renders the finished demo plan", async ({ page, baseURL }) => {
   const stray = watchOffOrigin(page, new URL(baseURL!).origin);
 
-  await page.goto("/app?demo=1", { waitUntil: "networkidle" });
+  await page.goto("app?demo=1", { waitUntil: "networkidle" });
 
   await expect(page.getByRole("tab", { name: "Strategy" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "Calendar" })).toBeVisible();
@@ -204,7 +204,7 @@ test("key → intake → real generation against an intercepted api → result",
   // Slow enough that the streamed preview is on screen between copy batches.
   const seen = await interceptApi(page, 900);
 
-  await page.goto("/app");
+  await page.goto("app");
   await fillIntake(page, "400");
 
   await stageSection(page, "strategy")
@@ -336,7 +336,7 @@ test("a 401 shows the friendly banner and leaves the stage pending", async ({
     }),
   );
 
-  await page.goto("/app");
+  await page.goto("app");
   await fillIntake(page, "400");
 
   await stageSection(page, "strategy")
@@ -363,7 +363,7 @@ test("a 401 shows the friendly banner and leaves the stage pending", async ({
 });
 
 test("clear key returns to the gate", async ({ page }) => {
-  await page.goto("/app");
+  await page.goto("app");
 
   await page.locator("#api-key").fill(KEY);
   await page.getByRole("button", { name: "Continue" }).click();

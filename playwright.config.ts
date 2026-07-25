@@ -5,10 +5,11 @@ import { defineConfig } from "@playwright/test";
 // client scripts that rightly fail the tier-1 zero-JS guard.
 export default defineConfig({
   testDir: "tests/e2e",
-  use: { baseURL: "http://localhost:4322" },
+  // BASE duplicated from astro.config.mjs — update together.
+  use: { baseURL: "http://localhost:4322/Kampa/" },
   webServer: {
     command: "npm run build && npm run preview -- --port 4322",
-    url: "http://localhost:4322",
+    url: "http://localhost:4322/Kampa/",
     reuseExistingServer: false,
   },
 });
