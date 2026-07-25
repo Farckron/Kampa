@@ -372,5 +372,7 @@ test("clear key returns to the gate", async ({ page }) => {
   await page.getByRole("button", { name: "Clear key" }).click();
 
   await expect(page.locator("#api-key")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Clear key" })).toHaveCount(0);
+  // Still on screen so the key does not look like it silently vanished, but
+  // there is nothing left to clear.
+  await expect(page.getByRole("button", { name: "Clear key" })).toBeDisabled();
 });

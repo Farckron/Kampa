@@ -24,7 +24,7 @@ function Header() {
   const model = MODELS.find((m) => m.id === state.model);
 
   return (
-    <header className="border-b border-neutral-200">
+    <header className="border-b border-neutral-200 print:hidden">
       <div className="mx-auto flex h-16 max-w-3xl items-center justify-between gap-4 px-6">
         <a
           href={base}
@@ -34,10 +34,15 @@ function Header() {
         </a>
         <div className="flex items-center gap-3">
           {model && <Badge variant="outline">{model.label}</Badge>}
-          {state.keyPresent && (
+          {/* Present in every key-mode phase so it never looks like the key
+              silently vanished; disabled rather than hidden when there is
+              nothing to clear. */}
+          {!state.demo && (
             <Button
               variant="outline"
               size="sm"
+              disabled={!state.keyPresent}
+              title="Clear the stored API key from this browser"
               onClick={() => {
                 storage.clearKey();
                 dispatch({ type: "KEY_CLEARED" });
@@ -149,6 +154,9 @@ function Shell() {
     <>
       <Header />
       <main className="mx-auto w-full max-w-3xl px-6 py-10">
+        {/* The design has no visible page title, but the document still needs
+            one h1 above the h2s each phase renders. */}
+        <h1 className="sr-only">Kampa campaign wizard</h1>
         {state.phase === "gate" && <Gate />}
         {state.phase === "intake" && <Intake />}
         {state.phase === "generation" && (
