@@ -8,8 +8,8 @@ import tailwindcss from "@tailwindcss/vite";
 // Before first real deploy set: SITE = "https://<user>.github.io", BASE = "/<repo>/".
 // BASE must keep its trailing slash: import.meta.env.BASE_URL is used as `base + 'app'`.
 // When a custom domain arrives: SITE = "https://<domain>", BASE = "/".
-const SITE = "https://example.invalid";
-const BASE = "/";
+const SITE = "https://farckron.github.io";
+const BASE = "/Kampa/";
 
 export default defineConfig({
   site: SITE,

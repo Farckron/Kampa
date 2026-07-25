@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Host is the SITE placeholder from astro.config.mjs — update both together.
-Sitemap: https://example.invalid/sitemap-index.xml
+Sitemap: https://farckron.github.io/Kampa/sitemap-index.xml
