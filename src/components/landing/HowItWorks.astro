@@ -1,0 +1,49 @@
+---
+const steps = [
+  {
+    title: "Tell Kampa about your business",
+    body: "Eight quick questions: what you sell, who buys it, your budget, your hours — and a few samples of your own writing so the copy sounds like you.",
+  },
+  {
+    title: "Get your campaign",
+    body: "A complete 90-day plan: 2-3 channels chosen for your constraints (and why the rest were rejected), a budget split, a weekly calendar, and ready-to-paste copy.",
+    caption:
+      "You watch every cent: a full campaign costs about €1 in Claude API usage.",
+  },
+  {
+    title: "Export and run it",
+    body: "Markdown, PDF, or straight into your calendar (.ics). The plan is yours, on your machine. Come back any time to adjust and regenerate.",
+  },
+];
+---
+
+<section id="how-it-works" class="scroll-mt-16 px-6 py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl">
+    <h2
+      class="max-w-2xl text-4xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-5xl"
+    >
+      How it works
+    </h2>
+
+    <ol class="mt-14 grid gap-6 lg:grid-cols-3">
+      {
+        steps.map((step, i) => (
+          <li class="rounded-xl border border-neutral-200 bg-white p-8">
+            <span class="text-primary block text-5xl font-extrabold tracking-tight tabular-nums">
+              {i + 1}
+            </span>
+            <h3 class="mt-6 text-lg font-semibold text-neutral-950">
+              {step.title}
+            </h3>
+            <p class="mt-3 text-neutral-600">{step.body}</p>
+            {step.caption && (
+              <p class="mt-6 border-t border-neutral-200 pt-4 text-sm text-neutral-500">
+                {step.caption}
+              </p>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

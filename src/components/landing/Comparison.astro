@@ -1,0 +1,117 @@
+---
+const columns = [
+  "Kampa",
+  "ChatGPT free",
+  "Jasper",
+  "HubSpot Campaign Assistant",
+];
+
+const rows = [
+  {
+    label: "Complete 90-day campaign package",
+    cells: [
+      "yes",
+      "blank prompt, you assemble",
+      "assets only, no strategy",
+      "landing page + email + ad copy only",
+    ],
+  },
+  {
+    label: "Plans within your budget & hours",
+    cells: ["yes", "if you know to ask", "no", "no"],
+  },
+  {
+    label: "Cost",
+    cells: [
+      "~€1/campaign (your API key)",
+      "free but unstructured",
+      "€59-69/mo",
+      "free, but funnels to €20-890/mo",
+    ],
+  },
+  {
+    label: "Signup required",
+    cells: ["none", "account", "account + card", "HubSpot account"],
+  },
+  {
+    label: "Your data stored on their servers",
+    cells: ["no — browser only", "yes", "yes", "yes"],
+  },
+  {
+    label: "Export you own (md/PDF/ics)",
+    cells: ["yes", "copy-paste", "limited", "limited"],
+  },
+];
+---
+
+<section class="px-6 py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl">
+    <h2
+      class="max-w-3xl text-4xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-5xl"
+    >
+      Why not just ChatGPT?
+    </h2>
+    <p class="mt-5 max-w-prose text-lg text-neutral-600">
+      Fair question. Here's the honest answer.
+    </p>
+
+    <div
+      class="mt-12 overflow-x-auto rounded-xl border border-neutral-200 bg-white"
+    >
+      <table class="w-full min-w-3xl border-collapse text-left text-sm">
+        <thead>
+          <tr class="border-b border-neutral-200">
+            <th scope="col" class="w-56 px-5 py-4">
+              <span class="sr-only">Capability</span>
+            </th>
+            {
+              columns.map((name, i) => (
+                <th
+                  scope="col"
+                  class:list={[
+                    "px-5 py-4 font-semibold",
+                    i === 0 ? "text-primary bg-primary/5" : "text-neutral-500",
+                  ]}
+                >
+                  {name}
+                </th>
+              ))
+            }
+          </tr>
+        </thead>
+        <tbody>
+          {
+            rows.map((row) => (
+              <tr class="border-b border-neutral-200 last:border-0">
+                <th
+                  scope="row"
+                  class="px-5 py-4 align-top font-semibold text-neutral-950"
+                >
+                  {row.label}
+                </th>
+                {row.cells.map((cell, i) => (
+                  <td
+                    class:list={[
+                      "px-5 py-4 align-top",
+                      i === 0
+                        ? "bg-primary/5 font-medium text-neutral-950"
+                        : "text-neutral-600",
+                    ]}
+                  >
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-10 max-w-prose text-base text-neutral-600">
+      You could build this yourself in ChatGPT with the right 15 prompts. Kampa
+      is those prompts, in the right order, with your constraints enforced and
+      the output packaged. That's the whole product — and it's why it's free.
+    </p>
+  </div>
+</section>

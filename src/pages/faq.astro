@@ -1,0 +1,31 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/landing/Nav.astro";
+import Faq from "../components/landing/Faq.astro";
+import Footer from "../components/landing/Footer.astro";
+---
+
+<Base
+  title="FAQ — Kampa"
+  description="How Kampa works, what a Claude API key costs, where your key is stored, and what you get out of a 90-day campaign plan."
+>
+  <Nav />
+  <main>
+    <div class="mx-auto max-w-6xl px-6 pt-16">
+      <h1
+        class="max-w-3xl text-4xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-5xl"
+      >
+        Questions, answered
+      </h1>
+      <p class="mt-5 max-w-prose text-lg text-neutral-600">
+        What Kampa costs, what a Claude API key is, where your key lives, and
+        what you walk away with.
+      </p>
+    </div>
+    {
+      /* Canonical FAQ URL: this is the one page that carries the FAQPage JSON-LD. */
+    }
+    <Faq heading={false} schema />
+  </main>
+  <Footer />
+</Base>

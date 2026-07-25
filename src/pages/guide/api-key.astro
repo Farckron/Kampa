@@ -1,0 +1,288 @@
+---
+import Base from "../../layouts/Base.astro";
+import Nav from "../../components/landing/Nav.astro";
+import Footer from "../../components/landing/Footer.astro";
+
+const base = import.meta.env.BASE_URL;
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "Get a Claude API key in 90 seconds",
+  description:
+    "Create a spend-capped Anthropic API key and paste it into Kampa. Five steps, about 90 seconds.",
+  totalTime: "PT2M",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Create an account",
+      text: "Go to console.anthropic.com and sign up with your email. This is Anthropic's own console — the company that makes Claude.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Add billing",
+      text: "Anthropic requires a payment method before the API works. $5 of credit covers several campaigns.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Create an API key",
+      text: "Go to Settings → API keys → Create key. Name it kampa and copy it — the key is shown once.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Set a spend limit",
+      text: "Go to Settings → Limits and cap your monthly spend, for example $10. The key can never cost more than you chose.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 5,
+      name: "Paste it into Kampa",
+      text: "Open the Kampa app and paste the key. It stays in your browser and you can remove it with the Clear key button any time.",
+    },
+  ],
+};
+---
+
+<Base
+  title="Get a Claude API key in 90 seconds — Kampa"
+  description="Step-by-step: create an Anthropic account, add billing, create an API key, cap your monthly spend, and paste the key into Kampa. The key never leaves your browser."
+>
+  <Nav />
+
+  <main>
+    <section class="px-6 pt-16 pb-10 sm:pt-24">
+      <div class="mx-auto max-w-6xl">
+        <p class="text-primary text-sm font-semibold">Guide</p>
+        <h1
+          class="mt-3 max-w-3xl text-4xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-5xl"
+        >
+          Get a Claude API key in 90 seconds
+        </h1>
+        <div class="mt-8 max-w-prose space-y-5 text-lg text-neutral-600">
+          <p>
+            Kampa is free software. There is no subscription and no account,
+            because there is no server — the AI runs on your own Anthropic
+            account, billed directly to you. A full 90-day campaign costs about
+            €1.
+          </p>
+          <p>
+            That means you need one thing before you start: an API key. Here is
+            how to get one, with a spend cap so it can never surprise you.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 pb-20">
+      <div class="mx-auto grid max-w-6xl gap-6 lg:grid-cols-2">
+        <!-- Step 1 -->
+        <article class="rounded-xl border border-neutral-200 bg-white p-8">
+          <p class="text-sm font-semibold text-neutral-400">Step 1</p>
+          <h2 class="mt-2 text-xl font-bold tracking-tight text-neutral-950">
+            Create an account
+          </h2>
+          <p class="mt-3 text-neutral-600">
+            Sign up at
+            <a
+              href="https://console.anthropic.com"
+              target="_blank"
+              rel="noopener nofollow"
+              class="text-primary font-medium underline underline-offset-4"
+              >console.anthropic.com</a
+            >. That is Anthropic's own console — the company behind Claude.
+            Email and a password is all it takes.
+          </p>
+
+          <div
+            aria-hidden="true"
+            class="mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4"
+          >
+            <div
+              class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-3 py-2 text-xs text-neutral-500"
+            >
+              <span class="size-1.5 shrink-0 rounded-full bg-neutral-300"
+              ></span>
+              console.anthropic.com
+            </div>
+          </div>
+        </article>
+
+        <!-- Step 2 -->
+        <article class="rounded-xl border border-neutral-200 bg-white p-8">
+          <p class="text-sm font-semibold text-neutral-400">Step 2</p>
+          <h2 class="mt-2 text-xl font-bold tracking-tight text-neutral-950">
+            Add billing — minimum credit
+          </h2>
+          <p class="mt-3 text-neutral-600">
+            Anthropic requires a payment method before the API responds. Add the
+            smallest amount: $5 of credit covers several campaigns. You are
+            buying credit, not a subscription.
+          </p>
+
+          <div
+            aria-hidden="true"
+            class="mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4"
+          >
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-neutral-500">Credit balance</span>
+              <span class="font-semibold text-neutral-950">$5.00</span>
+            </div>
+            <div class="mt-3 h-1.5 rounded-full bg-neutral-200">
+              <div class="bg-primary h-1.5 w-1/5 rounded-full"></div>
+            </div>
+            <p class="mt-3 text-xs text-neutral-500">
+              ≈ 5 campaigns at ~€1 each
+            </p>
+          </div>
+        </article>
+
+        <!-- Step 3 -->
+        <article class="rounded-xl border border-neutral-200 bg-white p-8">
+          <p class="text-sm font-semibold text-neutral-400">Step 3</p>
+          <h2 class="mt-2 text-xl font-bold tracking-tight text-neutral-950">
+            Create an API key
+          </h2>
+          <p class="mt-3 text-neutral-600">
+            In the console go to <span class="font-medium text-neutral-950"
+              >Settings → API keys → Create key</span
+            >. Name it <span class="font-medium text-neutral-950">kampa</span> so
+            you can tell later what it is for. Copy it right away — the key is shown
+            once.
+          </p>
+
+          <div
+            aria-hidden="true"
+            class="mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4"
+          >
+            <p class="text-xs font-medium text-neutral-500">Key name</p>
+            <div
+              class="mt-2 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-950"
+            >
+              kampa
+            </div>
+            <div
+              class="bg-primary text-primary-foreground mt-3 inline-flex rounded-md px-3 py-1.5 text-xs font-semibold"
+            >
+              Create key
+            </div>
+          </div>
+        </article>
+
+        <!-- Step 4 — emphasised -->
+        <article class="border-primary rounded-xl border bg-white p-8">
+          <p class="text-primary text-sm font-semibold">Step 4 — do not skip</p>
+          <h2 class="mt-2 text-xl font-bold tracking-tight text-neutral-950">
+            Set a spend limit
+          </h2>
+          <p class="mt-3 text-neutral-600">
+            Go to <span class="font-medium text-neutral-950"
+              >Settings → Limits</span
+            > and cap your monthly spend — $10 is plenty. The key can never cost more
+            than you chose. A capped key is the safe way to use any bring-your-own-key
+            tool, Kampa included.
+          </p>
+
+          <div
+            aria-hidden="true"
+            class="border-primary/30 mt-6 rounded-lg border bg-neutral-50 p-4"
+          >
+            <p class="text-xs font-medium text-neutral-500">
+              Monthly spend limit
+            </p>
+            <div
+              class="border-primary/40 mt-2 flex items-center gap-2 rounded-md border bg-white px-3 py-2 text-sm text-neutral-950"
+            >
+              <span class="text-neutral-400">$</span>10.00
+            </div>
+            <p class="mt-3 text-xs text-neutral-500">
+              Hard ceiling. Requests stop when it is reached.
+            </p>
+          </div>
+        </article>
+
+        <!-- Step 5 -->
+        <article
+          class="rounded-xl border border-neutral-200 bg-white p-8 lg:col-span-2"
+        >
+          <p class="text-sm font-semibold text-neutral-400">Step 5</p>
+          <h2 class="mt-2 text-xl font-bold tracking-tight text-neutral-950">
+            Paste it into Kampa
+          </h2>
+          <div class="mt-3 grid gap-6 lg:grid-cols-2 lg:items-center">
+            <p class="max-w-prose text-neutral-600">
+              Open the app and paste the key into the field. It is stored in
+              your browser and sent straight to Anthropic — never to us. Use the
+              <span class="font-medium text-neutral-950">Clear key</span> button any
+              time to remove it.
+            </p>
+
+            <div
+              aria-hidden="true"
+              class="rounded-lg border border-neutral-200 bg-neutral-50 p-4"
+            >
+              <p class="text-xs font-medium text-neutral-500">
+                Anthropic API key
+              </p>
+              <div
+                class="mt-2 truncate rounded-md border border-neutral-200 bg-white px-3 py-2 font-mono text-sm text-neutral-500"
+              >
+                sk-ant-••••••••••••••••••••
+              </div>
+              <div class="mt-3 flex flex-wrap items-center gap-2">
+                <span
+                  class="bg-primary text-primary-foreground rounded-md px-3 py-1.5 text-xs font-semibold"
+                  >Save key</span
+                >
+                <span
+                  class="rounded-md border border-neutral-200 px-3 py-1.5 text-xs font-semibold text-neutral-700"
+                  >Clear key</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <a
+            href={base + "app"}
+            class="bg-primary text-primary-foreground mt-8 inline-flex rounded-lg px-6 py-3 text-base font-semibold hover:opacity-90"
+          >
+            Open the app →
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="px-6 pb-24">
+      <div class="mx-auto max-w-6xl">
+        <div class="max-w-prose border-t border-neutral-200 pt-8">
+          <h2 class="text-lg font-bold tracking-tight text-neutral-950">
+            Changed your mind?
+          </h2>
+          <p class="mt-3 text-neutral-600">
+            You can rotate or revoke the key any time in the Anthropic console,
+            and the old one stops working immediately. Kampa never sees it —
+            there is no server to send it to.
+          </p>
+          <p class="mt-6 text-sm text-neutral-500">
+            Still unsure? The <a
+              href={base + "faq"}
+              class="text-primary font-medium underline underline-offset-4"
+              >FAQ</a
+            > covers cost, privacy and what happens to your answers.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(howToSchema)}
+  />
+</Base>
