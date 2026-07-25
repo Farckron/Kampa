@@ -5,6 +5,6 @@ import Base from "../layouts/Base.astro";
   <main class="mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center gap-4 text-center">
     <h1 class="text-6xl font-bold">404</h1>
     <p>That page doesn't exist.</p>
-    <a href="/" class="underline">Back to Kampa</a>
+    <a href={import.meta.env.BASE_URL} class="underline">Back to Kampa</a>
   </main>
 </Base>
