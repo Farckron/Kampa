@@ -1,0 +1,2 @@
+# Prose docs (spec, plans, stage notes) are hand-formatted; Prettier only owns code.
+*.md
