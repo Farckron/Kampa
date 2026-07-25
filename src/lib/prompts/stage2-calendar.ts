@@ -31,6 +31,6 @@ Return JSON only.`;
     system: SYSTEM_PROMPT,
     blocks: [intakeBlock(intake), strategyBlock(strategy), { text: task }],
     schema: CALENDAR_SCHEMA,
-    maxTokens: 4000,
+    maxTokens: 9000,
   };
 }

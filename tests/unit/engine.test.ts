@@ -142,7 +142,7 @@ describe("runStageReal", () => {
 
     const opts = stream.mock.calls[0]![0];
     expect(opts.apiKey).toBe(KEY);
-    expect(opts.maxTokens).toBe(3000);
+    expect(opts.maxTokens).toBe(6000);
     expect(opts.cacheSystem).toBe(true);
     expect(opts).not.toHaveProperty("temperature");
   });

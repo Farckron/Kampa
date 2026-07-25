@@ -78,7 +78,7 @@ async function generate<T>(
 
   for (let attempt = 0; ; attempt++) {
     let acc = preview;
-    const { text, usage } = await call({
+    const { text, usage, stopReason } = await call({
       apiKey,
       model,
       system: prompt.system,
@@ -104,6 +104,11 @@ async function generate<T>(
       costEur: usageToEur(model, usage),
     });
 
+    if (stopReason === "max_tokens")
+      throw new ApiError(
+        "invalid",
+        "The response ran out of room and was cut off mid-answer. Regenerate — if it happens again on Haiku, switch to a bigger model.",
+      );
     try {
       return { value: validate(JSON.parse(stripFence(text))), preview: acc };
     } catch (e) {

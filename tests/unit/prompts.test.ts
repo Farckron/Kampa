@@ -173,7 +173,7 @@ describe("buildStrategyPrompt", () => {
 
   it("returns the strategy schema and its token budget", () => {
     expect(built.schema).toBe(STRATEGY_SCHEMA);
-    expect(built.maxTokens).toBe(3000);
+    expect(built.maxTokens).toBe(6000);
     expect(built.system).toBe(SYSTEM_PROMPT);
   });
 });
@@ -189,7 +189,7 @@ describe("buildCalendarPrompt", () => {
 
   it("returns the calendar schema and its token budget", () => {
     expect(built.schema).toBe(CALENDAR_SCHEMA);
-    expect(built.maxTokens).toBe(4000);
+    expect(built.maxTokens).toBe(9000);
   });
 });
 
@@ -202,7 +202,7 @@ describe("buildCopyPrompt", () => {
     expect(userText(built)).not.toContain("Week 9:");
     expect(userText(built)).toContain("for these 4 items");
     expect(built.schema).toBe(COPY_SCHEMA);
-    expect(built.maxTokens).toBe(5000);
+    expect(built.maxTokens).toBe(9000);
   });
 
   it("passes the voice samples through", () => {

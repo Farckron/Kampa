@@ -68,6 +68,6 @@ Everything must fit ${intake.hours === null ? "the stated" : intake.hours} hours
     system: SYSTEM_PROMPT,
     blocks: [intakeBlock(intake), { text: task }],
     schema: STRATEGY_SCHEMA,
-    maxTokens: 3000,
+    maxTokens: 6000,
   };
 }
