@@ -170,6 +170,10 @@ async function fillIntake(page: Page, budget: string) {
   await page.getByRole("button", { name: "Create my campaign" }).click();
 }
 
+/** The result screen keeps a second, display:none copy of the campaign for
+ *  the print stylesheet, so on-screen assertions scope to the open tab panel. */
+const shown = (page: Page) => page.getByRole("tabpanel");
+
 const stageSection = (page: Page, stage: string) =>
   page.locator(`section[aria-labelledby="stage-${stage}-title"]`);
 
@@ -182,10 +186,12 @@ test("demo mode renders the finished demo plan", async ({ page, baseURL }) => {
   await expect(page.getByRole("tab", { name: "Calendar" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "Copy" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "Export" })).toBeVisible();
-  await expect(page.getByText("the 90-second coffee stop")).toBeVisible();
+  await expect(
+    shown(page).getByText("the 90-second coffee stop"),
+  ).toBeVisible();
 
   await page.getByRole("tab", { name: "Calendar" }).click();
-  await expect(page.getByRole("table")).toBeVisible();
+  await expect(shown(page).getByRole("table")).toBeVisible();
 
   expect(stray).toEqual([]);
 });
@@ -262,7 +268,9 @@ test("key → intake → real generation against an intercepted api → result",
   await expect(page.getByText("€0.05")).toBeVisible();
 
   await page.getByRole("button", { name: "View my campaign" }).click();
-  await expect(page.getByText("the 90-second coffee stop")).toBeVisible();
+  await expect(
+    shown(page).getByText("the 90-second coffee stop"),
+  ).toBeVisible();
 
   // --- what actually went over the wire ---
   expect(seen).toHaveLength(5);
@@ -303,7 +311,7 @@ test("key → intake → real generation against an intercepted api → result",
     );
   }
   expect(seen.map((s) => s.body.max_tokens)).toEqual([
-    3000, 4000, 5000, 5000, 5000,
+    6000, 9000, 9000, 9000, 9000,
   ]);
   expect(
     seen.slice(2).map((s) => /WEEKS ([\d, ]+)\n/.exec(sentText(s.body))?.[1]),
