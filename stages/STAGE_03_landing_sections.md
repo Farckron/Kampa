@@ -40,8 +40,9 @@ Done when: entire landing + all static pages deployed, Lighthouse holds ≥95.
   `/faq` and `/samples/riga-coffee-shop` each scored
   **100 performance / 100 accessibility / 100 best-practices / 100 SEO**.
   Budget in SPEC §5 (≥95) holds.
-- Deploy: still blocked on the user's repo, same as the stage-01 deploy-workflow
-  entry. The workflow is committed and the build is green, but nothing is live,
-  so "deployed" is unverified and the Lighthouse numbers above are from the
-  local preview build, not a production URL. Also pending the repo: the real
-  GitHub URL, a one-line swap in `src/lib/site.ts`.
+- Deploy: resolved in stage 07. The site is live at
+  https://farckron.github.io/Kampa/ and the 2026-07-25 audit of the live URL
+  reproduced **100 / 100 / 100 / 100**, so the numbers above are no longer
+  preview-only. `src/lib/site.ts` carries the real GitHub URL.
+- Cross-browser: chromium tested (e2e suite); firefox and safari/iOS manual
+  passes still pending, tracked in `docs/LAUNCH.md` pre-flight.
