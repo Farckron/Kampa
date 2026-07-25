@@ -31,3 +31,20 @@
 - [/privacy](/privacy): How your API key and answers are handled — no servers,
   no accounts, nothing stored off your device.
 - [/terms](/terms): Terms of use for the software.
+
+## Blog
+
+- [/blog](/blog): Index of all posts. RSS feed at [/rss.xml](/rss.xml).
+- [/blog/one-euro-ai-campaign](/blog/one-euro-ai-campaign): Full token math for
+  a real Kampa run that cost under €0.50, broken down by model call.
+- [/blog/marketing-plan-500-budget](/blog/marketing-plan-500-budget): A
+  concrete channel and spend split for a €500/month small business budget,
+  including which channels to skip.
+- [/blog/free-jasper-alternative](/blog/free-jasper-alternative): Why Kampa is
+  a free alternative to Jasper (about €59 to €69 per seat monthly), and what
+  bring-your-own-key means for your data.
+- [/blog/claude-api-key-spend-cap](/blog/claude-api-key-spend-cap): Five steps
+  to create a Claude API key and cap monthly spend in the Anthropic console.
+- [/blog/facebook-vs-instagram-latvia](/blog/facebook-vs-instagram-latvia):
+  Which of the two actually reaches customers in Latvia, and what a €35 boost
+  buys on each.
