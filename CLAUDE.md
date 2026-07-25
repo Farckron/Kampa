@@ -19,7 +19,7 @@ before writing any code. Market context in
 3. **Dependency fence.** Runtime dependencies allowed: astro, react,
    react-dom, tailwindcss, shadcn/ui components (and their direct radix
    deps), @astrojs/* official integrations. Dev-only: vitest, playwright,
-   typescript, prettier. No Anthropic SDK (plain fetch — auditability is the
+   typescript, prettier, jsdom (user-approved 2026-07-25), @astrojs/check. No Anthropic SDK (plain fetch — auditability is the
    product). Do not add any other dependency without asking.
 4. **Landing pages ship zero client JS.** Marketing pages are pure Astro.
    Interactivity beyond the /app island needs CSS or a written justification.
