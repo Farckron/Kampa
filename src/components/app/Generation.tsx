@@ -1,35 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { CheckIcon } from "@/components/ui/icons";
+import { costEur, USAGE } from "./mock";
 import type { GenStage } from "./types";
 import { useWizard } from "./WizardContext";
 
 type Status = "pending" | "running" | "done" | "stale";
 
-// ponytail: estimates are hardcoded copy, not a model. Real per-model math can
-// live here when Stage 05 has token counts worth multiplying.
-const STAGES: {
-  id: GenStage;
-  label: string;
-  desc: string;
-  estimate: string;
-}[] = [
+const STAGES: { id: GenStage; label: string; desc: string }[] = [
   {
     id: "strategy",
     label: "Strategy",
     desc: "Positioning, ideal customer, channel picks and budget split.",
-    estimate: "0.15",
   },
   {
     id: "calendar",
     label: "Calendar",
     desc: "Four weeks of posts and assets, with the time each one takes.",
-    estimate: "0.20",
   },
   {
     id: "copy",
     label: "Copy",
     desc: "Ready-to-post copy in your voice for every calendar item.",
-    estimate: "0.45",
   },
 ];
 
@@ -90,9 +81,28 @@ export function Generation({ runStage }: { runStage: (s: GenStage) => void }) {
 
   return (
     <div className="space-y-4">
-      {STAGES.map(({ id, label, desc, estimate }) => {
+      <div className="flex items-center justify-between gap-4">
+        <p className="text-sm text-neutral-600">
+          Generate each part in order. You can change your answers at any time.
+        </p>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={running !== null}
+          onClick={() => dispatch({ type: "START_INTAKE" })}
+        >
+          Edit answers
+        </Button>
+      </div>
+
+      {STAGES.map(({ id, label, desc }) => {
         const status = statusOf(id);
         const pending = status === "pending";
+        const estimate = costEur(
+          state.model,
+          USAGE[id].tokensIn,
+          USAGE[id].tokensOut,
+        ).toFixed(2);
         return (
           <section
             key={id}
@@ -121,10 +131,7 @@ export function Generation({ runStage }: { runStage: (s: GenStage) => void }) {
                 variant={pending ? "default" : "outline"}
                 size="sm"
                 disabled={running !== null || !unlocked(id)}
-                onClick={() => {
-                  if (!pending) dispatch({ type: "REGENERATE", stage: id });
-                  runStage(id);
-                }}
+                onClick={() => runStage(id)}
               >
                 {pending ? "Generate" : "Regenerate"}
               </Button>

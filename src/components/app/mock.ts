@@ -9,13 +9,14 @@ import type { Action, GenStage, ModelId } from "./types";
 
 const DELAY_MS = 800;
 
-// Token counts chosen so the sonnet cost lands on the per-stage estimates the
-// generation screen advertises (~€0.15 / €0.20 / €0.45).
-const USAGE: Record<GenStage, { tokensIn: number; tokensOut: number }> = {
-  strategy: { tokensIn: 12000, tokensOut: 7500 },
-  calendar: { tokensIn: 18000, tokensOut: 9700 },
-  copy: { tokensIn: 30000, tokensOut: 24000 },
-};
+// Per-stage token counts. The generation screen prices these against the
+// selected model to show its estimate, so estimate and meter share one source.
+export const USAGE: Record<GenStage, { tokensIn: number; tokensOut: number }> =
+  {
+    strategy: { tokensIn: 12000, tokensOut: 7500 },
+    calendar: { tokensIn: 18000, tokensOut: 9700 },
+    copy: { tokensIn: 30000, tokensOut: 24000 },
+  };
 
 export function costEur(
   model: ModelId,

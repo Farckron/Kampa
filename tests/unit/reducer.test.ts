@@ -23,8 +23,24 @@ describe("reducer", () => {
   it("KEY_SET / KEY_CLEARED", () => {
     const set = reducer(initialState, { type: "KEY_SET" });
     expect(set.keyPresent).toBe(true);
-    // clearing wipes everything back to the gate
-    expect(reducer(full, { type: "KEY_CLEARED" })).toEqual(initialState);
+
+    // nothing generated yet -> back to the gate
+    const bare = reducer(
+      { ...initialState, keyPresent: true, phase: "intake" },
+      { type: "KEY_CLEARED" },
+    );
+    expect(bare.keyPresent).toBe(false);
+    expect(bare.phase).toBe("gate");
+
+    // a finished campaign survives the key being cleared
+    const cleared = reducer(
+      { ...full, phase: "result", keyPresent: true, intakeStep: 5 },
+      { type: "KEY_CLEARED" },
+    );
+    expect(cleared.keyPresent).toBe(false);
+    expect(cleared.phase).toBe("result");
+    expect(cleared.campaign).toEqual(full.campaign);
+    expect(cleared.intakeStep).toBe(5);
   });
 
   it("SET_MODEL", () => {
@@ -147,7 +163,7 @@ describe("reducer", () => {
     expect(copyDone.campaign.copy).toBe(copy);
   });
 
-  it("REGENERATE nulls the stage and everything downstream", () => {
+  it("REGENERATE nulls only that stage and marks downstream stale", () => {
     const s = reducer(
       { ...full, phase: "result" },
       { type: "REGENERATE", stage: "calendar" },
@@ -155,15 +171,42 @@ describe("reducer", () => {
     expect(s.phase).toBe("generation");
     expect(s.campaign.strategy).toBe(strategy);
     expect(s.campaign.calendar).toBeNull();
-    expect(s.campaign.copy).toBeNull();
-    expect(s.stale).toEqual({ strategy: false, calendar: false, copy: false });
+    expect(s.campaign.copy).toBe(copy); // downstream data survives
+    expect(s.stale).toEqual({ strategy: false, calendar: false, copy: true });
 
     const all = reducer(full, { type: "REGENERATE", stage: "strategy" });
-    expect(all.campaign).toEqual({
-      strategy: null,
-      calendar: null,
-      copy: null,
+    expect(all.campaign.strategy).toBeNull();
+    expect(all.campaign.calendar).toBe(calendar);
+    expect(all.stale).toEqual({ strategy: false, calendar: true, copy: true });
+
+    // nothing downstream yet -> nothing to flag
+    const early = reducer(
+      { ...initialState, campaign: { strategy, calendar: null, copy: null } },
+      { type: "REGENERATE", stage: "strategy" },
+    );
+    expect(early.stale).toEqual({
+      strategy: false,
+      calendar: false,
+      copy: false,
     });
+  });
+
+  it("re-running a stale stage clears its own flag", () => {
+    const stale = reducer(full, { type: "REGENERATE", stage: "strategy" });
+    const regenerated = reducer(stale, {
+      type: "STAGE_DONE",
+      stage: "strategy",
+      data: strategy,
+    });
+    expect(regenerated.stale.calendar).toBe(true);
+
+    const calFresh = reducer(regenerated, {
+      type: "STAGE_DONE",
+      stage: "calendar",
+      data: calendar,
+    });
+    expect(calFresh.stale.calendar).toBe(false);
+    expect(calFresh.stale.copy).toBe(true);
   });
 
   it("ADD_USAGE accumulates", () => {

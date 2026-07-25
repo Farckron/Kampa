@@ -24,7 +24,12 @@ export function reducer(state: WizardState, action: Action): WizardState {
       return { ...state, keyPresent: true };
 
     case "KEY_CLEARED":
-      return initialState;
+      // Non-destructive: keep the campaign and the answers, only lose the key.
+      return {
+        ...state,
+        keyPresent: false,
+        phase: state.campaign.strategy === null ? "gate" : state.phase,
+      };
 
     case "SET_MODEL":
       return { ...state, model: action.model };
@@ -77,11 +82,11 @@ export function reducer(state: WizardState, action: Action): WizardState {
     }
 
     case "REGENERATE": {
-      const campaign = { ...state.campaign };
-      const stale = { ...state.stale };
-      for (const s of [action.stage, ...downstream[action.stage]]) {
-        campaign[s] = null;
-        stale[s] = false;
+      const campaign = { ...state.campaign, [action.stage]: null };
+      const stale = { ...state.stale, [action.stage]: false };
+      // Downstream keeps its data, but it no longer matches — flag it.
+      for (const s of downstream[action.stage]) {
+        stale[s] = state.campaign[s] !== null;
       }
       return { ...state, campaign, stale, phase: "generation" };
     }

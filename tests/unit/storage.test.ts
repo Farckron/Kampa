@@ -68,6 +68,21 @@ describe("storage", () => {
     expect(getDraft()).toEqual({ intake, step: 3 });
   });
 
+  it("saves the draft in the same tier as the key", () => {
+    setKey(FAKE, true);
+    setDraft({ intake: initialState.intake, step: 4 });
+    expect(localStorage.getItem("kampa.draft")).not.toBeNull();
+    expect(sessionStorage.getItem("kampa.draft")).toBeNull();
+    expect(getDraft()?.step).toBe(4);
+
+    // switching back to session-only leaves no stale remembered copy
+    setKey(FAKE, false);
+    setDraft({ intake: initialState.intake, step: 5 });
+    expect(sessionStorage.getItem("kampa.draft")).not.toBeNull();
+    expect(localStorage.getItem("kampa.draft")).toBeNull();
+    expect(getDraft()?.step).toBe(5);
+  });
+
   it("survives a corrupted draft", () => {
     sessionStorage.setItem("kampa.draft", "{not json");
     expect(getDraft()).toBeNull();

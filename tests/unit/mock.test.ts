@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { costEur } from "@/components/app/mock";
+import { costEur, USAGE } from "@/components/app/mock";
 
 describe("mock cost", () => {
   it("prices tokens off the model table", () => {
@@ -14,5 +14,13 @@ describe("mock cost", () => {
       costEur("claude-sonnet-5", 18000, 9700) +
       costEur("claude-sonnet-5", 30000, 24000);
     expect(total).toBeCloseTo(0.8, 1);
+  });
+
+  it("the per-stage estimate tracks the selected model", () => {
+    const { tokensIn, tokensOut } = USAGE.strategy;
+    const sonnet = costEur("claude-sonnet-5", tokensIn, tokensOut);
+    const opus = costEur("claude-opus-5", tokensIn, tokensOut);
+    expect(opus).toBeGreaterThan(sonnet);
+    expect(opus.toFixed(2)).not.toBe(sonnet.toFixed(2));
   });
 });

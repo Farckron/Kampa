@@ -58,12 +58,37 @@ test("key → intake → mocked generation → result", async ({ page, baseURL }
   await expect(page.locator("#intake-voiceSamples")).toBeVisible();
   await page.getByRole("button", { name: "Create my campaign" }).click();
 
-  for (const stage of ["strategy", "calendar", "copy"]) {
-    const section = page.locator(
-      `section[aria-labelledby="stage-${stage}-title"]`,
-    );
-    await section.getByRole("button", { name: "Generate" }).click();
-    await expect(section.getByText("Done ·")).toBeVisible();
+  const stageSection = (stage: string) =>
+    page.locator(`section[aria-labelledby="stage-${stage}-title"]`);
+
+  await stageSection("strategy")
+    .getByRole("button", { name: "Generate" })
+    .click();
+  await expect(stageSection("strategy").getByText("Done ·")).toBeVisible();
+
+  // answers stay editable after submitting, without losing generated stages
+  const backToBudget = async () => {
+    await page.getByRole("button", { name: "Edit answers" }).click();
+    for (let i = 0; i < 4; i++)
+      await page.getByRole("button", { name: "Back" }).click();
+  };
+  await backToBudget();
+  await expect(page.locator("#intake-budget")).toHaveValue("400");
+  await page.locator("#intake-budget").fill("500");
+  for (let i = 0; i < 4; i++)
+    await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "Create my campaign" }).click();
+  await expect(stageSection("strategy").getByText("Done ·")).toBeVisible();
+
+  await backToBudget();
+  await expect(page.locator("#intake-budget")).toHaveValue("500");
+  for (let i = 0; i < 4; i++)
+    await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "Create my campaign" }).click();
+
+  for (const stage of ["calendar", "copy"]) {
+    await stageSection(stage).getByRole("button", { name: "Generate" }).click();
+    await expect(stageSection(stage).getByText("Done ·")).toBeVisible();
   }
 
   await expect(page.getByText("€0.80")).toBeVisible();

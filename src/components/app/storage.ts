@@ -44,9 +44,13 @@ export function getDraft(): { intake: Intake; step: number } | null {
 }
 
 export function setDraft(d: { intake: Intake; step: number }): void {
-  const [session] = stores();
-  if (!session) return;
-  session.setItem(DRAFT, JSON.stringify(d));
+  const [session, local] = stores();
+  if (!session || !local) return;
+  // Same tier as the key: remembered key -> remembered draft.
+  const remembered = local.getItem(KEY) !== null;
+  const [target, other] = remembered ? [local, session] : [session, local];
+  other.removeItem(DRAFT);
+  target.setItem(DRAFT, JSON.stringify(d));
 }
 
 export function clearAll(): void {
