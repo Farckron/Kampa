@@ -1,0 +1,76 @@
+---
+const base = import.meta.env.BASE_URL;
+
+const pages = [
+  { label: "App", href: base + "app" },
+  { label: "Sample plans", href: base + "samples" },
+  { label: "FAQ", href: base + "faq" },
+  { label: "Blog", href: base + "blog" },
+];
+
+const legal = [
+  { label: "Privacy", href: base + "privacy" },
+  { label: "Terms", href: base + "terms" },
+];
+---
+
+<footer class="border-t border-neutral-200">
+  <div class="mx-auto max-w-6xl px-6 pt-20 pb-10">
+    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="lg:col-span-2">
+        <p class="text-2xl font-extrabold tracking-tight text-neutral-950">
+          kampa
+        </p>
+        <p class="mt-3 max-w-xs text-sm text-neutral-500">
+          Free AI campaign planner for small businesses.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-sm font-semibold text-neutral-950">Pages</h2>
+        <ul class="mt-4 space-y-3 text-sm text-neutral-500">
+          {
+            pages.map((link) => (
+              <li>
+                <a class="hover:text-primary" href={link.href}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-sm font-semibold text-neutral-950">Legal</h2>
+        <ul class="mt-4 space-y-3 text-sm text-neutral-500">
+          {
+            legal.map((link) => (
+              <li>
+                <a class="hover:text-primary" href={link.href}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            {/* TODO: replace with the real Kampa repo URL once published. */}
+            <a
+              class="hover:text-primary"
+              href="https://github.com"
+              rel="noopener">GitHub</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="mt-16 text-sm text-neutral-500">© 2026 Kampa.</p>
+  </div>
+
+  <div class="overflow-hidden" aria-hidden="true">
+    <p class="text-[18vw] leading-none font-extrabold text-neutral-100">
+      kampa
+    </p>
+  </div>
+</footer>
