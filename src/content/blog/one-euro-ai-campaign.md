@@ -1,6 +1,6 @@
 ---
 title: "What a €1 AI marketing campaign actually looks like"
-description: "A real Kampa run cost under €0.50 in API tokens: three model calls covering strategy, a 12-week calendar and every piece of copy. Here is the full math."
+description: "A real Kampa run cost under €0.50 in API tokens: one conversation covering strategy, a 12-week calendar and every piece of copy. Here is the full math."
 date: 2026-07-25
 keywords:
   - ai marketing campaign cost
@@ -14,13 +14,13 @@ keywords:
 
 One full campaign in Kampa cost under €0.50 in API tokens on the default model. That is the whole bill, paid directly to Anthropic, with no subscription on top. The €1 in the title is the ceiling, not the average, because a longer business description or a second run pushes it up a bit.
 
-Here is where the money goes. Kampa makes three model calls per campaign:
+Here is where the money goes. Kampa makes five short model calls per campaign, in three stages:
 
 1. Strategy: positioning, audience, channel mix, the reasoning behind them.
 2. A 12-week calendar: every week, every channel, every post slot.
 3. All the copy: the actual text for each of those slots.
 
-The default model bills roughly €3 per million input tokens and €15 per million output tokens. A campaign for a small local business sends something like 15,000 input tokens across the three calls and gets back around 18,000 output tokens, because most of the cost is writing, not reading. That is about €0.05 of input and €0.27 of output. Prompt caching does the rest of the work: calls two and three resend the same business context and strategy, and cached input reads bill at roughly a tenth of the normal rate, so the repeat context is close to free.
+The default model bills roughly €3 per million input tokens and €15 per million output tokens. A campaign for a small local business sends something like 15,000 fresh input tokens across the run and gets back around 18,000 output tokens, because most of the cost is writing, not reading. That is about €0.05 of input and €0.27 of output. Prompt caching does the rest of the work: later calls resend the same business context and strategy, and cached input reads bill at roughly a tenth of the normal rate, so the repeat context is close to free.
 
 Add it up and a typical run lands between €0.30 and €0.45. Anthropic publishes current per-token rates on its [pricing page](https://www.anthropic.com/pricing), so you can check the math against whatever the numbers are when you read this.
 
@@ -58,7 +58,7 @@ If you were hoping to spend €1 and have marketing happen, that is not what thi
 
 ## How do you make sure it stays under €1?
 
-Set a spend limit in your Anthropic console before your first run, so a mistake costs cents instead of euros. The console supports a hard monthly cap on the API key, and setting it to something small like €5 means no runaway loop or repeated retry can ever exceed that. Kampa itself makes exactly three calls per campaign and has no background jobs, but a cap protects you from your own experiments as much as from the tool.
+Set a spend limit in your Anthropic console before your first run, so a mistake costs cents instead of euros. The console supports a hard monthly cap on the API key, and setting it to something small like €5 means no runaway loop or repeated retry can ever exceed that. Kampa itself makes a handful of calls per campaign (five, currently) and has no background jobs, but a cap protects you from your own experiments as much as from the tool.
 
 The other habit that keeps costs down: read the strategy output before generating the calendar and copy. If the strategy is aimed at the wrong audience, fix the input and rerun the cheap first call rather than paying for a full plan you will throw away. More detail on models, limits and what happens to your data is in [the FAQ](/Kampa/faq).
 
