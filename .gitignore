@@ -1,0 +1,8 @@
+inspiration/
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+test-results/
+playwright-report/
