@@ -54,13 +54,14 @@ export const demoCampaign: Campaign = {
           "25 to 30% commission on a €3.20 drink kills the margin, and delivered coffee cannibalises exactly the walk-in habit we are building.",
       },
     ],
+    // 90-day split: must sum to budget90(demoIntake) = 400 × 3 = 1200.
     budgetSplit: [
-      { item: "Instagram boosted posts (4 × €35)", eur: 140 },
-      { item: "Coffee card programme", eur: 90 },
-      { item: "Monthly photo session", eur: 60 },
-      { item: "Morning tastings", eur: 50 },
-      { item: "Print (poster, office flyers)", eur: 40 },
-      { item: "Test budget, held back", eur: 20 },
+      { item: "Instagram boosted posts (12 × €35)", eur: 420 },
+      { item: "Coffee card programme", eur: 270 },
+      { item: "Monthly photo session", eur: 180 },
+      { item: "Morning tastings", eur: 150 },
+      { item: "Print (poster, office flyers)", eur: 120 },
+      { item: "Test budget, held back", eur: 60 },
     ],
     kpis: [
       {

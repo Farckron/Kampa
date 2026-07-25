@@ -1,11 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { demoCampaign } from "@/components/app/demo-campaign";
+import { demoCampaign, demoIntake } from "@/components/app/demo-campaign";
+import { budget90 } from "@/lib/prompts/stage1-strategy";
 
 describe("demoCampaign", () => {
   const { strategy, calendar, copy } = demoCampaign;
 
-  it("budget split sums to the sample's €400", () => {
-    expect(strategy!.budgetSplit.reduce((n, b) => n + b.eur, 0)).toBe(400);
+  it("budget split sums to the intake's 90-day pot", () => {
+    expect(strategy!.budgetSplit.reduce((n, b) => n + b.eur, 0)).toBe(
+      budget90(demoIntake),
+    );
   });
 
   it("no week exceeds the 4 h/week budget", () => {

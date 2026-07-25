@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { demoCampaign } from "@/components/app/demo-campaign";
+import { demoCampaign, demoIntake } from "@/components/app/demo-campaign";
 import type { CalendarItem, Intake } from "@/components/app/types";
 import { campaignToIcs, campaignToMarkdown, downloadFile } from "@/lib/exports";
+import { budget90 } from "@/lib/prompts/stage1-strategy";
 
 const campaign = {
   strategy: demoCampaign.strategy!,
@@ -51,6 +52,12 @@ describe("campaignToMarkdown", () => {
     expect(md).toContain(`| **Total** | **${total}** |`);
     for (const b of campaign.strategy.budgetSplit)
       expect(md).toContain(`| ${b.item} | ${b.eur} |`);
+  });
+
+  it("keeps the demo split in step with the demo intake's 90-day pot", () => {
+    expect(campaignToMarkdown(campaign, demoIntake, GENERATED)).toContain(
+      `| **Total** | **${budget90(demoIntake)}** |`,
+    );
   });
 
   it("has the calendar table with monthly grouping rows", () => {
