@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { ApiError, streamMessage } from "@/lib/anthropic";
+import { ApiError, apiSafeSchema, streamMessage } from "@/lib/anthropic";
 
 const KEY = "sk-ant-test-0000000000000000000000";
 
@@ -213,5 +213,94 @@ describe("streamMessage", () => {
       expect(`${e.message} ${e.userMessage} ${e.stack}`).not.toContain(KEY);
       expect(`${e.message} ${e.userMessage}`).not.toContain("sk-ant");
     }
+  });
+});
+
+describe("apiSafeSchema", () => {
+  it("strips unsupported validation keywords recursively, keeps the rest", () => {
+    const schema = {
+      type: "object",
+      additionalProperties: false,
+      required: ["items"],
+      properties: {
+        items: {
+          type: "array",
+          minItems: 12,
+          maxItems: 12,
+          items: {
+            type: "object",
+            properties: {
+              week: { type: "integer", minimum: 1, maximum: 12 },
+              title: { type: "string", minLength: 1 },
+            },
+            required: ["week", "title"],
+            additionalProperties: false,
+          },
+        },
+      },
+    };
+    const safe = apiSafeSchema(schema) as Record<string, unknown>;
+    const s = JSON.stringify(safe);
+    for (const k of [
+      "minItems",
+      "maxItems",
+      "minimum",
+      "maximum",
+      "minLength",
+    ]) {
+      expect(s).not.toContain(`"${k}"`);
+    }
+    expect(s).toContain('"additionalProperties":false');
+    expect(s).toContain('"required"');
+    expect(s).toContain('"week"');
+  });
+
+  it("is applied to the wire body", async () => {
+    fetchMock.mockResolvedValue(
+      new Response(
+        streamOf(
+          sse("message_start", {
+            type: "message_start",
+            message: { usage: { input_tokens: 1 } },
+          }) +
+            sse("message_delta", {
+              type: "message_delta",
+              usage: { output_tokens: 1 },
+              delta: { stop_reason: "end_turn" },
+            }) +
+            sse("message_stop", { type: "message_stop" }),
+          [],
+        ),
+        { status: 200 },
+      ),
+    );
+    await streamMessage({
+      apiKey: "sk-ant-test-000",
+      model: "claude-sonnet-5",
+      system: "s",
+      userBlocks: [{ text: "u" }],
+      maxTokens: 10,
+      schema: { type: "array", minItems: 3, items: { type: "string" } },
+    });
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body as string);
+    expect(JSON.stringify(body.output_config)).not.toContain("minItems");
+  });
+
+  it("surfaces the server error message on 400", async () => {
+    fetchMock.mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          type: "error",
+          error: {
+            type: "invalid_request_error",
+            message: "output_config.format.schema: minItems is not supported",
+          },
+        }),
+        { status: 400 },
+      ),
+    );
+    const e = await run().catch((x) => x);
+    expect(e.kind).toBe("invalid");
+    expect(e.userMessage).toContain("minItems is not supported");
   });
 });

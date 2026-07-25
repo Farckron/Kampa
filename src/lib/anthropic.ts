@@ -48,7 +48,36 @@ export interface StreamOptions {
   onText?: (chunk: string) => void;
 }
 
-function httpError(status: number, retryAfter: string | null): ApiError {
+// Structured outputs reject validation keywords the official SDKs silently
+// strip. We send raw JSON, so strip them ourselves before the wire; the
+// client-side validators keep enforcing the full schema after parsing.
+const UNSUPPORTED_SCHEMA_KEYS = new Set([
+  "minimum",
+  "maximum",
+  "multipleOf",
+  "minLength",
+  "maxLength",
+  "pattern",
+  "minItems",
+  "maxItems",
+]);
+export function apiSafeSchema(schema: unknown): unknown {
+  if (Array.isArray(schema)) return schema.map(apiSafeSchema);
+  if (schema !== null && typeof schema === "object") {
+    return Object.fromEntries(
+      Object.entries(schema as Record<string, unknown>)
+        .filter(([k]) => !UNSUPPORTED_SCHEMA_KEYS.has(k))
+        .map(([k, v]) => [k, apiSafeSchema(v)]),
+    );
+  }
+  return schema;
+}
+
+function httpError(
+  status: number,
+  retryAfter: string | null,
+  serverMessage?: string,
+): ApiError {
   if (status === 401 || status === 403)
     return new ApiError(
       "auth",
@@ -68,7 +97,12 @@ function httpError(status: number, retryAfter: string | null): ApiError {
       "overloaded",
       "Anthropic is overloaded right now. Try again in a minute.",
     );
-  return new ApiError("invalid", "The request was rejected. Try regenerating.");
+  return new ApiError(
+    "invalid",
+    serverMessage
+      ? `The request was rejected: ${serverMessage}`
+      : "The request was rejected. Try regenerating.",
+  );
 }
 
 // ponytail: dispatch on the JSON `type` field and ignore `event:` lines —
@@ -100,7 +134,7 @@ export async function streamMessage(
     ...(opts.schema
       ? {
           output_config: {
-            format: { type: "json_schema", schema: opts.schema },
+            format: { type: "json_schema", schema: apiSafeSchema(opts.schema) },
           },
         }
       : {}),
@@ -126,8 +160,23 @@ export async function streamMessage(
     );
   }
 
-  if (!res.ok || !res.body)
-    throw httpError(res.status, res.headers?.get("retry-after") ?? null);
+  if (!res.ok || !res.body) {
+    // Server error messages never contain the api key; surface them so a 400
+    // is diagnosable instead of a dead end.
+    let serverMessage: string | undefined;
+    try {
+      const j = await res.json();
+      if (typeof j?.error?.message === "string")
+        serverMessage = j.error.message.slice(0, 300);
+    } catch {
+      /* body not JSON — keep the generic message */
+    }
+    throw httpError(
+      res.status,
+      res.headers?.get("retry-after") ?? null,
+      serverMessage,
+    );
+  }
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
