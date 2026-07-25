@@ -29,12 +29,12 @@ trust asset.
 
 ## 2. Architecture (approved: option A)
 
-- **Astro 5** static site. All marketing pages are pure Astro components,
+- **Astro 7** static site. All marketing pages are pure Astro components,
   zero client JS.
 - **One React 19 island** on `/app` (`client:only="react"`) — the campaign
   wizard.
 - **Tailwind CSS v4 + shadcn/ui** (components pulled via shadcn MCP,
-  `.mcp.json` with `npx shadcn@latest mcp`).
+  `.mcp.json` running the lockfile-pinned `shadcn mcp`).
 - **State:** React `useReducer` + context in the island. No zustand, no
   router inside the island.
 - **API access:** plain `fetch` to `https://api.anthropic.com/v1/messages`

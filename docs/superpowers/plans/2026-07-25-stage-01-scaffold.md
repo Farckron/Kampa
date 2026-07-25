@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Empty-but-deployable Kampa site: Astro 5 + Tailwind v4 + React 19 + shadcn wired, test toolchains installed, GitHub Actions deploy to Pages green.
+**Goal:** Empty-but-deployable Kampa site: Astro 7 + Tailwind v4 + React 19 + shadcn wired, test toolchains installed, GitHub Actions deploy to Pages green.
 
 **Architecture:** Static Astro site; all interactivity later lives in one React island. This stage produces the skeleton only: base layout with CSP, config with parameterized site/base, CI pipeline.
 
-**Tech Stack:** Astro 5, Tailwind CSS v4 (`@tailwindcss/vite`), React 19 (`@astrojs/react`), shadcn/ui, vitest, Playwright, GitHub Actions (`withastro/action`).
+**Tech Stack:** Astro 7, Tailwind CSS v4 (`@tailwindcss/vite`), React 19 (`@astrojs/react`), shadcn/ui, vitest, Playwright, GitHub Actions (`withastro/action`).
 
 ## Global Constraints
 

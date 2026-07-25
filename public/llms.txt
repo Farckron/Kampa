@@ -1,0 +1,6 @@
+# Kampa — free BYOK AI campaign planner for small businesses
+# Full content added in Stage 07.
+
+> Kampa generates complete 90-day marketing campaigns for small businesses
+> in the browser, using the user's own Claude API key. No signup, no
+> servers; the only network call is to api.anthropic.com.
