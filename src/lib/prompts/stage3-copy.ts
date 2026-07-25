@@ -40,6 +40,6 @@ Return JSON only.`;
     system: SYSTEM_PROMPT,
     blocks: [intakeBlock(intake), strategyBlock(strategy), { text: task }],
     schema: COPY_SCHEMA,
-    maxTokens: 9000,
+    maxTokens: 24000,
   };
 }
