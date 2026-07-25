@@ -1,0 +1,109 @@
+---
+const base = import.meta.env.BASE_URL;
+
+// Single source of truth: rendered as the accordion and as FAQPage JSON-LD.
+const faqs = [
+  {
+    q: "Is it really free?",
+    a: "The software is free and open source — no account, no subscription, no upsell. The only cost is the AI itself: you bring your own Claude API key and pay Anthropic directly for what the campaign uses, which is usually around €1. That money never passes through us.",
+  },
+  {
+    q: "What's a Claude API key and how do I get one?",
+    a: "It's a token from Anthropic that lets Kampa talk to Claude on your behalf. You create an account in the Anthropic console, add a small amount of credit, and generate a key. It takes about five minutes, and that credit is the only money involved.",
+    link: {
+      href: base + "guide/api-key",
+      label: "Read the step-by-step guide to getting a key.",
+    },
+  },
+  {
+    q: "Is my API key safe?",
+    a: "Kampa runs entirely in your browser and has no server, so there is nowhere for us to send your key even if we wanted to. It's held in sessionStorage and cleared when you close the tab, unless you choose to remember it on this device, and the only address it is ever sent to is api.anthropic.com. Even so, do the sensible thing and create a dedicated key with a spend cap, so a mistake can't cost more than you decided. The code is open source if you'd rather check than take our word for it.",
+    link: {
+      href: base + "guide/api-key",
+      label: "The guide shows how to set a spend cap.",
+    },
+  },
+  {
+    q: "What exactly do I get?",
+    a: "A 90-day plan for your business: which channels to use, which ones we rejected and why, how to split your budget across them, and a week-by-week calendar of what to publish and when. Every task comes with copy you can paste straight into a post, an email or a listing. Export the whole thing as Markdown or PDF, and the calendar as an .ics file for Google or Apple Calendar.",
+  },
+  {
+    q: "Why not just use ChatGPT?",
+    a: "You can, and you'll get advice that sounds reasonable. What a blank chat box won't do is keep asking until it actually knows your budget, your hours and your city, then commit to a set of channels and tell you what it ruled out. Kampa runs a fixed interview and hands back a dated, structured, exportable plan instead of a conversation you have to reassemble yourself.",
+  },
+  {
+    q: "Does it work for my type of business?",
+    a: "It's built for small businesses selling to real customers: local services, shops, cafes and restaurants, online stores, freelancers and solo consultants. If your decisions are about a modest budget, limited hours and a handful of channels, it fits. It's a weaker fit for enterprise marketing, long B2B sales cycles, or anything that needs a media-buying team.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.link ? item.a + " " + item.link.label : item.a,
+    },
+  })),
+};
+---
+
+<section class="px-6 py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl">
+    <h2
+      class="text-4xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-5xl"
+    >
+      Questions, answered
+    </h2>
+
+    {
+      /* ponytail: native <details> — zero JS, keyboard and screen-reader ready */
+    }
+    <div class="mt-12 max-w-3xl border-t border-neutral-200">
+      {
+        faqs.map((item) => (
+          <details class="group border-b border-neutral-200">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-base font-medium text-neutral-950 [&::-webkit-details-marker]:hidden">
+              {item.q}
+              <svg
+                class="size-5 shrink-0 text-neutral-400 transition-transform duration-200 group-open:rotate-180"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </summary>
+
+            <div class="pb-6 text-neutral-600">
+              <p class="max-w-prose">{item.a}</p>
+              {item.link && (
+                <p class="mt-3">
+                  <a
+                    href={item.link.href}
+                    class="text-primary font-medium hover:underline"
+                  >
+                    {item.link.label}
+                  </a>
+                </p>
+              )}
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(faqSchema)}
+  />
+</section>
