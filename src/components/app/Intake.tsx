@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -72,10 +74,18 @@ function isValid(step: number, a: Answers): boolean {
 
 export function Intake() {
   const { state, dispatch } = useWizard();
-  const step = state.intakeStep;
+  // A restored draft can carry a step index that no longer exists.
+  const step = Math.min(Math.max(state.intakeStep, 0), QUESTIONS.length - 1);
   const q = QUESTIONS[step];
   const last = step === QUESTIONS.length - 1;
   const id = `intake-${q.field}`;
+  const headingRef = React.useRef<HTMLDivElement>(null);
+
+  // Keyboard and screen-reader users follow the wizard instead of being left
+  // at the old Next button.
+  React.useEffect(() => {
+    headingRef.current?.focus();
+  }, [step]);
 
   const setField = (
     field: keyof Answers,
@@ -118,7 +128,14 @@ export function Intake() {
 
       <Card>
         <CardHeader>
-          <CardTitle id={`${id}-label`}>
+          <CardTitle
+            id={`${id}-label`}
+            ref={headingRef}
+            tabIndex={-1}
+            role="heading"
+            aria-level={2}
+            className="outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+          >
             {step === 5 ? q.label : <Label htmlFor={id}>{q.label}</Label>}
           </CardTitle>
         </CardHeader>

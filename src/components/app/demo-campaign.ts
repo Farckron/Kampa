@@ -1,4 +1,17 @@
-import type { Campaign } from "./types";
+import type { Campaign, Intake } from "./types";
+
+/** The answers this fixture is the plan for — exports read the intake for the
+ *  title, budget and hours line, so demo mode needs them too. */
+export const demoIntake: Intake = {
+  sell: "Rīts, a 20-seat speciality coffee shop on Miera iela",
+  buyer: "People walking to work in the quarter, 28 to 45",
+  region: "Riga, Latvia",
+  budget: 400,
+  hours: 4,
+  channels: ["Instagram", "Google Business Profile", "Email"],
+  goal: "Lift weekday morning transactions from 41 to 51 a day",
+  voiceSamples: "Doors open 07:30. Your coffee is on the counter before 09:00.",
+};
 
 // Demo fixture: the Rīts coffee shop sample (src/content/samples/riga-coffee-shop.md),
 // shaped into the wizard's Campaign type. No network, no key needed.
@@ -41,13 +54,14 @@ export const demoCampaign: Campaign = {
           "25 to 30% commission on a €3.20 drink kills the margin, and delivered coffee cannibalises exactly the walk-in habit we are building.",
       },
     ],
+    // 90-day split: must sum to budget90(demoIntake) = 400 × 3 = 1200.
     budgetSplit: [
-      { item: "Instagram boosted posts (4 × €35)", eur: 140 },
-      { item: "Coffee card programme", eur: 90 },
-      { item: "Monthly photo session", eur: 60 },
-      { item: "Morning tastings", eur: 50 },
-      { item: "Print (poster, office flyers)", eur: 40 },
-      { item: "Test budget, held back", eur: 20 },
+      { item: "Instagram boosted posts (12 × €35)", eur: 420 },
+      { item: "Coffee card programme", eur: 270 },
+      { item: "Monthly photo session", eur: 180 },
+      { item: "Morning tastings", eur: 150 },
+      { item: "Print (poster, office flyers)", eur: 120 },
+      { item: "Test budget, held back", eur: 60 },
     ],
     kpis: [
       {

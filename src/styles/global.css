@@ -98,3 +98,55 @@
     @apply font-sans;
   }
 }
+
+/* Print = "save as PDF". Result.tsx swaps its tabs for one stacked document;
+   everything interactive drops out. */
+@media print {
+  @page {
+    margin: 18mm;
+  }
+
+  html,
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  header,
+  nav,
+  button,
+  [data-slot="tabs-list"],
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  main {
+    max-width: none;
+    padding: 0;
+  }
+
+  [data-slot="card"],
+  table,
+  tr,
+  li {
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  /* Ring/shadow tricks print as grey mush; a hairline reads better. */
+  [data-slot="card"] {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555;
+  }
+}

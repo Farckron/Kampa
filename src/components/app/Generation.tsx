@@ -18,7 +18,7 @@ const STAGES: { id: GenStage; label: string; desc: string }[] = [
   {
     id: "calendar",
     label: "Calendar",
-    desc: "Four weeks of posts and assets, with the time each one takes.",
+    desc: "Twelve weeks of posts and assets, with the time each one takes.",
   },
   {
     id: "copy",
@@ -47,7 +47,7 @@ function StatusIcon({ status }: { status: Status }) {
     return (
       <span
         aria-hidden="true"
-        className="inline-flex size-4 items-center justify-center rounded-full border border-amber-500 text-[10px] leading-none font-semibold text-amber-600"
+        className="inline-flex size-4 items-center justify-center rounded-full border border-amber-600 text-[10px] leading-none font-semibold text-amber-700"
       >
         !
       </span>
@@ -146,12 +146,12 @@ export function Generation({
                   <StatusIcon status={status} />
                 </span>
                 <div>
-                  <h3
+                  <h2
                     id={`stage-${id}-title`}
                     className="text-base leading-snug font-medium"
                   >
                     {label}
-                  </h3>
+                  </h2>
                   <p className="mt-1 text-sm text-neutral-600">{desc}</p>
                   <p className="mt-1 text-xs text-neutral-500">
                     {STATUS_TEXT[status]} · ~€{estimate} estimate

@@ -7,6 +7,7 @@ import type {
   WizardState,
 } from "./types";
 import { initialState } from "./types";
+import { demoIntake } from "./demo-campaign";
 
 const MAX_STEP = 7;
 const clamp = (n: number) => Math.min(MAX_STEP, Math.max(0, n));
@@ -35,9 +36,12 @@ export function reducer(state: WizardState, action: Action): WizardState {
       return { ...state, model: action.model };
 
     case "START_DEMO":
+      // The exports read the intake (title, budget, hours), so the demo plan
+      // has to arrive with the answers it is a plan for.
       return {
         ...state,
         demo: true,
+        intake: demoIntake,
         campaign: action.campaign,
         phase: "result",
       };
