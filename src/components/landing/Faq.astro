@@ -1,4 +1,13 @@
 ---
+interface Props {
+  /** The /faq page supplies its own <h1>, so it turns this <h2> off. */
+  heading?: boolean;
+  /** FAQPage JSON-LD belongs on one URL only — the canonical /faq page. */
+  schema?: boolean;
+}
+
+const { heading = true, schema = false } = Astro.props;
+
 const base = import.meta.env.BASE_URL;
 
 // Single source of truth: rendered as the accordion and as FAQPage JSON-LD.
@@ -53,16 +62,20 @@ const faqSchema = {
 
 <section class="px-6 py-24 sm:py-32">
   <div class="mx-auto max-w-6xl">
-    <h2
-      class="text-4xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-5xl"
-    >
-      Questions, answered
-    </h2>
+    {
+      heading && (
+        <h2 class="text-4xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-5xl">
+          Questions, answered
+        </h2>
+      )
+    }
 
     {
       /* ponytail: native <details> — zero JS, keyboard and screen-reader ready */
     }
-    <div class="mt-12 max-w-3xl border-t border-neutral-200">
+    <div
+      class:list={["max-w-3xl border-t border-neutral-200", heading && "mt-12"]}
+    >
       {
         faqs.map((item) => (
           <details class="group border-b border-neutral-200">
@@ -101,9 +114,13 @@ const faqSchema = {
     </div>
   </div>
 
-  <script
-    is:inline
-    type="application/ld+json"
-    set:html={JSON.stringify(faqSchema)}
-  />
+  {
+    schema && (
+      <script
+        is:inline
+        type="application/ld+json"
+        set:html={JSON.stringify(faqSchema)}
+      />
+    )
+  }
 </section>

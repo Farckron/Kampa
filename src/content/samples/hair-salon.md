@@ -39,14 +39,14 @@ Who we are not chasing: students wanting a €12 trim, brides wanting a full wed
 
 | Line | Monthly | What it actually buys |
 | --- | --- | --- |
-| Meta boosted posts (Jelgava + 10 km, women 28-48) | €120 | 3 boosted posts a month, €40 each, roughly 5,500 to 7,000 reach per boost |
+| Meta boosted posts (Jelgava + 10 km, women 28-48) | €120 | 9 boosts of €40 across the 90 days, starting week 3, roughly 5,500 to 7,000 reach per boost |
 | Tue-Thu "klusās dienas" discount, 10 slots x €5 | €50 | The €5 off midweek colour and cut, absorbed from margin |
 | Referral credit, 5 x €8 | €40 | €8 off the referrer's next visit when a named friend books |
 | Review thank-yous, ~25 x €1.10 | €28 | Coffee from the machine next door or a Laima bar for clients who leave a review |
 | Canva Pro | €12 | Reusable post templates so weekly content takes 20 minutes, not 60 |
 | **Total** | **€250** | |
 
-Acquisition maths behind this: €360 of boost spend over 90 days at roughly €15 per first-time booking gives about 24 new clients, of whom 60 to 65 percent rebook within the window. That is the 15 recurring clients. The remaining midweek gap is closed by moving existing Saturday regulars, which costs nothing but the ask.
+Acquisition maths behind this: 9 boosts of €40 is €360 of boost spend over 90 days, and at roughly €15 per first-time booking gives about 24 new clients, of whom 60 to 65 percent rebook within the window. That is the 15 recurring clients. The remaining midweek gap is closed by moving existing Saturday regulars, which costs nothing but the ask.
 
 ## The 12 weeks
 
@@ -57,15 +57,15 @@ Weekly baseline once the setup is done: two Instagram posts, one Facebook group 
 | 1 | Fix the shopfront | Complete Google Business Profile: correct Tue-Thu hours, services with prices, 10 photos of real work. Photograph 8 finished clients on your phone by the window, no flash. | 2h 30m |
 | 2 | Ask the existing base | Message the 40 most regular clients personally about the Tue-Thu €5 discount and ask 10 of them for a Google review. Print 50 QR review cards to hand out with the receipt. | 3h |
 | 3 | First boost live | Write and boost post 1 (€40): before/after root colour, caption ends with "Otrdien un trešdien vēl ir brīvas vietas". Reply to every comment within 24h. | 2h 30m |
-| 4 | Enter the groups | Join Jelgavnieki and Jelgavas mammas. Answer 3 hair questions with genuinely useful replies, no self-promotion. Post 2 to Instagram. | 2h 30m |
-| 5 | Referral launch | Tell every client in the chair about the €8 referral credit and write it on the back of their next-appointment card. Boost post 2 (€40). | 2h 30m |
-| 6 | Midweek proof | Post a real Wednesday 15:00 slot as a Story with a booking link. Ask 8 more clients for reviews. Check the 30-day Google Insights numbers. | 2h 30m |
+| 4 | Enter the groups | Join Jelgavnieki and Jelgavas mammas. Answer 3 hair questions with genuinely useful replies, no self-promotion. Post 2 to Instagram and boost it (€40). | 2h 40m |
+| 5 | Referral launch | Tell every client in the chair about the €8 referral credit and write it on the back of their next-appointment card. Boost the referral announcement (€40). | 2h 30m |
+| 6 | Midweek proof | Post a real Wednesday 15:00 slot as a Story with a booking link. Ask 8 more clients for reviews. Check the 30-day Google Insights numbers. Boost the week 3 before/after again, to a fresh audience (€40). | 2h 40m |
 | 7 | First group post | With moderator permission, one honest post in Jelgavnieki: three before/afters, prices stated, midweek availability named. Reply to every comment that evening. | 3h |
 | 8 | Double down | Boost the post that performed best in weeks 3 to 7 (€40) instead of making a new one. Post 2 to Instagram. | 2h |
-| 9 | Rebooking discipline | Every client leaves with the next appointment already in the book, offered Tue-Thu first. Add 5 fresh Google photos. | 2h 30m |
+| 9 | Rebooking discipline | Every client leaves with the next appointment already in the book, offered Tue-Thu first. Add 5 fresh Google photos. Boost the best-performing photo of weeks 1 to 8 (€40). | 2h 40m |
 | 10 | Winter colour angle | Post a "roots before the holidays" series, three posts, and boost one (€40). Book the December weeks now while people are thinking about it. | 3h |
-| 11 | Second group appearance | Answer questions in the groups again, then a short post about holiday availability. Ask the 6 newest clients for reviews. | 2h 30m |
-| 12 | Count and cut | Pull the three numbers below. Kill whichever of the three channels produced least, move its budget to the winner, repeat the 12 weeks. | 2h |
+| 11 | Second group appearance | Answer questions in the groups again, then a short post about holiday availability. Ask the 6 newest clients for reviews. Boost the holiday-availability post (€40). | 2h 40m |
+| 12 | Count and cut | Pull the three numbers below. Kill whichever of the three channels produced least, move its budget to the winner, repeat the 12 weeks. One last boost, on the best post of the quarter (€40). | 2h 10m |
 
 ## Copy you can paste
 

@@ -1,4 +1,6 @@
 ---
+import { GITHUB_URL } from "../../lib/site";
+
 // Icons are inline so the page makes zero external requests.
 const icon = "size-6 text-primary";
 ---
@@ -117,7 +119,12 @@ const icon = "size-6 text-primary";
         <p class="mt-3 text-neutral-600">
           No account, no server, no database. Your business data and API key
           stay on your machine; the only network call is to Anthropic. The code
-          is open source — check it.
+          is <a
+            href={GITHUB_URL}
+            rel="noopener"
+            class="text-primary font-medium underline underline-offset-4"
+            >open source</a
+          > — check it.
         </p>
       </div>
 

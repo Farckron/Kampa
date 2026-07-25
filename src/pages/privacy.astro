@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Nav from "../components/landing/Nav.astro";
 import Footer from "../components/landing/Footer.astro";
+import { GITHUB_URL } from "../lib/site";
 
 const base = import.meta.env.BASE_URL;
 
@@ -74,8 +75,8 @@ const a = "text-primary font-medium underline underline-offset-2";
     <p class={p}>
       Nothing. No analytics, no cookies, no tracking pixels, no logs. The site
       is a folder of static files, and it has no code that reports back to us.
-      Kampa is open source, so you can check that claim yourself instead of
-      taking our word for it.
+      Kampa is <a class={a} href={GITHUB_URL} rel="noopener">open source</a>, so
+      you can check that claim yourself instead of taking our word for it.
     </p>
 
     <h2 class={h2}>Hosting</h2>

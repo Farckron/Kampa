@@ -37,15 +37,15 @@ Secondary: the remote workers and freelancers of the quarter who come 10:00 to 1
 
 | Line | Monthly | What it buys |
 | --- | ---: | --- |
-| Instagram boosted posts | €140 | 4 pushes of €35, 3 km radius, morning-offer creative only |
-| Coffee card programme | €90 | 500 printed cards plus the drink cost of ~55 redemptions |
-| Monthly photo session | €60 | 2 hours with a photography student, 30 usable morning images |
-| Morning tastings | €50 | Sampling tray, 2 sessions a month, single-origin filter |
-| Print | €40 | A3 window poster plus 200 office flyers |
-| Test budget | €20 | Held back, spent on whatever the month's numbers say worked |
+| Instagram boosted posts | €140 | Four €35 pushes a month — one every week, 3 km radius, morning-offer creative only |
+| Coffee card programme | €90 | The 500-card print run in month 1 (€90), then the drink cost of redemptions, about €90 a month once the cards mature |
+| Monthly photo session | €60 | One 2 hour session with a photography student, 30 usable morning images (weeks 2, 7, 11) |
+| Morning tastings | €50 | Sampling tray and beans, one session a month, single-origin filter (weeks 4, 8, 10) |
+| Print | €40 | A3 window poster in week 3 (€30), then 200 office flyers in week 6 and a 150-flyer top-up in week 9 (€45 each) |
+| Test budget | €20 | Held back each month, spent at the week 5, 9 and 12 reads on whatever the numbers say worked |
 | **Total** | **€400** | |
 
-Google Business Profile and MailerLite are €0 and stay €0 at this list size. Month 3 shifts the €60 photo line into Instagram if the reach numbers hold, because by then we have 90 banked images.
+Every line above is spent three times over the 90 days: €1,200 in total, and the calendar below schedules each occurrence so nothing sits unspent. Google Business Profile and MailerLite are €0 and stay €0 at this list size. Month 4 shifts the €60 photo line into Instagram if the reach numbers hold, because by then we have 90 banked images.
 
 ## The 12 weeks
 
@@ -53,18 +53,18 @@ Weekly budget is 4 hours. Nothing below exceeds it.
 
 | Week | Focus | Actions | Time |
 | --- | --- | --- | --- |
-| 1 | Baseline | Export 4 weeks of POS data, isolate weekday 07:30 to 10:30 transactions, write down the number (currently 41/day). Claim and verify Google Business Profile. Open MailerLite account. | 3 h 30 m |
-| 2 | Profile repair | Shoot and upload 20 phone photos: counter at 08:00, the pastry case, the street door, seating. Add full menu with prices, set attributes (opens 07:30, takeaway, card payment, dog friendly). Write the business description. | 3 h 45 m |
-| 3 | Coffee card | Design and order 500 cards (10th coffee free, valid before 11:00 only). Print the A3 window poster. Brief yourself on the one line staff say at the till. | 3 h |
-| 4 | First paid push | Instagram post 1 (the 07:30 opening shot), boost €35, 3 km radius, ages 25 to 50. Card programme goes live at the counter with email signup on the reverse. | 3 h 45 m |
-| 5 | Email begins | Write and send email 1 to the first ~40 subscribers: what we roast this month, why we open at 07:30. Weekly GBP post. Log week 4 morning numbers. | 3 h 30 m |
-| 6 | Office push | Walk 200 flyers to 6 reception desks within 400 m: Tallinas kvartāls studios, Miera 22, two clinics on Bruņinieku. Offer: first card stamp free for the whole office. | 3 h 45 m |
-| 7 | Image bank | 2 hour photo session with a student, morning light only, 30 usable frames. Schedule 4 weeks of Instagram from it. Instagram boost 2, €35. | 4 h |
-| 8 | Reviews | Add a review QR to the receipt roll and the card. Ask 5 named regulars in person. Weekly GBP post. Reply to every existing review. | 3 h 15 m |
-| 9 | Mid-point read | Pull week 1 to 8 morning numbers against baseline. Cut the worst-performing Instagram format. Instagram boost 3, €35, on whichever post carried best organically. | 3 h 30 m |
-| 10 | Tastings | Run 2 morning filter tastings, 08:00 to 09:30, free 60 ml pours at the door. Photograph both. Post same day. | 4 h |
-| 11 | Redemption push | Email 2 to the list (now ~180): "your card is probably at stamp 6, here is what stamp 10 tastes like." Instagram boost 4, €35. Weekly GBP post. | 3 h 30 m |
-| 12 | Decide | Final numbers against the three KPIs. Kill what failed, write the next 90 day budget on the same lines, reorder cards if redemption held above 30%. | 3 h |
+| 1 | Baseline | Export 4 weeks of POS data, isolate weekday 07:30 to 10:30 transactions, write down the number (currently 41/day). Claim and verify Google Business Profile. Open MailerLite account. Boost the best photo already on the feed, €35. | 3 h 20 m |
+| 2 | Profile repair | Photo session 1: 2 hours with a photography student, morning light only — counter at 08:00, the pastry case, the street door, seating. Upload 20 of the frames. Add full menu with prices, set attributes (opens 07:30, takeaway, card payment, dog friendly). Write the business description. Instagram boost, €35. | 3 h 55 m |
+| 3 | Coffee card | Design and order 500 cards (10th coffee free, valid before 11:00 only), €90. Print the A3 window poster, €30. Brief yourself on the one line staff say at the till. Weekly GBP post. Instagram boost, €35. | 2 h 30 m |
+| 4 | First paid push | Instagram post 1 (the 07:30 opening shot), boost €35, 3 km radius, ages 25 to 50. Card programme goes live at the counter with email signup on the reverse. Morning filter tasting 1, 08:00 to 09:30, free 60 ml pours at the door. | 3 h 45 m |
+| 5 | Email begins | Write and send email 1 to the first ~40 subscribers: what we roast this month, why we open at 07:30. Weekly GBP post. Log week 4 morning numbers and put month 1's €20 test budget behind whatever they favour. Instagram boost, €35. | 3 h 15 m |
+| 6 | Office push | Walk 200 flyers to 6 reception desks within 400 m: Tallinas kvartāls studios, Miera 22, two clinics on Bruņinieku (€45 printed). Offer: first card stamp free for the whole office. Instagram boost, €35. | 3 h 45 m |
+| 7 | Image bank | Photo session 2: 2 hours with a student, morning light only, 30 usable frames. Schedule 4 weeks of Instagram from it. Instagram boost, €35. | 4 h |
+| 8 | Reviews | Add a review QR to the receipt roll and the card. Ask 5 named regulars in person. Weekly GBP post. Morning filter tasting 2, photographed and posted the same day. Instagram boost, €35. | 3 h 20 m |
+| 9 | Mid-point read | Pull week 1 to 8 morning numbers against baseline. Cut the worst-performing Instagram format, and spend month 2's €20 test budget on the one that carried. Reply to every existing review. Top up the offices with 150 more flyers (€45). Instagram boost, €35, on whichever post carried best organically. | 3 h 55 m |
+| 10 | Tastings | Morning filter tasting 3, 08:00 to 09:30, free 60 ml pours at the door. Photograph it. Post same day. Weekly GBP post. Instagram boost, €35. | 3 h |
+| 11 | Redemption push | Photo session 3: 2 hours with a student, 30 usable frames, the 90th banked image. Email 2 to the list (now ~180): "your card is probably at stamp 6, here is what stamp 10 tastes like." Weekly GBP post. Instagram boost, €35. | 3 h 30 m |
+| 12 | Decide | Final numbers against the three KPIs. Kill what failed, write the next 90 day budget on the same lines, reorder cards if redemption held above 30%. Month 3's €20 test budget goes on the winner. Instagram boost, €35. | 3 h 10 m |
 
 ## Copy you can paste
 

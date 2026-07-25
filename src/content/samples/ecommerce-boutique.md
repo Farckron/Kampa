@@ -37,8 +37,8 @@ Not the target: anyone hunting a €25 linen tea towel, and anyone who needs it 
 
 | Line | €/month | Why |
 | --- | --- | --- |
-| Photography — half-day with a Riga stylist-photographer, monthly | 200 | 90 usable stills per shoot; feeds Pinterest, email and IG for four weeks |
-| Creator gifting — 4 parcels at cost (COGS + Omniva/DPD) | 180 | Content rights + reach, no flat fees |
+| Photography — half-day with a Riga stylist-photographer, monthly (weeks 1, 8, 11) | 200 | 90 usable stills per shoot; feeds Pinterest, email and IG for four weeks |
+| Creator gifting — 4 parcels at cost (COGS + Omniva/DPD), one wave a month (weeks 5, 9, 11) | 180 | 12 parcels over the 90 days: content rights + reach, no flat fees |
 | First-order 10% code — capped | 150 | Covers ~€1,500 of discounted first orders; underspend rolls to props |
 | Props and set materials (Latvian ceramics, dried flax, oak boards) | 60 | Sets that don't repeat; rented look, owned photos |
 | Email platform, up to 2,500 contacts | 45 | Flows + segments; the one recurring tool |
@@ -54,13 +54,13 @@ Not the target: anyone hunting a €25 linen tea towel, and anyone who needs it 
 | 2 | Welcome flow live | Write and build 3 emails: day 0 (code LINEN10 + how to measure your duvet), day 2 (the mill, with photos), day 6 (care: wash cold, line dry, it gets softer). Test all three on phone and desktop. | 6 h — 4 write/build, 1 QA, 1 pin batch |
 | 3 | Capture live | Site opt-in live: exit-intent on desktop, 12-second delay on mobile, offer = "Linen sizing card" PDF (EU + UK + US bed sizes, gsm guide). Add opt-in checkbox at checkout. | 5 h — 3 build PDF, 1 popup, 1 pins |
 | 4 | Pinterest rebuild | Cut 9 dead boards, keep 5: Linen bedding, Slow table, Small Baltic homes, Linen care, Studio diary. Upload 40 pins with keyworded descriptions (size + gsm + colour). Set the weekly 25-pin queue. | 6 h — 4 pin/write, 2 board copy |
-| 5 | First campaign + first collab wave | Campaign email "Why our duvet covers come in eleven sizes". Ship gifted parcels to 4 creators (2 DE, 1 NL, 1 SE), brief: one photo in their own bedroom, no script. | 6 h — 2 email, 2 outreach, 2 pins |
+| 5 | First campaign + collab wave 1 | Campaign email "Why our duvet covers come in eleven sizes". Ship gifted parcels to 4 creators (2 DE, 1 NL, 1 SE), brief: one photo in their own bedroom, no script. | 6 h — 2 email, 2 outreach, 2 pins |
 | 6 | Instagram proof | Post the mill carousel (7 slides, loom to finished hem). Pin the sizing card in bio. Reply to every comment within 24 h — that is the whole engagement strategy. | 5 h — 2 shoot/edit, 1 write, 2 pins |
 | 7 | Read the data, cut the losers | Pull 30-day Pinterest outbound clicks by pin. Re-pin the top 5 formats, stop making the bottom 5. Fix the two product pages with the worst add-to-cart rate. | 6 h — 2 analysis, 2 page copy, 2 pins |
 | 8 | Second shoot, autumn set | Half-day shoot: bedding in low September light, plus 3 flat-lays for the napkin sets. 90 stills, 40 verticals. | 6 h — 3 shoot, 2 edit, 1 schedule |
-| 9 | Restock story | Campaign email "The linen we didn't ship" (the QC-reject story) + IG post from creator photos, with credit. Add a back-in-stock signup to the two sold-out SKUs. | 6 h — 2 email, 1 IG, 1 build, 2 pins |
-| 10 | Post-purchase | Build the 2-email post-purchase flow: day 3 care reminder, day 21 review request with a photo ask. Insert cards arrive — start including them in every parcel. | 5 h — 3 build, 2 pins |
-| 11 | Second collab wave + segment | 4 more gifted parcels (2 DE, 1 AT, 1 DK). Segment the list: opened-but-never-bought gets a one-off "ask me anything about linen" plain-text email from Ieva. | 6 h — 2 outreach, 2 email, 2 pins |
+| 9 | Restock story + collab wave 2 | Campaign email "The linen we didn't ship" (the QC-reject story) + IG post from creator photos, with credit. Add a back-in-stock signup to the two sold-out SKUs. Ship 4 more gifted parcels (2 DE, 1 AT, 1 DK). | 6 h — 2 email, 1 IG, 1 build, 2 outreach |
+| 10 | Post-purchase + segment | Build the 2-email post-purchase flow: day 3 care reminder, day 21 review request with a photo ask. Insert cards arrive — start including them in every parcel. Segment the list: opened-but-never-bought gets a one-off "ask me anything about linen" plain-text email from Ieva. | 6 h — 3 build, 2 email, 1 pins |
+| 11 | Third shoot + collab wave 3 | Half-day shoot: the October pre-order set, layered beds and a candle-lit table, 90 stills, 40 verticals. Ship the last 4 gifted parcels (1 DE, 1 NL, 1 FI, 1 AT). | 6 h — 3 shoot, 2 edit, 1 outreach |
 | 12 | Close and set Q4 | October pre-order campaign to the full list, 48-hour early access for subscribers. Write the Q4 pin calendar. Log the numbers against the three KPIs below. | 6 h — 2 campaign, 2 calendar, 2 review |
 
 ## Copy you can paste

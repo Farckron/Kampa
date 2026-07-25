@@ -2,9 +2,11 @@
 import Base from "../layouts/Base.astro";
 import Nav from "../components/landing/Nav.astro";
 import Footer from "../components/landing/Footer.astro";
+import { GITHUB_URL } from "../lib/site";
 
 const h2 = "mt-14 text-xl font-bold tracking-tight text-neutral-950";
 const p = "mt-4 text-base leading-7 text-neutral-700";
+const a = "text-primary font-medium underline underline-offset-2";
 ---
 
 <Base
@@ -21,9 +23,10 @@ const p = "mt-4 text-base leading-7 text-neutral-700";
 
     <h2 class={h2}>What Kampa is</h2>
     <p class={p}>
-      Kampa is free, open-source software that runs entirely in your browser. It
-      is provided as-is. There is no subscription, no account, and no support
-      contract behind it.
+      Kampa is free, <a class={a} href={GITHUB_URL} rel="noopener"
+        >open-source</a
+      > software that runs entirely in your browser. It is provided as-is. There is
+      no subscription, no account, and no support contract behind it.
     </p>
 
     <h2 class={h2}>Your responsibilities</h2>
