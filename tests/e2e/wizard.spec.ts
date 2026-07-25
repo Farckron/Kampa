@@ -311,7 +311,7 @@ test("key → intake → real generation against an intercepted api → result",
     );
   }
   expect(seen.map((s) => s.body.max_tokens)).toEqual([
-    6000, 9000, 9000, 9000, 9000,
+    16000, 24000, 24000, 24000, 24000,
   ]);
   expect(
     seen.slice(2).map((s) => /WEEKS ([\d, ]+)\n/.exec(sentText(s.body))?.[1]),
