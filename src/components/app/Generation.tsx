@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CheckIcon } from "@/components/ui/icons";
 import { estimateEur } from "@/lib/cost";
 import { checkBudget, checkHours } from "./engine";
-import type { GenStage } from "./types";
+import { MODELS, type GenStage } from "./types";
 import { useWizard } from "./WizardContext";
 
 type Status = "pending" | "running" | "done" | "stale";
@@ -128,6 +128,39 @@ export function Generation({
         >
           Edit answers
         </Button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-neutral-200 p-3">
+        <span className="text-sm text-neutral-600" id="gen-model-label">
+          Model
+        </span>
+        <div
+          role="group"
+          aria-labelledby="gen-model-label"
+          className="flex flex-wrap gap-1"
+        >
+          {MODELS.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              disabled={running !== null}
+              aria-pressed={state.model === m.id}
+              title={`${m.blurb} — €${m.inPerMTok}/€${m.outPerMTok} per million tokens`}
+              onClick={() => dispatch({ type: "SET_MODEL", model: m.id })}
+              className={
+                "rounded-lg border px-3 py-1.5 text-sm transition-colors disabled:opacity-50 " +
+                (state.model === m.id
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-neutral-200 text-neutral-700 hover:border-neutral-300")
+              }
+            >
+              {m.label.replace(" (recommended)", "")}
+            </button>
+          ))}
+        </div>
+        <span className="text-xs text-neutral-500">
+          Applies to the next stage you generate.
+        </span>
       </div>
 
       {STAGES.map(({ id, label, desc }) => {

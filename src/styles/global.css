@@ -150,3 +150,10 @@
     color: #555;
   }
 }
+
+/* shadcn "nova" components use data-* shorthand variants that assume these
+   custom variants exist; Radix actually emits data-state/data-orientation. */
+@custom-variant data-checked (&[data-state="checked"]);
+@custom-variant data-unchecked (&[data-state="unchecked"]);
+@custom-variant data-horizontal (&[data-orientation="horizontal"]);
+@custom-variant data-vertical (&[data-orientation="vertical"]);

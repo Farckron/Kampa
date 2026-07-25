@@ -376,3 +376,46 @@ test("clear key returns to the gate", async ({ page }) => {
   // there is nothing left to clear.
   await expect(page.getByRole("button", { name: "Clear key" })).toBeDisabled();
 });
+
+test("model is selectable on gate and switchable during generation", async ({
+  page,
+}) => {
+  await page.goto("app");
+  const opus = page.getByRole("radio", { name: /Best strategy/ });
+  await opus.click();
+  await expect(opus).toHaveAttribute("data-state", "checked");
+  await expect(page.locator("header")).toContainText("Best strategy");
+  // visual feedback: the selected card border carries the accent color
+  const border = await page
+    .locator('label[for="claude-opus-5"]')
+    .evaluate((el) => getComputedStyle(el).borderColor);
+  expect(border).toContain("0.508");
+
+  // through to generation with a fake key, switch model there
+  await page.getByLabel("Your Anthropic API key").fill(KEY);
+  await page.getByRole("button", { name: "Continue" }).click();
+  for (const [label, value] of [
+    ["What do you sell?", "Coffee"],
+    ["Who buys it?", "Locals"],
+    ["Where are your customers?", "Riga"],
+    ["Monthly marketing budget (EUR)", "400"],
+    ["Hours per week you can spend", "4"],
+  ] as const) {
+    await page.getByLabel(label).fill(value);
+    await page.getByRole("button", { name: "Next" }).click();
+  }
+  await page.getByText("Instagram", { exact: true }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByLabel("Your one goal for the next 90 days").fill("Growth");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "Create my campaign" }).click();
+
+  const budget = page
+    .getByRole("group", { name: "Model" })
+    .getByRole("button", {
+      name: "Budget",
+    });
+  await budget.click();
+  await expect(budget).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("header")).toContainText("Budget");
+});
