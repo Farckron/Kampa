@@ -94,11 +94,15 @@ CLAUDE.md  SPEC.md  .mcp.json
 - Storage: `sessionStorage` by default; `localStorage` only via explicit
   "remember on this device" checkbox. Visible **Clear key** button in the app
   header at all times.
-- The key is sent to exactly one host: `api.anthropic.com`. CSP via
-  `<meta http-equiv="Content-Security-Policy">` (GitHub Pages cannot set
-  headers): `default-src 'self'; connect-src 'self' https://api.anthropic.com;
-  img-src 'self' data:; style-src 'self' 'unsafe-inline'` (tighten during
-  implementation as build output allows).
+- The key is sent to exactly one host: `api.anthropic.com`. CSP via meta tag
+  (GitHub Pages cannot set headers), emitted by Astro's `security.csp` config
+  with per-script/style sha256 hashes: `default-src 'self'; connect-src 'self'
+  https://api.anthropic.com; img-src 'self' data:; base-uri 'self';
+  form-action 'self'; object-src 'none'; script-src 'self' <hashes>;
+  style-src 'self' <hashes>; style-src-attr 'unsafe-inline'` (attr exception:
+  Radix writes style attributes, which cannot be hashed). Changed from
+  hand-written meta 2026-07-25 — hashes are stricter and cover the island's
+  hydration bootstrap.
 - Key setup guide instructs the user to create a **dedicated, spend-capped**
   key and to rotate it; the app states plainly that the key stays in the
   browser but any compromised site could misuse a key, hence the cap.

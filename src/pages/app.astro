@@ -1,0 +1,15 @@
+---
+import Base from "../layouts/Base.astro";
+import Wizard from "../components/app/Wizard";
+---
+
+{
+  /* Focused app chrome: no Nav/Footer — the wizard header carries navigation. */
+}
+<Base
+  title="Campaign wizard — Kampa"
+  description="Answer eight questions and get a 90-day marketing plan: strategy, a 12-week calendar and ready-to-post copy, generated with your own Anthropic key."
+  noindex
+>
+  <Wizard client:only="react" />
+</Base>

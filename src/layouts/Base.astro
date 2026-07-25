@@ -4,8 +4,9 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description: string;
+  noindex?: boolean;
 }
-const { title, description } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const base = import.meta.env.BASE_URL;
 const ogImage = new URL(base + "og.png", Astro.site);
@@ -16,10 +17,6 @@ const ogImage = new URL(base + "og.png", Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; connect-src 'self' https://api.anthropic.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
-    />
     <link
       rel="preload"
       as="font"
@@ -30,6 +27,7 @@ const ogImage = new URL(base + "og.png", Astro.site);
     <link rel="icon" type="image/svg+xml" href={base + "favicon.svg"} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
