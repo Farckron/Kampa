@@ -15,6 +15,9 @@ export default defineConfig({
   site: SITE,
   base: BASE,
   integrations: [react(), sitemap()],
+  // No code blocks in our markdown (sample plans); Shiki's inline styles are
+  // CSP-incompatible, so highlighting stays off. Prism if a blog post ever needs it.
+  markdown: { syntaxHighlight: false },
   // SPEC §2.3 CSP. Astro emits the <meta> and hashes its own inline hydration
   // bootstrap, so /app can carry a React island without 'unsafe-inline' scripts.
   security: {
@@ -31,7 +34,7 @@ export default defineConfig({
       // cannot be hashed, so they get their own directive.
       styleDirective: {
         resources: [
-          "'self'",
+          { resource: "'self'", kind: "element" },
           { resource: "'unsafe-inline'", kind: "attribute" },
         ],
       },
