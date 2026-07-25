@@ -2,9 +2,11 @@ import * as React from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import type { ApiError } from "@/lib/anthropic";
 
 import { CostMeter } from "./CostMeter";
 import { demoCampaign } from "./demo-campaign";
+import { runStageReal } from "./engine";
 import { Gate } from "./Gate";
 import { Generation } from "./Generation";
 import { Intake } from "./Intake";
@@ -50,8 +52,60 @@ function Header() {
   );
 }
 
+function ErrorBanner({
+  error,
+  onDismiss,
+}: {
+  error: ApiError;
+  onDismiss: () => void;
+}) {
+  const { dispatch } = useWizard();
+  const [left, setLeft] = React.useState(error.retryAfterSec ?? 0);
+
+  React.useEffect(() => {
+    setLeft(error.retryAfterSec ?? 0);
+    if (error.retryAfterSec === undefined) return;
+    const t = setInterval(() => setLeft((n) => (n > 0 ? n - 1 : 0)), 1000);
+    return () => clearInterval(t);
+  }, [error]);
+
+  return (
+    <div
+      role="alert"
+      className="mb-4 rounded-xl border border-destructive bg-destructive/5 p-4"
+    >
+      <p className="text-sm text-neutral-900">{error.userMessage}</p>
+      {error.retryAfterSec !== undefined && (
+        <p className="mt-1 text-sm text-neutral-600 tabular-nums">
+          {left > 0 ? `Try again in ${left}s.` : "You can try again now."}
+        </p>
+      )}
+      <div className="mt-3 flex gap-2">
+        {error.kind === "auth" && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              storage.clearKey();
+              onDismiss();
+              dispatch({ type: "TO_GATE" });
+            }}
+          >
+            Re-enter key
+          </Button>
+        )}
+        <Button variant="outline" size="sm" onClick={onDismiss}>
+          Dismiss
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 function Shell() {
   const { state, dispatch } = useWizard();
+  const [error, setError] = React.useState<ApiError | null>(null);
+  const [preview, setPreview] = React.useState("");
 
   React.useEffect(() => {
     if (new URLSearchParams(window.location.search).get("demo") === "1") {
@@ -74,8 +128,22 @@ function Shell() {
     dispatch({ type: "START_INTAKE" });
   }, [dispatch]);
 
-  const runStage = (stage: GenStage) =>
-    mockRunStage(dispatch, stage, state.model);
+  // Demo mode never touches the network: it replays the bundled fixture.
+  const runStage = (stage: GenStage) => {
+    if (state.demo) {
+      mockRunStage(dispatch, stage, state.model);
+      return;
+    }
+    setError(null);
+    setPreview("");
+    void runStageReal(dispatch, stage, {
+      intake: state.intake,
+      model: state.model,
+      campaign: state.campaign,
+      onError: setError,
+      onPreview: setPreview,
+    });
+  };
 
   return (
     <>
@@ -83,7 +151,14 @@ function Shell() {
       <main className="mx-auto w-full max-w-3xl px-6 py-10">
         {state.phase === "gate" && <Gate />}
         {state.phase === "intake" && <Intake />}
-        {state.phase === "generation" && <Generation runStage={runStage} />}
+        {state.phase === "generation" && (
+          <>
+            {error && (
+              <ErrorBanner error={error} onDismiss={() => setError(null)} />
+            )}
+            <Generation runStage={runStage} preview={preview} />
+          </>
+        )}
         {state.phase === "result" && <Result />}
         {(state.phase === "generation" || state.phase === "result") && (
           <CostMeter />

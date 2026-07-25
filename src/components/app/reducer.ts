@@ -81,6 +81,13 @@ export function reducer(state: WizardState, action: Action): WizardState {
       return { ...state, campaign, stale, running: null };
     }
 
+    // A stage that errored keeps no partial data — it just stops running.
+    case "STAGE_FAIL":
+      return { ...state, running: null };
+
+    case "TO_GATE":
+      return { ...state, keyPresent: false, phase: "gate" };
+
     case "REGENERATE": {
       const campaign = { ...state.campaign, [action.stage]: null };
       const stale = { ...state.stale, [action.stage]: false };

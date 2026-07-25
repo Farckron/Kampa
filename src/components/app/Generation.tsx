@@ -1,6 +1,9 @@
+import * as React from "react";
+
 import { Button } from "@/components/ui/button";
 import { CheckIcon } from "@/components/ui/icons";
-import { costEur, USAGE } from "./mock";
+import { estimateEur } from "@/lib/cost";
+import { checkBudget, checkHours } from "./engine";
 import type { GenStage } from "./types";
 import { useWizard } from "./WizardContext";
 
@@ -57,9 +60,41 @@ function StatusIcon({ status }: { status: Status }) {
   );
 }
 
-export function Generation({ runStage }: { runStage: (s: GenStage) => void }) {
+/** Raw model output as it arrives. Scrolls itself to the tail. */
+function Preview({ text }: { text: string }) {
+  const ref = React.useRef<HTMLPreElement>(null);
+  React.useEffect(() => {
+    if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
+  }, [text]);
+
+  return (
+    <pre
+      ref={ref}
+      data-testid="stream-preview"
+      className="max-h-40 overflow-y-auto rounded-lg bg-neutral-50 p-3 font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap text-neutral-600"
+    >
+      {text}
+    </pre>
+  );
+}
+
+export function Generation({
+  runStage,
+  preview = "",
+}: {
+  runStage: (s: GenStage) => void;
+  preview?: string;
+}) {
   const { state, dispatch } = useWizard();
-  const { campaign, stale, running } = state;
+  const { campaign, stale, running, intake } = state;
+
+  // ponytail: derived, not mirrored into state — a useEffect+setState copy of
+  // props is the classic React footgun and renders one frame stale.
+  const warning: Partial<Record<GenStage, string>> = {};
+  const budget = campaign.strategy && checkBudget(campaign.strategy, intake);
+  const hours = campaign.calendar && checkHours(campaign.calendar, intake);
+  if (budget) warning.strategy = budget;
+  if (hours) warning.calendar = hours;
 
   const statusOf = (id: GenStage): Status => {
     if (running === id) return "running";
@@ -98,11 +133,7 @@ export function Generation({ runStage }: { runStage: (s: GenStage) => void }) {
       {STAGES.map(({ id, label, desc }) => {
         const status = statusOf(id);
         const pending = status === "pending";
-        const estimate = costEur(
-          state.model,
-          USAGE[id].tokensIn,
-          USAGE[id].tokensOut,
-        ).toFixed(2);
+        const estimate = estimateEur(state.model, id).toFixed(2);
         return (
           <section
             key={id}
@@ -144,9 +175,30 @@ export function Generation({ runStage }: { runStage: (s: GenStage) => void }) {
                 className="mt-4 space-y-2 border-t border-neutral-200 pt-4"
               >
                 <span className="sr-only">Generating {label}</span>
-                <div className="h-3 w-full animate-pulse rounded bg-neutral-100" />
-                <div className="h-3 w-5/6 animate-pulse rounded bg-neutral-100" />
-                <div className="h-3 w-2/3 animate-pulse rounded bg-neutral-100" />
+                {preview === "" ? (
+                  <>
+                    <div className="h-3 w-full animate-pulse rounded bg-neutral-100" />
+                    <div className="h-3 w-5/6 animate-pulse rounded bg-neutral-100" />
+                    <div className="h-3 w-2/3 animate-pulse rounded bg-neutral-100" />
+                  </>
+                ) : (
+                  <Preview text={preview} />
+                )}
+              </div>
+            )}
+
+            {warning[id] !== undefined && status !== "running" && (
+              <div className="mt-4 flex flex-col gap-3 rounded-lg border border-amber-500 bg-amber-50 p-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-amber-900">{warning[id]}</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0"
+                  disabled={running !== null}
+                  onClick={() => runStage(id)}
+                >
+                  Regenerate
+                </Button>
               </div>
             )}
           </section>

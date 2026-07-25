@@ -114,7 +114,9 @@ export type Action =
       stage: GenStage;
       data: Strategy | CalendarItem[] | CopyAsset[];
     }
+  | { type: "STAGE_FAIL" }
   | { type: "REGENERATE"; stage: GenStage }
+  | { type: "TO_GATE" }
   | { type: "ADD_USAGE"; tokensIn: number; tokensOut: number; costEur: number }
   | { type: "TO_RESULT" }
   | { type: "BACK_TO_GENERATION" }

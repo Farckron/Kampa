@@ -20,7 +20,11 @@ const QUESTIONS: Question[] = [
   { field: "sell", label: "What do you sell?" },
   { field: "buyer", label: "Who buys it?" },
   { field: "region", label: "Where are your customers?" },
-  { field: "budget", label: "Monthly marketing budget (EUR)" },
+  {
+    field: "budget",
+    label: "Monthly marketing budget (EUR)",
+    helper: "The plan covers 90 days, so it spends three months of this.",
+  },
   { field: "hours", label: "Hours per week you can spend" },
   { field: "channels", label: "Channels you already use" },
   { field: "goal", label: "Your one goal for the next 90 days" },
