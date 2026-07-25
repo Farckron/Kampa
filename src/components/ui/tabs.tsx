@@ -13,6 +13,9 @@ function Tabs({
     <TabsPrimitive.Root
       data-slot="tabs"
       data-orientation={orientation}
+      // `data-horizontal:`/`data-vertical:` below compile to plain attribute
+      // selectors, so the orientation needs an attribute of its own.
+      {...{ [`data-${orientation}`]: "" }}
       className={cn(
         "group/tabs flex gap-2 data-horizontal:flex-col",
         className
@@ -79,7 +82,7 @@ function TabsContent({
   return (
     <TabsPrimitive.Content
       data-slot="tabs-content"
-      className={cn("flex-1 text-sm outline-none", className)}
+      className={cn("min-w-0 flex-1 text-sm outline-none", className)}
       {...props}
     />
   )
