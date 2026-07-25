@@ -13,4 +13,14 @@ const samples = defineCollection({
   }),
 });
 
-export const collections = { samples };
+const blog = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    keywords: z.array(z.string()).min(3).max(5),
+  }),
+});
+
+export const collections = { samples, blog };

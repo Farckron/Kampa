@@ -12,6 +12,10 @@ Goal: visual language locked; nav + hero + footer live.
       campaign-package CSS mockup + BUILT FOR strip
 - [x] `Footer.astro`: columns + oversized flat wordmark (SPEC §3.8)
 - [x] `index.astro` composes Nav + Hero + Footer; responsive 360px→1440px
-- [ ] Lighthouse on deployed page ≥95 all categories (pending first deploy)
+- [x] Lighthouse on deployed page ≥95 all categories — 2026-07-25 audit of the
+      live site (https://farckron.github.io/Kampa/) scored
+      **100 performance / 100 accessibility / 100 best-practices / 100 SEO**.
+      Cross-browser: chromium tested (e2e suite); firefox and safari/iOS
+      manual passes still pending, tracked in `docs/LAUNCH.md` pre-flight.
 
 Done when: deployed landing shows polished hero, nav, footer; zero client JS.

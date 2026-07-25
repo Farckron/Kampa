@@ -4,7 +4,13 @@ import { expect, test } from "@playwright/test";
 // zero third-party requests. These must fail loudly, not drift.
 
 // Relative to baseURL, which carries the site base path.
-const PAGES = [".", "faq", "samples/riga-coffee-shop"];
+const PAGES = [
+  ".",
+  "faq",
+  "samples/riga-coffee-shop",
+  "blog",
+  "blog/free-jasper-alternative",
+];
 
 test("landing pages ship no executable scripts", async ({ request }) => {
   for (const path of PAGES) {
