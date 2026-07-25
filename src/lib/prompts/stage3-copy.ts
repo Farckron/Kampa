@@ -1,7 +1,11 @@
 import type { CalendarItem, Intake, Strategy } from "@/components/app/types";
 import { COPY_SCHEMA } from "./schemas";
 import { SYSTEM_PROMPT } from "./system";
-import { intakeBlock, strategyBlock, type BuiltPrompt } from "./stage1-strategy";
+import {
+  intakeBlock,
+  strategyBlock,
+  type BuiltPrompt,
+} from "./stage1-strategy";
 
 /** Copy is generated in three calls so no single response hits max_tokens. */
 export const COPY_BATCHES: number[][] = [

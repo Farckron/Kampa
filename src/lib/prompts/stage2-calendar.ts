@@ -1,7 +1,11 @@
 import type { Intake, Strategy } from "@/components/app/types";
 import { CALENDAR_SCHEMA } from "./schemas";
 import { SYSTEM_PROMPT } from "./system";
-import { intakeBlock, strategyBlock, type BuiltPrompt } from "./stage1-strategy";
+import {
+  intakeBlock,
+  strategyBlock,
+  type BuiltPrompt,
+} from "./stage1-strategy";
 
 export function buildCalendarPrompt(
   intake: Intake,

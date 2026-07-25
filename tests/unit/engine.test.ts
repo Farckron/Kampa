@@ -23,7 +23,8 @@ vi.mock("@/lib/anthropic", async (importOriginal) => {
 const stream = vi.mocked(streamMessage);
 
 /** The whole user message of one call, as the model reads it. */
-const sentText = (o: StreamOptions) => o.userBlocks.map((b) => b.text).join("\n\n");
+const sentText = (o: StreamOptions) =>
+  o.userBlocks.map((b) => b.text).join("\n\n");
 
 const KEY = "sk-ant-test-0000000000000000000000";
 
@@ -160,7 +161,7 @@ describe("runStageReal", () => {
 
   it("streams text into the preview callback", async () => {
     stream.mockImplementation(async (o) => {
-      o.onText?.("{ \"a\"");
+      o.onText?.('{ "a"');
       o.onText?.(": 1 }");
       return reply(strategy);
     });
@@ -174,7 +175,11 @@ describe("runStageReal", () => {
 
   it("retries exactly once with the validation error appended", async () => {
     stream
-      .mockResolvedValueOnce({ text: "not json at all", usage, stopReason: null })
+      .mockResolvedValueOnce({
+        text: "not json at all",
+        usage,
+        stopReason: null,
+      })
       .mockResolvedValueOnce(reply(strategy));
     const h = harness();
 
@@ -277,7 +282,9 @@ describe("runStageReal", () => {
 
     await runStageReal(h.dispatch, "calendar", h.ctx);
 
-    expect(sentText(stream.mock.calls[0]![0])).toContain("The fast local bike fix.");
+    expect(sentText(stream.mock.calls[0]![0])).toContain(
+      "The fast local bike fix.",
+    );
     expect(h.actions[2]).toMatchObject({ stage: "calendar", data: calendar });
   });
 
@@ -351,7 +358,9 @@ describe("checkBudget", () => {
     expect(built.blocks.map((b) => b.text).join("\n\n")).toContain(
       `sum EXACTLY to ${total} EUR`,
     );
-    expect(checkBudget(withSplit([{ item: "all", eur: total }]), intake)).toBeNull();
+    expect(
+      checkBudget(withSplit([{ item: "all", eur: total }]), intake),
+    ).toBeNull();
     // the raw monthly figure must NOT pass — that was the 3x bug
     expect(
       checkBudget(withSplit([{ item: "all", eur: intake.budget! }]), intake),
@@ -395,7 +404,9 @@ describe("checkHours", () => {
 
   it("sums items within a week before comparing", () => {
     const over = [...calendar, { ...calendar[0]!, minutes: 200 }];
-    expect(checkHours(over, intake)).toMatch(/One week goes over.*week 1 \(260 min\)/);
+    expect(checkHours(over, intake)).toMatch(
+      /One week goes over.*week 1 \(260 min\)/,
+    );
   });
 
   it("lists every offending week in order", () => {

@@ -35,7 +35,10 @@ export function intakeSections(intake: Intake): string {
 
 /** Byte-identical across all three stages, so it earns a cache breakpoint. */
 export function intakeBlock(intake: Intake): UserBlock {
-  return { text: `Here is the business.\n\n${intakeSections(intake)}`, cache: true };
+  return {
+    text: `Here is the business.\n\n${intakeSections(intake)}`,
+    cache: true,
+  };
 }
 
 /** Sent verbatim by stages 2 and 3 (and three times over for the copy

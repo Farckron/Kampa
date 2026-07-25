@@ -6,7 +6,11 @@ import { expect, test, type Page } from "@playwright/test";
 const KEY = "sk-ant-test-000000000000000000";
 const API = "https://api.anthropic.com/v1/messages";
 
-function watchOffOrigin(page: Page, origin: string, allow: string[] = []): string[] {
+function watchOffOrigin(
+  page: Page,
+  origin: string,
+  allow: string[] = [],
+): string[] {
   const stray: string[] = [];
   page.on("request", (r) => {
     const url = r.url();
@@ -73,9 +77,17 @@ const STRATEGY = {
     { item: "Held back for weeks 9-12", eur: 180 },
   ],
   kpis: [
-    { name: "Morning cups", target: "40 a day by week 12", where: "Till tally" },
+    {
+      name: "Morning cups",
+      target: "40 a day by week 12",
+      where: "Till tally",
+    },
     { name: "Profile views", target: "300 a month", where: "GBP dashboard" },
-    { name: "Saved posts", target: "50 by week 8", where: "Instagram insights" },
+    {
+      name: "Saved posts",
+      target: "50 by week 8",
+      where: "Instagram insights",
+    },
   ],
 };
 
@@ -119,7 +131,11 @@ async function interceptApi(page: Page, delayMs = 0): Promise<Seen[]> {
     const n = seen.length;
     const userText = sentText(body);
     const payload =
-      n === 1 ? STRATEGY : n === 2 ? { items: CALENDAR } : { assets: copyFor(userText) };
+      n === 1
+        ? STRATEGY
+        : n === 2
+          ? { items: CALENDAR }
+          : { assets: copyFor(userText) };
     if (delayMs) await new Promise((r) => setTimeout(r, delayMs));
     await route.fulfill({
       status: 200,
@@ -134,7 +150,9 @@ async function fillIntake(page: Page, budget: string) {
   await page.locator("#api-key").fill(KEY);
   await page.getByRole("button", { name: "Continue" }).click();
 
-  await page.locator("#intake-sell").fill("Speciality coffee, eat in and take away");
+  await page
+    .locator("#intake-sell")
+    .fill("Speciality coffee, eat in and take away");
   await page.getByRole("button", { name: "Next" }).click();
   await page.locator("#intake-buyer").fill("Office workers walking to work");
   await page.getByRole("button", { name: "Next" }).click();
@@ -186,8 +204,12 @@ test("key → intake → real generation against an intercepted api → result",
   await stageSection(page, "strategy")
     .getByRole("button", { name: "Generate" })
     .click();
-  await expect(stageSection(page, "strategy").getByText("Generating…")).toBeVisible();
-  await expect(stageSection(page, "strategy").getByText("Done ·")).toBeVisible();
+  await expect(
+    stageSection(page, "strategy").getByText("Generating…"),
+  ).toBeVisible();
+  await expect(
+    stageSection(page, "strategy").getByText("Done ·"),
+  ).toBeVisible();
 
   // answers stay editable after submitting, without losing generated stages
   const backToBudget = async () => {
@@ -201,7 +223,9 @@ test("key → intake → real generation against an intercepted api → result",
   for (let i = 0; i < 4; i++)
     await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Create my campaign" }).click();
-  await expect(stageSection(page, "strategy").getByText("Done ·")).toBeVisible();
+  await expect(
+    stageSection(page, "strategy").getByText("Done ·"),
+  ).toBeVisible();
 
   // the split still sums to 1200, so the raised budget (500 x 3) must be flagged
   await expect(
@@ -221,11 +245,15 @@ test("key → intake → real generation against an intercepted api → result",
   await stageSection(page, "calendar")
     .getByRole("button", { name: "Generate" })
     .click();
-  await expect(stageSection(page, "calendar").getByText("Done ·")).toBeVisible();
+  await expect(
+    stageSection(page, "calendar").getByText("Done ·"),
+  ).toBeVisible();
 
   // copy is three sequential calls; batch 1's streamed text is on screen while
   // batch 2 is still in flight, which only happens if onText really renders.
-  await stageSection(page, "copy").getByRole("button", { name: "Generate" }).click();
+  await stageSection(page, "copy")
+    .getByRole("button", { name: "Generate" })
+    .click();
   await expect(page.getByTestId("stream-preview")).toContainText(COPY_MARK);
   await expect(stageSection(page, "copy").getByText("Done ·")).toBeVisible();
 
@@ -248,7 +276,9 @@ test("key → intake → real generation against an intercepted api → result",
     expect(body).not.toHaveProperty("top_k");
     expect(body.stream).toBe(true);
     // no assistant prefill
-    expect(body.messages.map((m: { role: string }) => m.role)).toEqual(["user"]);
+    expect(body.messages.map((m: { role: string }) => m.role)).toEqual([
+      "user",
+    ]);
     expect(body.system[0].cache_control).toEqual({ type: "ephemeral" });
     // the intake block is cached too, and it is the same bytes every call
     expect(body.messages[0].content[0]).toEqual({
@@ -256,17 +286,25 @@ test("key → intake → real generation against an intercepted api → result",
       text: expect.stringContaining("Here is the business."),
       cache_control: { type: "ephemeral" },
     });
-    expect(body.messages[0].content[0].text).toBe(seen[0]!.body.messages[0].content[0].text);
+    expect(body.messages[0].content[0].text).toBe(
+      seen[0]!.body.messages[0].content[0].text,
+    );
     // never on the task block, which changes every call
     expect(body.messages[0].content.at(-1).cache_control).toBeUndefined();
     expect(body.model).toBe("claude-sonnet-5");
   }
   // stages 2-3 cache the agreed strategy on top of it
   for (const { body } of seen.slice(1)) {
-    expect(body.messages[0].content[1].cache_control).toEqual({ type: "ephemeral" });
-    expect(body.messages[0].content[1].text).toBe(seen[1]!.body.messages[0].content[1].text);
+    expect(body.messages[0].content[1].cache_control).toEqual({
+      type: "ephemeral",
+    });
+    expect(body.messages[0].content[1].text).toBe(
+      seen[1]!.body.messages[0].content[1].text,
+    );
   }
-  expect(seen.map((s) => s.body.max_tokens)).toEqual([3000, 4000, 5000, 5000, 5000]);
+  expect(seen.map((s) => s.body.max_tokens)).toEqual([
+    3000, 4000, 5000, 5000, 5000,
+  ]);
   expect(
     seen.slice(2).map((s) => /WEEKS ([\d, ]+)\n/.exec(sentText(s.body))?.[1]),
   ).toEqual(["1, 2, 3, 4", "5, 6, 7, 8", "9, 10, 11, 12"]);

@@ -12,12 +12,7 @@ export interface Usage {
 }
 
 export type ApiErrorKind =
-  | "auth"
-  | "rate_limit"
-  | "overloaded"
-  | "invalid"
-  | "refusal"
-  | "network";
+  "auth" | "rate_limit" | "overloaded" | "invalid" | "refusal" | "network";
 
 export class ApiError extends Error {
   kind: ApiErrorKind;
@@ -62,7 +57,11 @@ function httpError(status: number, retryAfter: string | null): ApiError {
   if (status === 429) {
     const sec = Number(retryAfter);
     const n = Number.isFinite(sec) && sec > 0 ? Math.round(sec) : 60;
-    return new ApiError("rate_limit", `Rate limited — wait ${n}s and try again.`, n);
+    return new ApiError(
+      "rate_limit",
+      `Rate limited — wait ${n}s and try again.`,
+      n,
+    );
   }
   if (status === 529 || status === 503)
     return new ApiError(
@@ -99,7 +98,11 @@ export async function streamMessage(
       },
     ],
     ...(opts.schema
-      ? { output_config: { format: { type: "json_schema", schema: opts.schema } } }
+      ? {
+          output_config: {
+            format: { type: "json_schema", schema: opts.schema },
+          },
+        }
       : {}),
   };
 
@@ -170,8 +173,15 @@ export async function streamMessage(
             "Anthropic is overloaded right now. Try again in a minute.",
           )
         : t === "rate_limit_error"
-          ? new ApiError("rate_limit", "Rate limited — wait 60s and try again.", 60)
-          : new ApiError("invalid", "The request was rejected. Try regenerating.");
+          ? new ApiError(
+              "rate_limit",
+              "Rate limited — wait 60s and try again.",
+              60,
+            )
+          : new ApiError(
+              "invalid",
+              "The request was rejected. Try regenerating.",
+            );
     }
   };
 

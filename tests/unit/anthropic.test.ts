@@ -64,7 +64,11 @@ const run = (over: Partial<Parameters<typeof streamMessage>[0]> = {}) =>
 describe("streamMessage", () => {
   it("assembles text across chunks that split mid-line", async () => {
     const script =
-      START + delta("Hello ") + delta("brave ") + delta("world") + stop("end_turn");
+      START +
+      delta("Hello ") +
+      delta("brave ") +
+      delta("world") +
+      stop("end_turn");
     // Cuts land inside SSE lines and inside events, not on boundaries.
     const cuts = [7, 45, 130, 190, 240, 300, 360, 420];
     fetchMock.mockResolvedValue(ok(script, cuts));
@@ -123,7 +127,10 @@ describe("streamMessage", () => {
       ok(
         START +
           delta("I ") +
-          stop("refusal", { category: "harmful", explanation: "Not doing that." }),
+          stop("refusal", {
+            category: "harmful",
+            explanation: "Not doing that.",
+          }),
       ),
     );
     const e = await run().catch((x) => x);
@@ -138,7 +145,10 @@ describe("streamMessage", () => {
       schema,
       cacheSystem: true,
       maxTokens: 4000,
-      userBlocks: [{ text: "Here is the business.", cache: true }, { text: "Make a plan." }],
+      userBlocks: [
+        { text: "Here is the business.", cache: true },
+        { text: "Make a plan." },
+      ],
     });
 
     const [url, init] = fetchMock.mock.calls[0];
@@ -192,7 +202,12 @@ describe("streamMessage", () => {
   });
 
   it("never leaks the api key in error messages", async () => {
-    for (const res of [fail(401), fail(429, { "retry-after": "7" }), fail(529), fail(400)]) {
+    for (const res of [
+      fail(401),
+      fail(429, { "retry-after": "7" }),
+      fail(529),
+      fail(400),
+    ]) {
       fetchMock.mockResolvedValue(res);
       const e = await run().catch((x) => x);
       expect(`${e.message} ${e.userMessage} ${e.stack}`).not.toContain(KEY);

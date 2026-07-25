@@ -92,7 +92,12 @@ describe("validators accept valid data", () => {
 
   it("round-trips copy assets", () => {
     const assets: CopyAsset[] = [
-      { week: 1, channel: "Instagram", title: "Cable fix", body: "Chain was toast." },
+      {
+        week: 1,
+        channel: "Instagram",
+        title: "Cable fix",
+        body: "Chain was toast.",
+      },
     ];
     expect(validateCopy({ assets })).toEqual(assets);
   });
@@ -106,7 +111,10 @@ describe("validators reject bad data", () => {
 
   it("rejects a wrong type", () => {
     expect(() =>
-      validateStrategy({ ...strategy, budgetSplit: [{ item: "Ads", eur: "400" }] }),
+      validateStrategy({
+        ...strategy,
+        budgetSplit: [{ item: "Ads", eur: "400" }],
+      }),
     ).toThrow(/eur.*expected a number/);
   });
 
@@ -203,20 +211,28 @@ describe("buildCopyPrompt", () => {
   });
 
   it("batches all 12 weeks exactly once", () => {
-    expect(COPY_BATCHES.flat()).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+    expect(COPY_BATCHES.flat()).toEqual([
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+    ]);
   });
 });
 
 describe("cache breakpoints", () => {
   const s1 = buildStrategyPrompt(intake);
   const s2 = buildCalendarPrompt(intake, strategy);
-  const s3 = COPY_BATCHES.map((w) => buildCopyPrompt(intake, strategy, calendar, w));
+  const s3 = COPY_BATCHES.map((w) =>
+    buildCopyPrompt(intake, strategy, calendar, w),
+  );
 
   it("marks intake and strategy, never the task block", () => {
     expect(s1.blocks.map((b) => b.cache ?? false)).toEqual([true, false]);
     expect(s2.blocks.map((b) => b.cache ?? false)).toEqual([true, true, false]);
     for (const p of s3)
-      expect(p.blocks.map((b) => b.cache ?? false)).toEqual([true, true, false]);
+      expect(p.blocks.map((b) => b.cache ?? false)).toEqual([
+        true,
+        true,
+        false,
+      ]);
   });
 
   it("keeps the cached prefix byte-identical across all five calls", () => {

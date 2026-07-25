@@ -14,7 +14,10 @@ export interface Pricing {
  * a second literal table that can drift.
  */
 export const PRICES: Record<string, Pricing> = Object.fromEntries(
-  MODELS.map((m) => [m.id, { inPerMTok: m.inPerMTok, outPerMTok: m.outPerMTok }]),
+  MODELS.map((m) => [
+    m.id,
+    { inPerMTok: m.inPerMTok, outPerMTok: m.outPerMTok },
+  ]),
 );
 
 export const CACHE_READ_FACTOR = 0.1;
@@ -47,7 +50,10 @@ export function usageToEur(
   );
 }
 
-export const STAGE_ESTIMATES: Record<string, { tokensIn: number; tokensOut: number }> = {
+export const STAGE_ESTIMATES: Record<
+  string,
+  { tokensIn: number; tokensOut: number }
+> = {
   strategy: { tokensIn: 6000, tokensOut: 1500 },
   calendar: { tokensIn: 9000, tokensOut: 2500 },
   copy: { tokensIn: 14000, tokensOut: 4500 },

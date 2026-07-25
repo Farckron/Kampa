@@ -98,7 +98,8 @@ async function generate<T>(
 
     dispatch({
       type: "ADD_USAGE",
-      tokensIn: usage.inputTokens + usage.cacheReadTokens + usage.cacheWriteTokens,
+      tokensIn:
+        usage.inputTokens + usage.cacheReadTokens + usage.cacheWriteTokens,
       tokensOut: usage.outputTokens,
       costEur: usageToEur(model, usage),
     });
@@ -158,14 +159,25 @@ export async function runStageReal(
     let data: Strategy | CalendarItem[] | CopyAsset[];
 
     if (stage === "strategy") {
-      data = (await run(buildStrategyPrompt(ctx.intake), validateStrategy)).value;
-    } else if (stage === "calendar") {
-      const strategy = need(ctx.campaign.strategy, "Generate the strategy first.");
-      data = (await run(buildCalendarPrompt(ctx.intake, strategy), validateCalendar))
+      data = (await run(buildStrategyPrompt(ctx.intake), validateStrategy))
         .value;
+    } else if (stage === "calendar") {
+      const strategy = need(
+        ctx.campaign.strategy,
+        "Generate the strategy first.",
+      );
+      data = (
+        await run(buildCalendarPrompt(ctx.intake, strategy), validateCalendar)
+      ).value;
     } else {
-      const strategy = need(ctx.campaign.strategy, "Generate the strategy first.");
-      const calendar = need(ctx.campaign.calendar, "Generate the calendar first.");
+      const strategy = need(
+        ctx.campaign.strategy,
+        "Generate the strategy first.",
+      );
+      const calendar = need(
+        ctx.campaign.calendar,
+        "Generate the calendar first.",
+      );
       const assets: CopyAsset[] = [];
       let preview = "";
       for (const weeks of COPY_BATCHES) {
@@ -186,7 +198,10 @@ export async function runStageReal(
     ctx.onError(
       e instanceof ApiError
         ? e
-        : new ApiError("network", "Something went wrong. Try that stage again."),
+        : new ApiError(
+            "network",
+            "Something went wrong. Try that stage again.",
+          ),
     );
   }
 }
@@ -203,7 +218,9 @@ export function checkBudget(strategy: Strategy, intake: Intake): string | null {
   if (Math.abs(sum - total) < 0.005) return null;
   const over = sum > total;
   return `The budget split adds up to €${sum.toFixed(0)}, but 90 days at €${intake.budget} a month is €${total} — ${
-    over ? `€${(sum - total).toFixed(0)} too much` : `€${(total - sum).toFixed(0)} unspent`
+    over
+      ? `€${(sum - total).toFixed(0)} too much`
+      : `€${(total - sum).toFixed(0)} unspent`
   }. Regenerate the strategy to get the arithmetic right.`;
 }
 

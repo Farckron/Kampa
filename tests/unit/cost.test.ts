@@ -30,19 +30,31 @@ describe("usageToEur", () => {
   // 100k in + 10k out, no cache.
   it("bills sonnet at 3/15", () => {
     expect(
-      usageToEur("claude-sonnet-5", { inputTokens: 100_000, outputTokens: 10_000, ...NO_CACHE }),
+      usageToEur("claude-sonnet-5", {
+        inputTokens: 100_000,
+        outputTokens: 10_000,
+        ...NO_CACHE,
+      }),
     ).toBeCloseTo(0.45, 10);
   });
 
   it("bills haiku at 1/5", () => {
     expect(
-      usageToEur("claude-haiku-4-5", { inputTokens: 100_000, outputTokens: 10_000, ...NO_CACHE }),
+      usageToEur("claude-haiku-4-5", {
+        inputTokens: 100_000,
+        outputTokens: 10_000,
+        ...NO_CACHE,
+      }),
     ).toBeCloseTo(0.15, 10);
   });
 
   it("bills opus at 5/25", () => {
     expect(
-      usageToEur("claude-opus-5", { inputTokens: 100_000, outputTokens: 10_000, ...NO_CACHE }),
+      usageToEur("claude-opus-5", {
+        inputTokens: 100_000,
+        outputTokens: 10_000,
+        ...NO_CACHE,
+      }),
     ).toBeCloseTo(0.75, 10);
   });
 
@@ -88,7 +100,9 @@ describe("estimateEur", () => {
 
   it("throws on an unknown model or stage", () => {
     expect(() => estimateEur("gpt-nope", "strategy")).toThrow(/unknown model/);
-    expect(() => estimateEur("claude-sonnet-5", "nope")).toThrow(/unknown stage/);
+    expect(() => estimateEur("claude-sonnet-5", "nope")).toThrow(
+      /unknown stage/,
+    );
   });
 });
 
