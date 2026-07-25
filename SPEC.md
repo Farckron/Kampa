@@ -29,7 +29,7 @@ trust asset.
 
 ## 2. Architecture (approved: option A)
 
-- **Astro 5** static site. All marketing pages are pure Astro components,
+- **Astro 7** static site. All marketing pages are pure Astro components,
   zero client JS.
 - **One React 19 island** on `/app` (`client:only="react"`) — the campaign
   wizard.
