@@ -14,9 +14,16 @@ import {
   validateStrategy,
 } from "@/lib/prompts/schemas";
 import { SYSTEM_PROMPT } from "@/lib/prompts/system";
-import { buildStrategyPrompt } from "@/lib/prompts/stage1-strategy";
+import {
+  budget90,
+  buildStrategyPrompt,
+  type BuiltPrompt,
+} from "@/lib/prompts/stage1-strategy";
 import { buildCalendarPrompt } from "@/lib/prompts/stage2-calendar";
 import { buildCopyPrompt, COPY_BATCHES } from "@/lib/prompts/stage3-copy";
+
+/** The whole user message, as the model reads it. */
+const userText = (p: BuiltPrompt) => p.blocks.map((b) => b.text).join("\n\n");
 
 const intake: Intake = {
   sell: "Bike repairs and second-hand bikes",
@@ -143,9 +150,17 @@ describe("buildStrategyPrompt", () => {
   const built = buildStrategyPrompt(intake);
 
   it("embeds the intake, including the budget number", () => {
-    expect(built.userText).toContain("600");
-    expect(built.userText).toContain(intake.sell);
-    expect(built.userText).toContain("240 minutes per week");
+    expect(userText(built)).toContain("600");
+    expect(userText(built)).toContain(intake.sell);
+    expect(userText(built)).toContain("240 minutes per week");
+  });
+
+  it("asks for the 90-day pot, not the monthly figure", () => {
+    expect(budget90(intake)).toBe(1800);
+    expect(userText(built)).toContain(
+      "1800 EUR total for the 90 days (600 EUR per month)",
+    );
+    expect(userText(built)).toContain("sum EXACTLY to 1800 EUR");
   });
 
   it("returns the strategy schema and its token budget", () => {
@@ -159,9 +174,9 @@ describe("buildCalendarPrompt", () => {
   const built = buildCalendarPrompt(intake, strategy);
 
   it("carries the chosen channels and the weekly minute ceiling", () => {
-    expect(built.userText).toContain("Google Business Profile");
-    expect(built.userText).toContain("240 minutes or less");
-    expect(built.userText).toContain(strategy.positioning);
+    expect(userText(built)).toContain("Google Business Profile");
+    expect(userText(built)).toContain("240 minutes or less");
+    expect(userText(built)).toContain(strategy.positioning);
   });
 
   it("returns the calendar schema and its token budget", () => {
@@ -173,21 +188,43 @@ describe("buildCalendarPrompt", () => {
 describe("buildCopyPrompt", () => {
   it("includes only the requested weeks' calendar items", () => {
     const built = buildCopyPrompt(intake, strategy, calendar, [5, 6, 7, 8]);
-    expect(built.userText).toContain("Week 5:");
-    expect(built.userText).toContain("Week 8:");
-    expect(built.userText).not.toContain("Week 4:");
-    expect(built.userText).not.toContain("Week 9:");
-    expect(built.userText).toContain("for these 4 items");
+    expect(userText(built)).toContain("Week 5:");
+    expect(userText(built)).toContain("Week 8:");
+    expect(userText(built)).not.toContain("Week 4:");
+    expect(userText(built)).not.toContain("Week 9:");
+    expect(userText(built)).toContain("for these 4 items");
     expect(built.schema).toBe(COPY_SCHEMA);
     expect(built.maxTokens).toBe(5000);
   });
 
   it("passes the voice samples through", () => {
     const built = buildCopyPrompt(intake, strategy, calendar, [1]);
-    expect(built.userText).toContain(intake.voiceSamples);
+    expect(userText(built)).toContain(intake.voiceSamples);
   });
 
   it("batches all 12 weeks exactly once", () => {
     expect(COPY_BATCHES.flat()).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+  });
+});
+
+describe("cache breakpoints", () => {
+  const s1 = buildStrategyPrompt(intake);
+  const s2 = buildCalendarPrompt(intake, strategy);
+  const s3 = COPY_BATCHES.map((w) => buildCopyPrompt(intake, strategy, calendar, w));
+
+  it("marks intake and strategy, never the task block", () => {
+    expect(s1.blocks.map((b) => b.cache ?? false)).toEqual([true, false]);
+    expect(s2.blocks.map((b) => b.cache ?? false)).toEqual([true, true, false]);
+    for (const p of s3)
+      expect(p.blocks.map((b) => b.cache ?? false)).toEqual([true, true, false]);
+  });
+
+  it("keeps the cached prefix byte-identical across all five calls", () => {
+    const intakes = [s1, s2, ...s3].map((p) => p.blocks[0]!.text);
+    expect(intakes[0]).toContain("Here is the business.");
+    expect(new Set(intakes).size).toBe(1);
+
+    const strategies = [s2, ...s3].map((p) => p.blocks[1]!.text);
+    expect(new Set(strategies).size).toBe(1);
   });
 });

@@ -1,7 +1,7 @@
 import type { Intake, Strategy } from "@/components/app/types";
 import { CALENDAR_SCHEMA } from "./schemas";
 import { SYSTEM_PROMPT } from "./system";
-import { intakeSections, type BuiltPrompt } from "./stage1-strategy";
+import { intakeBlock, strategyBlock, type BuiltPrompt } from "./stage1-strategy";
 
 export function buildCalendarPrompt(
   intake: Intake,
@@ -10,14 +10,7 @@ export function buildCalendarPrompt(
   const minutes = intake.hours === null ? null : intake.hours * 60;
   const channels = strategy.chosen.map((c) => c.channel).join(", ");
 
-  const userText = `Here is the business.
-
-${intakeSections(intake)}
-
-STRATEGY ALREADY AGREED (do not revisit it)
-${JSON.stringify(strategy, null, 2)}
-
-TASK
+  const task = `TASK
 Produce the 12-week calendar JSON.
 
 - Use ONLY these channels: ${channels}. Nothing else, not even once.
@@ -32,7 +25,7 @@ Return JSON only.`;
 
   return {
     system: SYSTEM_PROMPT,
-    userText,
+    blocks: [intakeBlock(intake), strategyBlock(strategy), { text: task }],
     schema: CALENDAR_SCHEMA,
     maxTokens: 4000,
   };

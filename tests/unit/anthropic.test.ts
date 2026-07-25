@@ -56,7 +56,7 @@ const run = (over: Partial<Parameters<typeof streamMessage>[0]> = {}) =>
     apiKey: KEY,
     model: "claude-sonnet-5",
     system: "You are a marketing strategist.",
-    userText: "Make a plan.",
+    userBlocks: [{ text: "Make a plan." }],
     maxTokens: 3000,
     ...over,
   });
@@ -134,7 +134,12 @@ describe("streamMessage", () => {
   it("sends exactly the documented headers and body", async () => {
     fetchMock.mockResolvedValue(ok(START + delta("x") + stop("end_turn")));
     const schema = { type: "object", properties: { a: { type: "string" } } };
-    await run({ schema, cacheSystem: true, maxTokens: 4000 });
+    await run({
+      schema,
+      cacheSystem: true,
+      maxTokens: 4000,
+      userBlocks: [{ text: "Here is the business.", cache: true }, { text: "Make a plan." }],
+    });
 
     const [url, init] = fetchMock.mock.calls[0];
     expect(url).toBe("https://api.anthropic.com/v1/messages");
@@ -151,9 +156,6 @@ describe("streamMessage", () => {
       model: "claude-sonnet-5",
       max_tokens: 4000,
       stream: true,
-      messages: [
-        { role: "user", content: [{ type: "text", text: "Make a plan." }] },
-      ],
       output_config: { format: { type: "json_schema", schema } },
     });
     expect(body.system[0]).toEqual({
@@ -161,6 +163,20 @@ describe("streamMessage", () => {
       text: "You are a marketing strategist.",
       cache_control: { type: "ephemeral" },
     });
+    // the intake block is a cache breakpoint too; the task block is not
+    expect(body.messages).toEqual([
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: "Here is the business.",
+            cache_control: { type: "ephemeral" },
+          },
+          { type: "text", text: "Make a plan." },
+        ],
+      },
+    ]);
     expect("temperature" in body).toBe(false);
     expect("top_p" in body).toBe(false);
     expect("top_k" in body).toBe(false);
@@ -171,6 +187,7 @@ describe("streamMessage", () => {
     await run();
     const body = JSON.parse(fetchMock.mock.calls[0][1].body);
     expect(body.system[0].cache_control).toBeUndefined();
+    expect(body.messages[0].content[0].cache_control).toBeUndefined();
     expect(body.output_config).toBeUndefined();
   });
 

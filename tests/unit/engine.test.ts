@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { ApiError } from "@/lib/anthropic";
-import { streamMessage } from "@/lib/anthropic";
+import { ApiError, streamMessage, type StreamOptions } from "@/lib/anthropic";
 import {
   checkBudget,
   checkHours,
   runStageReal,
   type RunContext,
 } from "@/components/app/engine";
+import { budget90, buildStrategyPrompt } from "@/lib/prompts/stage1-strategy";
 import type {
   Action,
   CalendarItem,
@@ -21,6 +21,9 @@ vi.mock("@/lib/anthropic", async (importOriginal) => {
 });
 
 const stream = vi.mocked(streamMessage);
+
+/** The whole user message of one call, as the model reads it. */
+const sentText = (o: StreamOptions) => o.userBlocks.map((b) => b.text).join("\n\n");
 
 const KEY = "sk-ant-test-0000000000000000000000";
 
@@ -47,9 +50,10 @@ const strategy: Strategy = {
     { channel: "Paid search", reason: "300 EUR buys 40 clicks." },
     { channel: "Podcast", reason: "8h per episode." },
   ],
+  // 400 EUR a month is a 1200 EUR pot over the 90 days
   budgetSplit: [
-    { item: "Boosted posts", eur: 240 },
-    { item: "Flyers", eur: 160 },
+    { item: "Boosted posts", eur: 720 },
+    { item: "Flyers", eur: 480 },
   ],
   kpis: [
     { name: "Repairs booked", target: "20 by week 12", where: "Till tally" },
@@ -90,6 +94,18 @@ function harness(over: Partial<RunContext> = {}) {
     ...over,
   };
   return { actions, errors, ctx, dispatch: (a: Action) => actions.push(a) };
+}
+
+/** Runs something that sleeps between attempts without waiting in real time. */
+async function withoutWaiting(run: () => Promise<void>): Promise<void> {
+  vi.useFakeTimers();
+  try {
+    const done = run();
+    await vi.runAllTimersAsync();
+    await done;
+  } finally {
+    vi.useRealTimers();
+  }
 }
 
 beforeEach(() => {
@@ -165,7 +181,7 @@ describe("runStageReal", () => {
     await runStageReal(h.dispatch, "strategy", h.ctx);
 
     expect(stream).toHaveBeenCalledTimes(2);
-    const retry = stream.mock.calls[1]![0].userText;
+    const retry = sentText(stream.mock.calls[1]![0]);
     expect(retry).toMatch(/Your previous reply failed validation: /);
     expect(retry).toMatch(/Return corrected JSON only\.$/);
     expect(h.actions.map((a) => a.type)).toEqual([
@@ -192,15 +208,67 @@ describe("runStageReal", () => {
     expect(h.errors[0]!.kind).toBe("invalid");
   });
 
-  it("reports an ApiError and dispatches no STAGE_DONE", async () => {
-    stream.mockRejectedValue(new ApiError("rate_limit", "Rate limited", 30));
+  it("reports a non-transient ApiError at once and dispatches no STAGE_DONE", async () => {
+    stream.mockRejectedValue(new ApiError("auth", "Key rejected"));
     const h = harness();
 
     await runStageReal(h.dispatch, "strategy", h.ctx);
 
+    expect(stream).toHaveBeenCalledTimes(1);
     expect(h.actions.map((a) => a.type)).toEqual(["STAGE_START", "STAGE_FAIL"]);
+    expect(h.errors[0]!.kind).toBe("auth");
+  });
+
+  it("retries a 529 exactly once and finishes the stage", async () => {
+    stream
+      .mockRejectedValueOnce(new ApiError("overloaded", "Overloaded"))
+      .mockResolvedValueOnce(reply(strategy));
+    const h = harness();
+
+    await withoutWaiting(() => runStageReal(h.dispatch, "strategy", h.ctx));
+
+    expect(stream).toHaveBeenCalledTimes(2);
+    expect(h.actions.map((a) => a.type)).toEqual([
+      "STAGE_START",
+      "ADD_USAGE",
+      "STAGE_DONE",
+    ]);
+    expect(h.errors).toEqual([]);
+  });
+
+  it("gives up when the second 529 lands too", async () => {
+    stream.mockRejectedValue(new ApiError("overloaded", "Overloaded"));
+    const h = harness();
+
+    await withoutWaiting(() => runStageReal(h.dispatch, "strategy", h.ctx));
+
+    expect(stream).toHaveBeenCalledTimes(2);
+    expect(h.actions.map((a) => a.type)).toEqual(["STAGE_START", "STAGE_FAIL"]);
+    expect(h.errors[0]!.kind).toBe("overloaded");
+  });
+
+  it("waits out retry-after on a 429, then reports it if it repeats", async () => {
+    stream.mockRejectedValue(new ApiError("rate_limit", "Rate limited", 30));
+    const h = harness();
+
+    await withoutWaiting(() => runStageReal(h.dispatch, "strategy", h.ctx));
+
+    expect(stream).toHaveBeenCalledTimes(2);
     expect(h.errors[0]!.kind).toBe("rate_limit");
     expect(h.errors[0]!.retryAfterSec).toBe(30);
+  });
+
+  it("never lets the transport and validation retries compound", async () => {
+    stream
+      .mockRejectedValueOnce(new ApiError("overloaded", "Overloaded"))
+      .mockResolvedValue({ text: "not json at all", usage, stopReason: null });
+    const h = harness();
+
+    await withoutWaiting(() => runStageReal(h.dispatch, "strategy", h.ctx));
+
+    // 1 transport retry + 1 validation retry = 3 requests, never 4
+    expect(stream).toHaveBeenCalledTimes(3);
+    expect(h.errors[0]!.kind).toBe("invalid");
   });
 
   it("passes the agreed strategy into the calendar prompt", async () => {
@@ -209,7 +277,7 @@ describe("runStageReal", () => {
 
     await runStageReal(h.dispatch, "calendar", h.ctx);
 
-    expect(stream.mock.calls[0]![0].userText).toContain("The fast local bike fix.");
+    expect(sentText(stream.mock.calls[0]![0])).toContain("The fast local bike fix.");
     expect(h.actions[2]).toMatchObject({ stage: "calendar", data: calendar });
   });
 
@@ -221,7 +289,7 @@ describe("runStageReal", () => {
       body: "Come by, we fix it while you wait.",
     });
     stream.mockImplementation(async (o) => {
-      const weeks = [...o.userText.matchAll(/WEEKS ([\d, ]+)\n/g)][0]![1]!
+      const weeks = [...sentText(o).matchAll(/WEEKS ([\d, ]+)\n/g)][0]![1]!
         .split(", ")
         .map(Number);
       return reply({ assets: weeks.map(asset) });
@@ -232,7 +300,7 @@ describe("runStageReal", () => {
 
     expect(stream).toHaveBeenCalledTimes(3);
     const weeksSeen = stream.mock.calls.map(
-      (c) => [...c[0].userText.matchAll(/WEEKS ([\d, ]+)\n/g)][0]![1],
+      (c) => [...sentText(c[0]).matchAll(/WEEKS ([\d, ]+)\n/g)][0]![1],
     );
     expect(weeksSeen).toEqual(["1, 2, 3, 4", "5, 6, 7, 8", "9, 10, 11, 12"]);
 
@@ -256,10 +324,10 @@ describe("runStageReal", () => {
           ],
         }),
       )
-      .mockRejectedValueOnce(new ApiError("overloaded", "Overloaded"));
+      .mockRejectedValue(new ApiError("overloaded", "Overloaded"));
     const h = harness();
 
-    await runStageReal(h.dispatch, "copy", h.ctx);
+    await withoutWaiting(() => runStageReal(h.dispatch, "copy", h.ctx));
 
     expect(h.actions.some((a) => a.type === "STAGE_DONE")).toBe(false);
     expect(h.errors[0]!.kind).toBe("overloaded");
@@ -272,27 +340,41 @@ describe("checkBudget", () => {
     budgetSplit: split,
   });
 
-  it("passes when the split lands exactly on the budget", () => {
+  it("passes when the split lands exactly on the 90-day budget", () => {
     expect(checkBudget(strategy, intake)).toBeNull();
+  });
+
+  it("validates against the same number the prompt asks for", () => {
+    const built = buildStrategyPrompt(intake);
+    const total = budget90(intake);
+    expect(total).toBe(1200);
+    expect(built.blocks.map((b) => b.text).join("\n\n")).toContain(
+      `sum EXACTLY to ${total} EUR`,
+    );
+    expect(checkBudget(withSplit([{ item: "all", eur: total }]), intake)).toBeNull();
+    // the raw monthly figure must NOT pass — that was the 3x bug
+    expect(
+      checkBudget(withSplit([{ item: "all", eur: intake.budget! }]), intake),
+    ).not.toBeNull();
   });
 
   it("tolerates float noise", () => {
     const s = withSplit([
-      { item: "a", eur: 133.33 },
-      { item: "b", eur: 133.33 },
-      { item: "c", eur: 133.34 },
+      { item: "a", eur: 399.99 },
+      { item: "b", eur: 400 },
+      { item: "c", eur: 400.01 },
     ]);
-    expect(checkBudget(s, { ...intake, budget: 400 })).toBeNull();
+    expect(checkBudget(s, intake)).toBeNull();
   });
 
   it("flags overspend", () => {
-    const s = withSplit([{ item: "a", eur: 500 }]);
-    expect(checkBudget(s, intake)).toMatch(/€500.*€400.*€100 too much/);
+    const s = withSplit([{ item: "a", eur: 1500 }]);
+    expect(checkBudget(s, intake)).toMatch(/€1500.*€1200.*€300 too much/);
   });
 
   it("flags underspend", () => {
-    const s = withSplit([{ item: "a", eur: 350 }]);
-    expect(checkBudget(s, intake)).toMatch(/€50 unspent/);
+    const s = withSplit([{ item: "a", eur: 1000 }]);
+    expect(checkBudget(s, intake)).toMatch(/€200 unspent/);
   });
 
   it("says nothing when no budget was given", () => {

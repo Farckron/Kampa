@@ -66,10 +66,11 @@ const STRATEGY = {
     { channel: "Paid search", reason: "400 EUR buys about 50 clicks here." },
     { channel: "Podcast", reason: "Eight hours per episode before editing." },
   ],
+  // 400 EUR a month is a 1200 EUR pot over the 90 days
   budgetSplit: [
-    { item: "Boosted posts, 12 x 20 EUR", eur: 240 },
-    { item: "Loyalty cards printed", eur: 100 },
-    { item: "Held back for weeks 9-12", eur: 60 },
+    { item: "Boosted posts, 36 x 20 EUR", eur: 720 },
+    { item: "Loyalty cards printed", eur: 300 },
+    { item: "Held back for weeks 9-12", eur: 180 },
   ],
   kpis: [
     { name: "Morning cups", target: "40 a day by week 12", where: "Till tally" },
@@ -105,6 +106,10 @@ interface Seen {
   body: Record<string, any>;
 }
 
+/** The whole user message of one request, as the model reads it. */
+const sentText = (body: Record<string, any>): string =>
+  body.messages[0].content.map((b: { text: string }) => b.text).join("\n\n");
+
 /** Serves strategy, then calendar, then the three copy batches. */
 async function interceptApi(page: Page, delayMs = 0): Promise<Seen[]> {
   const seen: Seen[] = [];
@@ -112,7 +117,7 @@ async function interceptApi(page: Page, delayMs = 0): Promise<Seen[]> {
     const body = route.request().postDataJSON();
     seen.push({ headers: route.request().headers(), body });
     const n = seen.length;
-    const userText = body.messages[0].content[0].text as string;
+    const userText = sentText(body);
     const payload =
       n === 1 ? STRATEGY : n === 2 ? { items: CALENDAR } : { assets: copyFor(userText) };
     if (delayMs) await new Promise((r) => setTimeout(r, delayMs));
@@ -198,9 +203,9 @@ test("key → intake → real generation against an intercepted api → result",
   await page.getByRole("button", { name: "Create my campaign" }).click();
   await expect(stageSection(page, "strategy").getByText("Done ·")).toBeVisible();
 
-  // the split still sums to 400, so the raised budget must be flagged
+  // the split still sums to 1200, so the raised budget (500 x 3) must be flagged
   await expect(
-    stageSection(page, "strategy").getByText("€100 unspent", { exact: false }),
+    stageSection(page, "strategy").getByText("€300 unspent", { exact: false }),
   ).toBeVisible();
 
   await backToBudget();
@@ -245,11 +250,25 @@ test("key → intake → real generation against an intercepted api → result",
     // no assistant prefill
     expect(body.messages.map((m: { role: string }) => m.role)).toEqual(["user"]);
     expect(body.system[0].cache_control).toEqual({ type: "ephemeral" });
+    // the intake block is cached too, and it is the same bytes every call
+    expect(body.messages[0].content[0]).toEqual({
+      type: "text",
+      text: expect.stringContaining("Here is the business."),
+      cache_control: { type: "ephemeral" },
+    });
+    expect(body.messages[0].content[0].text).toBe(seen[0]!.body.messages[0].content[0].text);
+    // never on the task block, which changes every call
+    expect(body.messages[0].content.at(-1).cache_control).toBeUndefined();
     expect(body.model).toBe("claude-sonnet-5");
+  }
+  // stages 2-3 cache the agreed strategy on top of it
+  for (const { body } of seen.slice(1)) {
+    expect(body.messages[0].content[1].cache_control).toEqual({ type: "ephemeral" });
+    expect(body.messages[0].content[1].text).toBe(seen[1]!.body.messages[0].content[1].text);
   }
   expect(seen.map((s) => s.body.max_tokens)).toEqual([3000, 4000, 5000, 5000, 5000]);
   expect(
-    seen.slice(2).map((s) => /WEEKS ([\d, ]+)\n/.exec(s.body.messages[0].content[0].text)?.[1]),
+    seen.slice(2).map((s) => /WEEKS ([\d, ]+)\n/.exec(sentText(s.body))?.[1]),
   ).toEqual(["1, 2, 3, 4", "5, 6, 7, 8", "9, 10, 11, 12"]);
 
   expect(stray).toEqual([]);

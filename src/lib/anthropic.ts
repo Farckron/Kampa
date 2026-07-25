@@ -33,11 +33,19 @@ export class ApiError extends Error {
   }
 }
 
+/** One text block of the user message. `cache` marks a cache_control
+ *  breakpoint at the end of it, so every later call whose prefix is identical
+ *  up to here is billed at the cache-read rate. */
+export interface UserBlock {
+  text: string;
+  cache?: boolean;
+}
+
 export interface StreamOptions {
   apiKey: string;
   model: string;
   system: string;
-  userText: string;
+  userBlocks: UserBlock[];
   maxTokens: number;
   schema?: object;
   cacheSystem?: boolean;
@@ -81,7 +89,14 @@ export async function streamMessage(
       },
     ],
     messages: [
-      { role: "user", content: [{ type: "text", text: opts.userText }] },
+      {
+        role: "user",
+        content: opts.userBlocks.map((b) => ({
+          type: "text",
+          text: b.text,
+          ...(b.cache ? { cache_control: { type: "ephemeral" } } : {}),
+        })),
+      },
     ],
     ...(opts.schema
       ? { output_config: { format: { type: "json_schema", schema: opts.schema } } }

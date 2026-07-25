@@ -5,14 +5,18 @@
 // fetch, and never stored, logged or put in an error.
 import type { Dispatch } from "react";
 
-import { ApiError, streamMessage } from "@/lib/anthropic";
+import { ApiError, streamMessage, type StreamOptions } from "@/lib/anthropic";
 import { usageToEur } from "@/lib/cost";
 import {
   validateCalendar,
   validateCopy,
   validateStrategy,
 } from "@/lib/prompts/schemas";
-import { buildStrategyPrompt, type BuiltPrompt } from "@/lib/prompts/stage1-strategy";
+import {
+  budget90,
+  buildStrategyPrompt,
+  type BuiltPrompt,
+} from "@/lib/prompts/stage1-strategy";
 import { buildCalendarPrompt } from "@/lib/prompts/stage2-calendar";
 import { buildCopyPrompt, COPY_BATCHES } from "@/lib/prompts/stage3-copy";
 
@@ -37,6 +41,8 @@ export interface RunContext {
   onPreview?: (text: string) => void;
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 /** One call plus, if the reply does not validate, exactly one corrective retry. */
 async function generate<T>(
   apiKey: string,
@@ -47,16 +53,36 @@ async function generate<T>(
   onPreview: ((text: string) => void) | undefined,
   previewSoFar: string,
 ): Promise<{ value: T; preview: string }> {
-  let userText = prompt.userText;
+  let blocks = prompt.blocks;
   let preview = previewSoFar;
+  // SPEC §2.4: max 1 automatic retry on 5xx. Spent once per stage call, so it
+  // cannot compound with the validation retry below into four requests.
+  let retriedTransport = false;
+
+  const call = async (opts: StreamOptions) => {
+    try {
+      return await streamMessage(opts);
+    } catch (e) {
+      if (
+        retriedTransport ||
+        !(e instanceof ApiError) ||
+        (e.kind !== "overloaded" && e.kind !== "rate_limit")
+      )
+        throw e;
+      retriedTransport = true;
+      // ponytail: fixed 1s pause unless the server named a wait.
+      await sleep((e.retryAfterSec ?? 1) * 1000);
+      return streamMessage(opts);
+    }
+  };
 
   for (let attempt = 0; ; attempt++) {
     let acc = preview;
-    const { text, usage } = await streamMessage({
+    const { text, usage } = await call({
       apiKey,
       model,
       system: prompt.system,
-      userText,
+      userBlocks: blocks,
       maxTokens: prompt.maxTokens,
       schema: prompt.schema,
       cacheSystem: true,
@@ -86,9 +112,17 @@ async function generate<T>(
           "Claude sent back something we could not read, twice in a row. Try again, or switch model.",
         );
       preview = acc;
-      userText = `${prompt.userText}\n\nYour previous reply failed validation: ${
-        e instanceof Error ? e.message : String(e)
-      }. Return corrected JSON only.`;
+      // Correct in the task block; the cached intake/strategy prefix stays put.
+      const last = prompt.blocks[prompt.blocks.length - 1]!;
+      blocks = [
+        ...prompt.blocks.slice(0, -1),
+        {
+          ...last,
+          text: `${last.text}\n\nYour previous reply failed validation: ${
+            e instanceof Error ? e.message : String(e)
+          }. Return corrected JSON only.`,
+        },
+      ];
     }
   }
 }
@@ -163,11 +197,13 @@ export async function runStageReal(
 
 export function checkBudget(strategy: Strategy, intake: Intake): string | null {
   if (intake.budget === null) return null;
+  // Same 90-day pot the prompt states — see budget90().
+  const total = budget90(intake);
   const sum = strategy.budgetSplit.reduce((t, b) => t + b.eur, 0);
-  if (Math.abs(sum - intake.budget) < 0.005) return null;
-  const over = sum > intake.budget;
-  return `The budget split adds up to €${sum.toFixed(0)}, but you said €${intake.budget} — ${
-    over ? `€${(sum - intake.budget).toFixed(0)} too much` : `€${(intake.budget - sum).toFixed(0)} unspent`
+  if (Math.abs(sum - total) < 0.005) return null;
+  const over = sum > total;
+  return `The budget split adds up to €${sum.toFixed(0)}, but 90 days at €${intake.budget} a month is €${total} — ${
+    over ? `€${(sum - total).toFixed(0)} too much` : `€${(total - sum).toFixed(0)} unspent`
   }. Regenerate the strategy to get the arithmetic right.`;
 }
 

@@ -1,7 +1,7 @@
 import type { CalendarItem, Intake, Strategy } from "@/components/app/types";
 import { COPY_SCHEMA } from "./schemas";
 import { SYSTEM_PROMPT } from "./system";
-import { intakeSections, type BuiltPrompt } from "./stage1-strategy";
+import { intakeBlock, strategyBlock, type BuiltPrompt } from "./stage1-strategy";
 
 /** Copy is generated in three calls so no single response hits max_tokens. */
 export const COPY_BATCHES: number[][] = [
@@ -18,14 +18,7 @@ export function buildCopyPrompt(
 ): BuiltPrompt {
   const batch = calendarItems.filter((it) => weeks.includes(it.week));
 
-  const userText = `Here is the business.
-
-${intakeSections(intake)}
-
-STRATEGY ALREADY AGREED (do not revisit it)
-${JSON.stringify(strategy, null, 2)}
-
-CALENDAR ITEMS TO WRITE — WEEKS ${weeks.join(", ")}
+  const task = `CALENDAR ITEMS TO WRITE — WEEKS ${weeks.join(", ")}
 ${JSON.stringify(batch, null, 2)}
 
 TASK
@@ -41,7 +34,7 @@ Return JSON only.`;
 
   return {
     system: SYSTEM_PROMPT,
-    userText,
+    blocks: [intakeBlock(intake), strategyBlock(strategy), { text: task }],
     schema: COPY_SCHEMA,
     maxTokens: 5000,
   };
