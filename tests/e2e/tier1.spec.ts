@@ -3,21 +3,36 @@ import { expect, test } from "@playwright/test";
 // Tier-1 guards from CLAUDE.md: landing pages ship zero client JS and make
 // zero third-party requests. These must fail loudly, not drift.
 
-test("landing page ships no script tags", async ({ request }) => {
-  const html = await (await request.get("/")).text();
-  expect(html.includes("<script")).toBe(false);
+// BASE is "/" today; if astro.config.mjs gets a sub-path base, prefix these.
+const PAGES = ["/", "/faq", "/samples/riga-coffee-shop"];
+
+test("landing pages ship no executable scripts", async ({ request }) => {
+  for (const path of PAGES) {
+    const html = await (await request.get(path)).text();
+    // JSON-LD is data, not executed JS — it is the only <script> allowed.
+    for (const tag of html.match(/<script[^>]*>/gi) ?? []) {
+      expect(tag, `${path} ships an executable script`).toContain(
+        "application/ld+json",
+      );
+    }
+  }
 });
 
-test("landing page makes no third-party requests", async ({
+test("landing pages make no third-party requests", async ({
   page,
   baseURL,
 }) => {
   const origin = new URL(baseURL!).origin;
-  const urls: string[] = [];
-  page.on("request", (req) => urls.push(req.url()));
 
-  await page.goto("/", { waitUntil: "networkidle" });
+  for (const path of PAGES) {
+    const urls: string[] = [];
+    const collect = (req: { url(): string }) => urls.push(req.url());
+    page.on("request", collect);
 
-  expect(urls.length).toBeGreaterThan(0);
-  expect(urls.filter((u) => !u.startsWith(origin))).toEqual([]);
+    await page.goto(path, { waitUntil: "networkidle" });
+    page.off("request", collect);
+
+    expect(urls.length, `${path} requested nothing`).toBeGreaterThan(0);
+    expect(urls.filter((u) => !u.startsWith(origin))).toEqual([]);
+  }
 });
