@@ -1,17 +1,154 @@
 import { expect, test, type Page } from "@playwright/test";
 
-// The wizard is the only page with client JS. Stage 04 generation is mocked, so
-// the hard guard here is that nothing ever leaves the origin.
+// The wizard is the only page with client JS. api.anthropic.com is intercepted
+// here and is the ONLY host the app may reach besides its own origin.
 
 const KEY = "sk-ant-test-000000000000000000";
+const API = "https://api.anthropic.com/v1/messages";
 
-function watchOffOrigin(page: Page, origin: string): string[] {
+function watchOffOrigin(page: Page, origin: string, allow: string[] = []): string[] {
   const stray: string[] = [];
   page.on("request", (r) => {
-    if (!r.url().startsWith(origin)) stray.push(r.url());
+    const url = r.url();
+    if (url.startsWith(origin)) return;
+    if (allow.some((a) => url.startsWith(a))) return;
+    stray.push(url);
   });
   return stray;
 }
+
+// --- recorded SSE ----------------------------------------------------------
+
+const ev = (type: string, data: object) =>
+  `event: ${type}\ndata: ${JSON.stringify({ type, ...data })}\n\n`;
+
+/** A real streamed reply: usage in message_start, the JSON split over several
+ *  text_deltas, output tokens in message_delta. 1000 in / 500 out per call. */
+function sseBody(payload: unknown): string {
+  const text = JSON.stringify(payload);
+  const parts = text.match(/[\s\S]{1,120}/g) ?? [text];
+  return (
+    ev("message_start", {
+      message: {
+        usage: {
+          input_tokens: 1000,
+          cache_creation_input_tokens: 0,
+          cache_read_input_tokens: 0,
+        },
+      },
+    }) +
+    ev("content_block_start", { index: 0 }) +
+    parts
+      .map((p) =>
+        ev("content_block_delta", {
+          index: 0,
+          delta: { type: "text_delta", text: p },
+        }),
+      )
+      .join("") +
+    ev("message_delta", {
+      delta: { stop_reason: "end_turn" },
+      usage: { output_tokens: 500 },
+    }) +
+    ev("message_stop", {})
+  );
+}
+
+const STRATEGY = {
+  positioning: "The 90-second coffee stop on the way to the office.",
+  icp: "Office workers aged 25-45 walking past between 7:30 and 9:00.",
+  chosen: [
+    { channel: "Instagram", reason: "40 local views a post, 25 minutes each." },
+    { channel: "Google Business", reason: "Free, 300 map searches a month." },
+  ],
+  rejected: [
+    { channel: "TikTok", reason: "Four hours a week you do not have." },
+    { channel: "Paid search", reason: "400 EUR buys about 50 clicks here." },
+    { channel: "Podcast", reason: "Eight hours per episode before editing." },
+  ],
+  budgetSplit: [
+    { item: "Boosted posts, 12 x 20 EUR", eur: 240 },
+    { item: "Loyalty cards printed", eur: 100 },
+    { item: "Held back for weeks 9-12", eur: 60 },
+  ],
+  kpis: [
+    { name: "Morning cups", target: "40 a day by week 12", where: "Till tally" },
+    { name: "Profile views", target: "300 a month", where: "GBP dashboard" },
+    { name: "Saved posts", target: "50 by week 8", where: "Instagram insights" },
+  ],
+};
+
+const CALENDAR = Array.from({ length: 12 }, (_, i) => ({
+  week: i + 1,
+  channel: i % 2 === 0 ? "Instagram" : "Google Business",
+  assetType: i % 2 === 0 ? "Reel" : "Google Business post",
+  title: `Week ${i + 1}: the morning grind, shot at the counter`,
+  minutes: 60,
+}));
+
+const COPY_MARK = "Beans go in at six, doors open at seven.";
+
+function copyFor(userText: string) {
+  const weeks = (/WEEKS ([\d, ]+)\n/.exec(userText)?.[1] ?? "1")
+    .split(", ")
+    .map(Number);
+  return weeks.map((week) => ({
+    week,
+    channel: "Instagram",
+    title: `Week ${week}: the morning grind, shot at the counter`,
+    body: `${COPY_MARK} Week ${week}. [NEEDS YOU: photo of the counter]`,
+  }));
+}
+
+interface Seen {
+  headers: Record<string, string>;
+  body: Record<string, any>;
+}
+
+/** Serves strategy, then calendar, then the three copy batches. */
+async function interceptApi(page: Page, delayMs = 0): Promise<Seen[]> {
+  const seen: Seen[] = [];
+  await page.route(API, async (route) => {
+    const body = route.request().postDataJSON();
+    seen.push({ headers: route.request().headers(), body });
+    const n = seen.length;
+    const userText = body.messages[0].content[0].text as string;
+    const payload =
+      n === 1 ? STRATEGY : n === 2 ? { items: CALENDAR } : { assets: copyFor(userText) };
+    if (delayMs) await new Promise((r) => setTimeout(r, delayMs));
+    await route.fulfill({
+      status: 200,
+      contentType: "text/event-stream",
+      body: sseBody(payload),
+    });
+  });
+  return seen;
+}
+
+async function fillIntake(page: Page, budget: string) {
+  await page.locator("#api-key").fill(KEY);
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await page.locator("#intake-sell").fill("Speciality coffee, eat in and take away");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.locator("#intake-buyer").fill("Office workers walking to work");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.locator("#intake-region").fill("Riga");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.locator("#intake-budget").fill(budget);
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.locator("#intake-hours").fill("4");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.locator("#intake-channel-instagram").click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.locator("#intake-goal").fill("More weekday morning regulars");
+  await page.getByRole("button", { name: "Next" }).click();
+  await expect(page.locator("#intake-voiceSamples")).toBeVisible();
+  await page.getByRole("button", { name: "Create my campaign" }).click();
+}
+
+const stageSection = (page: Page, stage: string) =>
+  page.locator(`section[aria-labelledby="stage-${stage}-title"]`);
 
 test("demo mode renders the finished demo plan", async ({ page, baseURL }) => {
   const stray = watchOffOrigin(page, new URL(baseURL!).origin);
@@ -30,41 +167,22 @@ test("demo mode renders the finished demo plan", async ({ page, baseURL }) => {
   expect(stray).toEqual([]);
 });
 
-test("key → intake → mocked generation → result", async ({ page, baseURL }) => {
-  const stray = watchOffOrigin(page, new URL(baseURL!).origin);
+test("key → intake → real generation against an intercepted api → result", async ({
+  page,
+  baseURL,
+}) => {
+  const stray = watchOffOrigin(page, new URL(baseURL!).origin, [API]);
+  // Slow enough that the streamed preview is on screen between copy batches.
+  const seen = await interceptApi(page, 900);
 
   await page.goto("/app");
+  await fillIntake(page, "400");
 
-  await page.locator("#api-key").fill(KEY);
-  await page.getByRole("button", { name: "Continue" }).click();
-
-  // 8 intake questions, minimal valid answers.
-  await page
-    .locator("#intake-sell")
-    .fill("Speciality coffee, eat in and take away");
-  await page.getByRole("button", { name: "Next" }).click();
-  await page.locator("#intake-buyer").fill("Office workers walking to work");
-  await page.getByRole("button", { name: "Next" }).click();
-  await page.locator("#intake-region").fill("Riga");
-  await page.getByRole("button", { name: "Next" }).click();
-  await page.locator("#intake-budget").fill("400");
-  await page.getByRole("button", { name: "Next" }).click();
-  await page.locator("#intake-hours").fill("4");
-  await page.getByRole("button", { name: "Next" }).click();
-  await page.locator("#intake-channel-instagram").click();
-  await page.getByRole("button", { name: "Next" }).click();
-  await page.locator("#intake-goal").fill("More weekday morning regulars");
-  await page.getByRole("button", { name: "Next" }).click();
-  await expect(page.locator("#intake-voiceSamples")).toBeVisible();
-  await page.getByRole("button", { name: "Create my campaign" }).click();
-
-  const stageSection = (stage: string) =>
-    page.locator(`section[aria-labelledby="stage-${stage}-title"]`);
-
-  await stageSection("strategy")
+  await stageSection(page, "strategy")
     .getByRole("button", { name: "Generate" })
     .click();
-  await expect(stageSection("strategy").getByText("Done ·")).toBeVisible();
+  await expect(stageSection(page, "strategy").getByText("Generating…")).toBeVisible();
+  await expect(stageSection(page, "strategy").getByText("Done ·")).toBeVisible();
 
   // answers stay editable after submitting, without losing generated stages
   const backToBudget = async () => {
@@ -78,23 +196,103 @@ test("key → intake → mocked generation → result", async ({ page, baseURL }
   for (let i = 0; i < 4; i++)
     await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Create my campaign" }).click();
-  await expect(stageSection("strategy").getByText("Done ·")).toBeVisible();
+  await expect(stageSection(page, "strategy").getByText("Done ·")).toBeVisible();
+
+  // the split still sums to 400, so the raised budget must be flagged
+  await expect(
+    stageSection(page, "strategy").getByText("€100 unspent", { exact: false }),
+  ).toBeVisible();
 
   await backToBudget();
   await expect(page.locator("#intake-budget")).toHaveValue("500");
+  await page.locator("#intake-budget").fill("400");
   for (let i = 0; i < 4; i++)
     await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Create my campaign" }).click();
+  await expect(
+    stageSection(page, "strategy").getByText("unspent", { exact: false }),
+  ).toHaveCount(0);
 
-  for (const stage of ["calendar", "copy"]) {
-    await stageSection(stage).getByRole("button", { name: "Generate" }).click();
-    await expect(stageSection(stage).getByText("Done ·")).toBeVisible();
-  }
+  await stageSection(page, "calendar")
+    .getByRole("button", { name: "Generate" })
+    .click();
+  await expect(stageSection(page, "calendar").getByText("Done ·")).toBeVisible();
 
-  await expect(page.getByText("€0.80")).toBeVisible();
+  // copy is three sequential calls; batch 1's streamed text is on screen while
+  // batch 2 is still in flight, which only happens if onText really renders.
+  await stageSection(page, "copy").getByRole("button", { name: "Generate" }).click();
+  await expect(page.getByTestId("stream-preview")).toContainText(COPY_MARK);
+  await expect(stageSection(page, "copy").getByText("Done ·")).toBeVisible();
+
+  // 5 calls x (1000 in / 500 out) on sonnet = 5000 in, 2500 out, €0.05
+  await expect(page.getByText("5.0k in · 2.5k out")).toBeVisible();
+  await expect(page.getByText("€0.05")).toBeVisible();
 
   await page.getByRole("button", { name: "View my campaign" }).click();
   await expect(page.getByText("the 90-second coffee stop")).toBeVisible();
+
+  // --- what actually went over the wire ---
+  expect(seen).toHaveLength(5);
+  for (const { headers, body } of seen) {
+    expect(headers["x-api-key"]).toBe(KEY);
+    expect(headers["anthropic-version"]).toBe("2023-06-01");
+    expect(headers["anthropic-dangerous-direct-browser-access"]).toBe("true");
+    expect(headers["content-type"]).toContain("application/json");
+    expect(body).not.toHaveProperty("temperature");
+    expect(body).not.toHaveProperty("top_p");
+    expect(body).not.toHaveProperty("top_k");
+    expect(body.stream).toBe(true);
+    // no assistant prefill
+    expect(body.messages.map((m: { role: string }) => m.role)).toEqual(["user"]);
+    expect(body.system[0].cache_control).toEqual({ type: "ephemeral" });
+    expect(body.model).toBe("claude-sonnet-5");
+  }
+  expect(seen.map((s) => s.body.max_tokens)).toEqual([3000, 4000, 5000, 5000, 5000]);
+  expect(
+    seen.slice(2).map((s) => /WEEKS ([\d, ]+)\n/.exec(s.body.messages[0].content[0].text)?.[1]),
+  ).toEqual(["1, 2, 3, 4", "5, 6, 7, 8", "9, 10, 11, 12"]);
+
+  expect(stray).toEqual([]);
+});
+
+test("a 401 shows the friendly banner and leaves the stage pending", async ({
+  page,
+  baseURL,
+}) => {
+  const stray = watchOffOrigin(page, new URL(baseURL!).origin, [API]);
+  await page.route(API, (route) =>
+    route.fulfill({
+      status: 401,
+      contentType: "application/json",
+      body: JSON.stringify({
+        type: "error",
+        error: { type: "authentication_error", message: "invalid x-api-key" },
+      }),
+    }),
+  );
+
+  await page.goto("/app");
+  await fillIntake(page, "400");
+
+  await stageSection(page, "strategy")
+    .getByRole("button", { name: "Generate" })
+    .click();
+
+  const banner = page.getByRole("alert");
+  await expect(banner).toContainText("That key was rejected by Anthropic");
+  // never the key, never the raw provider message
+  await expect(banner).not.toContainText(KEY);
+  await expect(banner).not.toContainText("x-api-key");
+
+  await expect(
+    stageSection(page, "strategy").getByText("Not generated yet"),
+  ).toBeVisible();
+  await expect(
+    stageSection(page, "strategy").getByRole("button", { name: "Generate" }),
+  ).toBeEnabled();
+
+  await banner.getByRole("button", { name: "Re-enter key" }).click();
+  await expect(page.locator("#api-key")).toBeVisible();
 
   expect(stray).toEqual([]);
 });
