@@ -1,10 +1,19 @@
 ---
 import Base from "../layouts/Base.astro";
+import Nav from "../components/landing/Nav.astro";
+import Hero from "../components/landing/Hero.astro";
+import Footer from "../components/landing/Footer.astro";
 ---
 
 <Base
   title="Kampa — AI campaign planner for small businesses"
   description="Answer 8 questions, get a complete 90-day marketing campaign: channel plan, weekly calendar, ready-to-paste copy. Free — bring your own Claude API key."
 >
-  <h1 class="text-4xl font-bold">Kampa</h1>
+  <Nav />
+  <main>
+    <Hero />
+    <!-- TODO(stage 03): How it works section renders here. -->
+    <div id="how-it-works" class="scroll-mt-16"></div>
+  </main>
+  <Footer />
 </Base>
