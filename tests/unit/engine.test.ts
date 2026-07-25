@@ -423,3 +423,13 @@ describe("checkHours", () => {
     expect(checkHours(over, { ...intake, hours: null })).toBeNull();
   });
 });
+
+describe("stripFence", () => {
+  it("unwraps fenced json and leaves bare json alone", async () => {
+    const { stripFence } = await import("@/components/app/engine");
+    expect(stripFence('```json\n{"a":1}\n```')).toBe('{"a":1}');
+    expect(stripFence('```\n{"a":1}\n```')).toBe('{"a":1}');
+    expect(stripFence('  {"a":1}  ')).toBe('{"a":1}');
+    expect(stripFence('{"a":1}')).toBe('{"a":1}');
+  });
+});

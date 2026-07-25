@@ -105,12 +105,15 @@ async function generate<T>(
     });
 
     try {
-      return { value: validate(JSON.parse(text)), preview: acc };
+      return { value: validate(JSON.parse(stripFence(text))), preview: acc };
     } catch (e) {
+      const detail = e instanceof Error ? e.message : String(e);
+      // Model output only — never contains the key. Kept for diagnosability.
+      console.debug("[kampa] stage output failed validation:", detail, text);
       if (attempt >= 1)
         throw new ApiError(
           "invalid",
-          "Claude sent back something we could not read, twice in a row. Try again, or switch model.",
+          `Claude sent back something we could not read, twice in a row (${detail.slice(0, 200)}). Try again, or switch model.`,
         );
       preview = acc;
       // Correct in the task block; the cached intake/strategy prefix stays put.
@@ -126,6 +129,13 @@ async function generate<T>(
       ];
     }
   }
+}
+
+/** Models occasionally wrap JSON in a ```json fence despite instructions. */
+export function stripFence(text: string): string {
+  const t = text.trim();
+  const m = t.match(/^```(?:json)?\s*\n([\s\S]*?)\n```\s*$/);
+  return m ? m[1]! : t;
 }
 
 function need<T>(x: T | null, message: string): T {
