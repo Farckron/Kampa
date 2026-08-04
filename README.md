@@ -67,9 +67,6 @@ npm run typecheck
 npm run build
 ```
 
-Project rules live in [CLAUDE.md](CLAUDE.md); full design in
-[SPEC.md](SPEC.md).
-
 ## License
 
 [MIT](LICENSE)

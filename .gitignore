@@ -1,10 +1,24 @@
-inspiration/
+# Build output / deps
 node_modules/
 dist/
 .astro/
-.env
-.env.*
 test-results/
 playwright-report/
+
+# Secrets — never commit
+.env
+.env.*
+*.pem
+*.key
+
+# Local agent / tooling state
+.claude/
 .playwright-mcp/
 .superpowers/
+
+# Internal documentation (kept local, not published)
+CLAUDE.md
+SPEC.md
+docs/
+stages/
+inspiration/
