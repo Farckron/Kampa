@@ -17,7 +17,7 @@ const STAGES: { id: GenStage; label: string; desc: string }[] = [
   {
     id: "calendar",
     label: "Calendar",
-    desc: "Twelve weeks of posts and assets, with the time each one takes.",
+    desc: "Four weeks of posts and assets, with the time each one takes.",
   },
   {
     id: "copy",

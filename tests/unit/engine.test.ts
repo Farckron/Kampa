@@ -7,7 +7,7 @@ import {
   runStageReal,
   type RunContext,
 } from "@/components/app/engine";
-import { budget90, buildStrategyPrompt } from "@/lib/prompts/stage1-strategy";
+import { budget30, buildStrategyPrompt } from "@/lib/prompts/stage1-strategy";
 import type {
   Action,
   CalendarItem,
@@ -51,19 +51,19 @@ const strategy: Strategy = {
     { channel: "Paid search", reason: "300 EUR buys 40 clicks." },
     { channel: "Podcast", reason: "8h per episode." },
   ],
-  // 400 EUR a month is a 1200 EUR pot over the 90 days
+  // 400 EUR a month is the whole pot over the 30 days
   budgetSplit: [
-    { item: "Boosted posts", eur: 720 },
-    { item: "Flyers", eur: 480 },
+    { item: "Boosted posts", eur: 240 },
+    { item: "Flyers", eur: 160 },
   ],
   kpis: [
-    { name: "Repairs booked", target: "20 by week 12", where: "Till tally" },
+    { name: "Repairs booked", target: "20 by week 4", where: "Till tally" },
     { name: "Profile views", target: "120/month", where: "GBP dashboard" },
-    { name: "Replies", target: "10 by week 8", where: "Inbox" },
+    { name: "Replies", target: "10 by week 3", where: "Inbox" },
   ],
 };
 
-const calendar: CalendarItem[] = Array.from({ length: 12 }, (_, i) => ({
+const calendar: CalendarItem[] = Array.from({ length: 4 }, (_, i) => ({
   week: i + 1,
   channel: "Instagram",
   assetType: "Post",
@@ -288,7 +288,7 @@ describe("runStageReal", () => {
     expect(h.actions[2]).toMatchObject({ stage: "calendar", data: calendar });
   });
 
-  it("batches copy into three calls and accumulates the assets", async () => {
+  it("batches copy into one call per week batch and accumulates the assets", async () => {
     const asset = (week: number) => ({
       week,
       channel: "Instagram",
@@ -305,33 +305,20 @@ describe("runStageReal", () => {
 
     await runStageReal(h.dispatch, "copy", h.ctx);
 
-    expect(stream).toHaveBeenCalledTimes(3);
+    expect(stream).toHaveBeenCalledTimes(1);
     const weeksSeen = stream.mock.calls.map(
       (c) => [...sentText(c[0]).matchAll(/WEEKS ([\d, ]+)\n/g)][0]![1],
     );
-    expect(weeksSeen).toEqual(["1, 2, 3, 4", "5, 6, 7, 8", "9, 10, 11, 12"]);
+    expect(weeksSeen).toEqual(["1, 2, 3, 4"]);
 
     const done = h.actions.at(-1) as Extract<Action, { type: "STAGE_DONE" }>;
     expect(done.type).toBe("STAGE_DONE");
-    expect((done.data as unknown[]).length).toBe(12);
-    expect(h.actions.filter((a) => a.type === "ADD_USAGE")).toHaveLength(3);
+    expect((done.data as unknown[]).length).toBe(4);
+    expect(h.actions.filter((a) => a.type === "ADD_USAGE")).toHaveLength(1);
   });
 
-  it("keeps no partial copy when a later batch fails", async () => {
-    stream
-      .mockResolvedValueOnce(
-        reply({
-          assets: [
-            {
-              week: 1,
-              channel: "Instagram",
-              title: "t",
-              body: "b",
-            },
-          ],
-        }),
-      )
-      .mockRejectedValue(new ApiError("overloaded", "Overloaded"));
+  it("keeps no copy when a batch fails", async () => {
+    stream.mockRejectedValue(new ApiError("overloaded", "Overloaded"));
     const h = harness();
 
     await withoutWaiting(() => runStageReal(h.dispatch, "copy", h.ctx));
@@ -347,43 +334,46 @@ describe("checkBudget", () => {
     budgetSplit: split,
   });
 
-  it("passes when the split lands exactly on the 90-day budget", () => {
+  it("passes when the split lands exactly on the 30-day budget", () => {
     expect(checkBudget(strategy, intake)).toBeNull();
   });
 
   it("validates against the same number the prompt asks for", () => {
     const built = buildStrategyPrompt(intake);
-    const total = budget90(intake);
-    expect(total).toBe(1200);
+    const total = budget30(intake);
+    expect(total).toBe(400);
     expect(built.blocks.map((b) => b.text).join("\n\n")).toContain(
       `sum EXACTLY to ${total} EUR`,
     );
     expect(
       checkBudget(withSplit([{ item: "all", eur: total }]), intake),
     ).toBeNull();
-    // the raw monthly figure must NOT pass — that was the 3x bug
+    // three months of the monthly figure must NOT pass — the plan is 30 days
     expect(
-      checkBudget(withSplit([{ item: "all", eur: intake.budget! }]), intake),
+      checkBudget(
+        withSplit([{ item: "all", eur: intake.budget! * 3 }]),
+        intake,
+      ),
     ).not.toBeNull();
   });
 
   it("tolerates float noise", () => {
     const s = withSplit([
-      { item: "a", eur: 399.99 },
-      { item: "b", eur: 400 },
-      { item: "c", eur: 400.01 },
+      { item: "a", eur: 133.33 },
+      { item: "b", eur: 133.33 },
+      { item: "c", eur: 133.34 },
     ]);
     expect(checkBudget(s, intake)).toBeNull();
   });
 
   it("flags overspend", () => {
-    const s = withSplit([{ item: "a", eur: 1500 }]);
-    expect(checkBudget(s, intake)).toMatch(/€1500.*€1200.*€300 too much/);
+    const s = withSplit([{ item: "a", eur: 500 }]);
+    expect(checkBudget(s, intake)).toMatch(/€500.*€400.*€100 too much/);
   });
 
   it("flags underspend", () => {
-    const s = withSplit([{ item: "a", eur: 1000 }]);
-    expect(checkBudget(s, intake)).toMatch(/€200 unspent/);
+    const s = withSplit([{ item: "a", eur: 300 }]);
+    expect(checkBudget(s, intake)).toMatch(/€100 unspent/);
   });
 
   it("says nothing when no budget was given", () => {
@@ -411,10 +401,10 @@ describe("checkHours", () => {
 
   it("lists every offending week in order", () => {
     const over = calendar.map((c) =>
-      c.week === 3 || c.week === 7 ? { ...c, minutes: 300 } : c,
+      c.week === 2 || c.week === 4 ? { ...c, minutes: 300 } : c,
     );
     expect(checkHours(over, intake)).toMatch(
-      /2 weeks go over your 4 hours \(240 min\): week 3 \(300 min\), week 7 \(300 min\)/,
+      /2 weeks go over your 4 hours \(240 min\): week 2 \(300 min\), week 4 \(300 min\)/,
     );
   });
 

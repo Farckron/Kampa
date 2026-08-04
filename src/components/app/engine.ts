@@ -13,7 +13,7 @@ import {
   validateStrategy,
 } from "@/lib/prompts/schemas";
 import {
-  budget90,
+  budget30,
   buildStrategyPrompt,
   type BuiltPrompt,
 } from "@/lib/prompts/stage1-strategy";
@@ -227,12 +227,12 @@ export async function runStageReal(
 
 export function checkBudget(strategy: Strategy, intake: Intake): string | null {
   if (intake.budget === null) return null;
-  // Same 90-day pot the prompt states — see budget90().
-  const total = budget90(intake);
+  // Same 30-day pot the prompt states — see budget30().
+  const total = budget30(intake);
   const sum = strategy.budgetSplit.reduce((t, b) => t + b.eur, 0);
   if (Math.abs(sum - total) < 0.005) return null;
   const over = sum > total;
-  return `The budget split adds up to €${sum.toFixed(0)}, but 90 days at €${intake.budget} a month is €${total} — ${
+  return `The budget split adds up to €${sum.toFixed(0)}, but your 30-day budget is €${total} — ${
     over
       ? `€${(sum - total).toFixed(0)} too much`
       : `€${(total - sum).toFixed(0)} unspent`

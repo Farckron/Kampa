@@ -4,7 +4,7 @@ import type {
   Intake,
   Strategy,
 } from "@/components/app/types";
-import { budget90 } from "@/lib/prompts/stage1-strategy";
+import { budget30 } from "@/lib/prompts/stage1-strategy";
 
 /** Local YYYY-MM-DD. The user picked a local date; keep it that way. */
 function isoDate(d: Date): string {
@@ -27,7 +27,7 @@ function cell(s: string): string {
 
 function budgetLine(intake: Intake): string {
   if (intake.budget === null) return "Budget not set";
-  return `Budget €${budget90(intake)} over 90 days (€${intake.budget}/month)`;
+  return `Budget €${budget30(intake)} over 30 days`;
 }
 
 export function campaignToMarkdown(
@@ -38,7 +38,7 @@ export function campaignToMarkdown(
   const { strategy } = c;
   const out: string[] = [];
 
-  out.push(`# ${intake.sell} — 90-day marketing campaign`, "");
+  out.push(`# ${intake.sell} — 30-day marketing campaign`, "");
   out.push(
     `Generated ${isoDate(generatedOn)} · ${budgetLine(intake)} · ${
       intake.hours === null ? "hours not set" : `${intake.hours} h/week`
@@ -78,17 +78,11 @@ export function campaignToMarkdown(
     out.push(`| ${cell(k.name)} | ${cell(k.target)} | ${cell(k.where)} |`);
   out.push("");
 
-  out.push("## 12-week calendar", "");
+  out.push("## 4-week calendar", "");
   out.push("| Week | Channel | Asset | Title | Minutes |");
   out.push("| ---: | --- | --- | --- | ---: |");
   const calendar = [...c.calendar].sort((a, b) => a.week - b.week);
-  let month = 0;
   for (const i of calendar) {
-    const m = Math.ceil(i.week / 4);
-    if (m !== month) {
-      month = m;
-      out.push(`| **Weeks ${m * 4 - 3}-${m * 4}** | | | | |`);
-    }
     out.push(
       `| ${i.week} | ${cell(i.channel)} | ${cell(i.assetType)} | ${cell(i.title)} | ${i.minutes} |`,
     );

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { demoCampaign, demoIntake } from "@/components/app/demo-campaign";
 import type { CalendarItem, Intake } from "@/components/app/types";
 import { campaignToIcs, campaignToMarkdown, downloadFile } from "@/lib/exports";
-import { budget90 } from "@/lib/prompts/stage1-strategy";
+import { budget30 } from "@/lib/prompts/stage1-strategy";
 
 const campaign = {
   strategy: demoCampaign.strategy!,
@@ -29,13 +29,13 @@ describe("campaignToMarkdown", () => {
 
   it("opens with the campaign H1", () => {
     expect(md.split("\n")[0]).toBe(
-      "# Rīts coffee shop — 90-day marketing campaign",
+      "# Rīts coffee shop — 30-day marketing campaign",
     );
   });
 
   it("states the generated date, budget and hours", () => {
     expect(md).toContain("Generated 2026-07-25");
-    expect(md).toContain("€399 over 90 days (€133/month)");
+    expect(md).toContain("€133 over 30 days");
     expect(md).toContain("4 h/week");
   });
 
@@ -54,18 +54,15 @@ describe("campaignToMarkdown", () => {
       expect(md).toContain(`| ${b.item} | ${b.eur} |`);
   });
 
-  it("keeps the demo split in step with the demo intake's 90-day pot", () => {
+  it("keeps the demo split in step with the demo intake's 30-day pot", () => {
     expect(campaignToMarkdown(campaign, demoIntake, GENERATED)).toContain(
-      `| **Total** | **${budget90(demoIntake)}** |`,
+      `| **Total** | **${budget30(demoIntake)}** |`,
     );
   });
 
-  it("has the calendar table with monthly grouping rows", () => {
-    expect(md).toContain("## 12-week calendar");
+  it("has the calendar table, one row per item", () => {
+    expect(md).toContain("## 4-week calendar");
     expect(md).toContain("| Week | Channel | Asset | Title | Minutes |");
-    expect(md).toContain("| **Weeks 1-4** | | | | |");
-    expect(md).toContain("| **Weeks 5-8** | | | | |");
-    expect(md).toContain("| **Weeks 9-12** | | | | |");
     for (const i of campaign.calendar)
       expect(md).toContain(`| ${i.week} | ${i.channel} |`);
   });
@@ -112,7 +109,7 @@ describe("campaignToIcs", () => {
     const starts = lines.filter((l) => l.startsWith("DTSTART"));
     expect(starts[0]).toBe("DTSTART;VALUE=DATE:20260803");
     expect(starts[1]).toBe("DTSTART;VALUE=DATE:20260810"); // week 2 = +7d
-    expect(starts.at(-1)).toBe("DTSTART;VALUE=DATE:20261019"); // week 12 = +77d
+    expect(starts.at(-1)).toBe("DTSTART;VALUE=DATE:20260824"); // week 4 = +21d
   });
 
   it("has deterministic, unique UIDs", () => {

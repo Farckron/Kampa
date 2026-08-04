@@ -37,7 +37,7 @@ test("downloads the campaign as markdown", async ({ page }) => {
   expect(md).toContain(
     "Half of Miera iela is still shuttered when we grind the first batch",
   );
-  expect(md).toContain("## 12-week calendar");
+  expect(md).toContain("## 4-week calendar");
 });
 
 test("downloads the calendar as an .ics that starts on the chosen Monday", async ({

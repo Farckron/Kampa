@@ -29,7 +29,7 @@ const QUESTIONS: Question[] = [
     field: "budget",
     short: "Budget",
     label: "Monthly marketing budget (EUR)",
-    helper: "The plan covers 90 days, so it spends three months of this.",
+    helper: "The plan covers 30 days, so this is the whole pot it spends.",
   },
   {
     field: "hours",
@@ -41,7 +41,7 @@ const QUESTIONS: Question[] = [
   {
     field: "goal",
     short: "Your goal",
-    label: "Your one goal for the next 90 days",
+    label: "Your one goal for the next 30 days",
   },
   {
     field: "voiceSamples",

@@ -177,14 +177,14 @@ function CalendarTab({
 
   return (
     <div>
-      <SectionHeader title="12-week calendar" stage="calendar" />
+      <SectionHeader title="4-week calendar" stage="calendar" />
       {/* tabindex makes the scroll box reachable by keyboard (Safari won't
           focus a scroll container on its own); the role gives it a name. */}
       <div
         className="overflow-x-auto"
         tabIndex={0}
         role="region"
-        aria-label="12-week calendar"
+        aria-label="4-week calendar"
       >
         <table className="w-full min-w-[42rem] border-collapse text-[length:var(--text-sm)]">
           <thead>
@@ -210,14 +210,7 @@ function CalendarTab({
             {rows.map((r, i) => (
               <tr
                 key={`${r.week}-${r.channel}-${r.title}`}
-                className={
-                  i === 0
-                    ? ""
-                    : // month break: heavier rule every 4 weeks
-                      i > 0 && r.week % 4 === 1 && rows[i - 1]!.week !== r.week
-                      ? "border-line border-t-2"
-                      : "border-line border-t"
-                }
+                className={i === 0 ? "" : "border-line border-t"}
               >
                 <td className="py-3 pr-3.5 align-top">
                   <span className="text-ink-soft font-mono font-bold">
@@ -589,10 +582,10 @@ export function Result() {
       <div className="hidden space-y-10 print:block">
         <div className="border-line border-b pb-4">
           <p className="font-heading text-xl font-semibold">
-            {state.intake.sell || "90-day marketing campaign"}
+            {state.intake.sell || "30-day marketing campaign"}
           </p>
           <p className="text-ink-soft mt-1 font-mono text-[length:var(--text-mono-label)] tracking-[0.06em] uppercase">
-            90-day marketing campaign · {toDateInput(new Date())} · made with
+            30-day marketing campaign · {toDateInput(new Date())} · made with
             Kampa
           </p>
         </div>

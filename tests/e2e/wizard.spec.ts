@@ -70,28 +70,28 @@ const STRATEGY = {
     { channel: "Paid search", reason: "400 EUR buys about 50 clicks here." },
     { channel: "Podcast", reason: "Eight hours per episode before editing." },
   ],
-  // 400 EUR a month is a 1200 EUR pot over the 90 days
+  // 400 EUR a month is the whole pot over the 30 days
   budgetSplit: [
-    { item: "Boosted posts, 36 x 20 EUR", eur: 720 },
-    { item: "Loyalty cards printed", eur: 300 },
-    { item: "Held back for weeks 9-12", eur: 180 },
+    { item: "Boosted posts, 12 x 20 EUR", eur: 240 },
+    { item: "Loyalty cards printed", eur: 100 },
+    { item: "Held back for weeks 3-4", eur: 60 },
   ],
   kpis: [
     {
       name: "Morning cups",
-      target: "40 a day by week 12",
+      target: "40 a day by week 4",
       where: "Till tally",
     },
     { name: "Profile views", target: "300 a month", where: "GBP dashboard" },
     {
       name: "Saved posts",
-      target: "50 by week 8",
+      target: "50 by week 3",
       where: "Instagram insights",
     },
   ],
 };
 
-const CALENDAR = Array.from({ length: 12 }, (_, i) => ({
+const CALENDAR = Array.from({ length: 4 }, (_, i) => ({
   week: i + 1,
   channel: i % 2 === 0 ? "Instagram" : "Google Business",
   assetType: i % 2 === 0 ? "Reel" : "Google Business post",
@@ -122,7 +122,7 @@ interface Seen {
 const sentText = (body: Record<string, any>): string =>
   body.messages[0].content.map((b: { text: string }) => b.text).join("\n\n");
 
-/** Serves strategy, then calendar, then the three copy batches. */
+/** Serves strategy, then calendar, then the copy batch. */
 async function interceptApi(page: Page, delayMs = 0): Promise<Seen[]> {
   const seen: Seen[] = [];
   await page.route(API, async (route) => {
@@ -233,9 +233,9 @@ test("key → intake → real generation against an intercepted api → result",
     stageSection(page, "strategy").getByText("Done ·"),
   ).toBeVisible();
 
-  // the split still sums to 1200, so the raised budget (500 x 3) must be flagged
+  // the split still sums to 400, so the raised 500 pot must be flagged
   await expect(
-    stageSection(page, "strategy").getByText("€300 unspent", { exact: false }),
+    stageSection(page, "strategy").getByText("€100 unspent", { exact: false }),
   ).toBeVisible();
 
   await backToBudget();
@@ -255,17 +255,18 @@ test("key → intake → real generation against an intercepted api → result",
     stageSection(page, "calendar").getByText("Done ·"),
   ).toBeVisible();
 
-  // copy is three sequential calls; batch 1's streamed text is on screen while
-  // batch 2 is still in flight, which only happens if onText really renders.
+  // one copy call for the four weeks: running state on screen, then done
   await stageSection(page, "copy")
     .getByRole("button", { name: "Generate" })
     .click();
-  await expect(page.getByTestId("stream-preview")).toContainText(COPY_MARK);
+  await expect(
+    stageSection(page, "copy").getByText("Generating…"),
+  ).toBeVisible();
   await expect(stageSection(page, "copy").getByText("Done ·")).toBeVisible();
 
-  // 5 calls x (1000 in / 500 out) on sonnet = 5000 in, 2500 out, €0.05
-  await expect(page.getByText("5.0k in · 2.5k out")).toBeVisible();
-  await expect(page.getByText("€0.05")).toBeVisible();
+  // 3 calls x (1000 in / 500 out) on sonnet = 3000 in, 1500 out, €0.03
+  await expect(page.getByText("3.0k in · 1.5k out")).toBeVisible();
+  await expect(page.getByText("€0.03")).toBeVisible();
 
   await page.getByRole("button", { name: "View my campaign" }).click();
   await expect(
@@ -273,7 +274,7 @@ test("key → intake → real generation against an intercepted api → result",
   ).toBeVisible();
 
   // --- what actually went over the wire ---
-  expect(seen).toHaveLength(5);
+  expect(seen).toHaveLength(3);
   for (const { headers, body } of seen) {
     expect(headers["x-api-key"]).toBe(KEY);
     expect(headers["anthropic-version"]).toBe("2023-06-01");
@@ -310,12 +311,10 @@ test("key → intake → real generation against an intercepted api → result",
       seen[1]!.body.messages[0].content[1].text,
     );
   }
-  expect(seen.map((s) => s.body.max_tokens)).toEqual([
-    16000, 24000, 24000, 24000, 24000,
-  ]);
+  expect(seen.map((s) => s.body.max_tokens)).toEqual([16000, 24000, 24000]);
   expect(
     seen.slice(2).map((s) => /WEEKS ([\d, ]+)\n/.exec(sentText(s.body))?.[1]),
-  ).toEqual(["1, 2, 3, 4", "5, 6, 7, 8", "9, 10, 11, 12"]);
+  ).toEqual(["1, 2, 3, 4"]);
 
   expect(stray).toEqual([]);
 });
@@ -418,7 +417,7 @@ test("model is selectable on gate and switchable during generation", async ({
   }
   await page.getByText("Instagram", { exact: true }).click();
   await page.getByRole("button", { name: "Next" }).click();
-  await page.getByLabel("Your one goal for the next 90 days").fill("Growth");
+  await page.getByLabel("Your one goal for the next 30 days").fill("Growth");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Create my campaign" }).click();
 

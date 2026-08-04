@@ -7,12 +7,9 @@ import {
   type BuiltPrompt,
 } from "./stage1-strategy";
 
-/** Copy is generated in three calls so no single response hits max_tokens. */
-export const COPY_BATCHES: number[][] = [
-  [1, 2, 3, 4],
-  [5, 6, 7, 8],
-  [9, 10, 11, 12],
-];
+/** Copy is generated in week batches so no single response hits max_tokens.
+ *  A 30-day plan is four weeks, which fits one call. */
+export const COPY_BATCHES: number[][] = [[1, 2, 3, 4]];
 
 export function buildCopyPrompt(
   intake: Intake,

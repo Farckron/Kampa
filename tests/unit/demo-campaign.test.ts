@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { demoCampaign, demoIntake } from "@/components/app/demo-campaign";
-import { budget90 } from "@/lib/prompts/stage1-strategy";
+import { budget30 } from "@/lib/prompts/stage1-strategy";
 
 describe("demoCampaign", () => {
   const { strategy, calendar, copy } = demoCampaign;
 
-  it("budget split sums to the intake's 90-day pot", () => {
+  it("budget split sums to the intake's 30-day pot", () => {
     expect(strategy!.budgetSplit.reduce((n, b) => n + b.eur, 0)).toBe(
-      budget90(demoIntake),
+      budget30(demoIntake),
     );
   });
 
@@ -15,7 +15,7 @@ describe("demoCampaign", () => {
     const perWeek = new Map<number, number>();
     for (const i of calendar!)
       perWeek.set(i.week, (perWeek.get(i.week) ?? 0) + i.minutes);
-    expect(calendar).toHaveLength(12);
+    expect(calendar).toHaveLength(7);
     expect(Math.max(...perWeek.values())).toBeLessThanOrEqual(240);
   });
 

@@ -57,7 +57,7 @@ describe("reducer", () => {
     });
     expect(s.demo).toBe(true);
     expect(s.phase).toBe("result");
-    expect(s.campaign.copy).toHaveLength(6);
+    expect(s.campaign.copy).toHaveLength(4);
   });
 
   it("START_INTAKE / SUBMIT_INTAKE / BACK_TO_GENERATION move phases", () => {

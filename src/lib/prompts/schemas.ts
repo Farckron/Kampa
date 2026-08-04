@@ -57,13 +57,13 @@ export const CALENDAR_SCHEMA = {
   properties: {
     items: {
       type: "array",
-      minItems: 12,
+      minItems: 4,
       items: {
         type: "object",
         additionalProperties: false,
         required: ["week", "channel", "assetType", "title", "minutes"],
         properties: {
-          week: { type: "integer", minimum: 1, maximum: 12 },
+          week: { type: "integer", minimum: 1, maximum: 4 },
           channel: { type: "string" },
           assetType: { type: "string" },
           title: { type: "string" },
@@ -87,7 +87,7 @@ export const COPY_SCHEMA = {
         additionalProperties: false,
         required: ["week", "channel", "title", "body"],
         properties: {
-          week: { type: "integer", minimum: 1, maximum: 12 },
+          week: { type: "integer", minimum: 1, maximum: 4 },
           channel: { type: "string" },
           title: { type: "string" },
           body: { type: "string" },
@@ -117,8 +117,8 @@ function num(x: unknown, at: string): number {
 
 function week(x: unknown, at: string): number {
   const n = num(x, at);
-  if (!Number.isInteger(n) || n < 1 || n > 12)
-    throw new Error(`${at}: expected an integer week 1-12, got ${n}`);
+  if (!Number.isInteger(n) || n < 1 || n > 4)
+    throw new Error(`${at}: expected an integer week 1-4, got ${n}`);
   return n;
 }
 
@@ -174,7 +174,7 @@ export function validateStrategy(x: unknown): Strategy {
 }
 
 export function validateCalendar(x: unknown): CalendarItem[] {
-  const items = arr(obj(x, "calendar").items, "calendar.items", 12);
+  const items = arr(obj(x, "calendar").items, "calendar.items", 4);
   return items.map((raw, i) => {
     const it = obj(raw, `calendar.items[${i}]`);
     const minutes = num(it.minutes, `calendar.items[${i}].minutes`);

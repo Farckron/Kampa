@@ -15,7 +15,7 @@ import {
 } from "@/lib/prompts/schemas";
 import { SYSTEM_PROMPT } from "@/lib/prompts/system";
 import {
-  budget90,
+  budget30,
   buildStrategyPrompt,
   type BuiltPrompt,
 } from "@/lib/prompts/stage1-strategy";
@@ -52,16 +52,16 @@ const strategy: Strategy = {
   ],
   budgetSplit: [
     { item: "Boosted local posts", eur: 400 },
-    { item: "Held back for weeks 9-12", eur: 200 },
+    { item: "Held back for weeks 3-4", eur: 200 },
   ],
   kpis: [
-    { name: "Repair jobs", target: "20/month by week 12", where: "Till book" },
+    { name: "Repair jobs", target: "20 by week 4", where: "Till book" },
     { name: "Profile views", target: "300/month", where: "GBP dashboard" },
     { name: "DMs", target: "10/week", where: "Instagram inbox" },
   ],
 };
 
-const calendar: CalendarItem[] = Array.from({ length: 12 }, (_, i) => ({
+const calendar: CalendarItem[] = Array.from({ length: 4 }, (_, i) => ({
   week: i + 1,
   channel: "Instagram",
   assetType: "Reel",
@@ -130,19 +130,19 @@ describe("validators reject bad data", () => {
     ).toThrow(/kpis/);
   });
 
-  it("rejects week 13", () => {
-    const items = [...calendar.slice(0, 11), { ...calendar[0]!, week: 13 }];
-    expect(() => validateCalendar({ items })).toThrow(/week.*1-12.*13/);
+  it("rejects week 5", () => {
+    const items = [...calendar.slice(0, 3), { ...calendar[0]!, week: 5 }];
+    expect(() => validateCalendar({ items })).toThrow(/week.*1-4.*5/);
     expect(() =>
       validateCopy({
-        assets: [{ week: 13, channel: "Email", title: "t", body: "b" }],
+        assets: [{ week: 5, channel: "Email", title: "t", body: "b" }],
       }),
-    ).toThrow(/week.*1-12.*13/);
+    ).toThrow(/week.*1-4.*5/);
   });
 
   it("rejects a short calendar", () => {
-    expect(() => validateCalendar({ items: calendar.slice(0, 5) })).toThrow(
-      /at least 12/,
+    expect(() => validateCalendar({ items: calendar.slice(0, 3) })).toThrow(
+      /at least 4/,
     );
   });
 
@@ -163,12 +163,10 @@ describe("buildStrategyPrompt", () => {
     expect(userText(built)).toContain("240 minutes per week");
   });
 
-  it("asks for the 90-day pot, not the monthly figure", () => {
-    expect(budget90(intake)).toBe(1800);
-    expect(userText(built)).toContain(
-      "1800 EUR total for the 90 days (600 EUR per month)",
-    );
-    expect(userText(built)).toContain("sum EXACTLY to 1800 EUR");
+  it("asks for the 30-day pot, which is the monthly figure", () => {
+    expect(budget30(intake)).toBe(600);
+    expect(userText(built)).toContain("600 EUR total for the 30 days");
+    expect(userText(built)).toContain("sum EXACTLY to 600 EUR");
   });
 
   it("returns the strategy schema and its token budget", () => {
@@ -195,12 +193,12 @@ describe("buildCalendarPrompt", () => {
 
 describe("buildCopyPrompt", () => {
   it("includes only the requested weeks' calendar items", () => {
-    const built = buildCopyPrompt(intake, strategy, calendar, [5, 6, 7, 8]);
-    expect(userText(built)).toContain("Week 5:");
-    expect(userText(built)).toContain("Week 8:");
+    const built = buildCopyPrompt(intake, strategy, calendar, [2, 3]);
+    expect(userText(built)).toContain("Week 2:");
+    expect(userText(built)).toContain("Week 3:");
+    expect(userText(built)).not.toContain("Week 1:");
     expect(userText(built)).not.toContain("Week 4:");
-    expect(userText(built)).not.toContain("Week 9:");
-    expect(userText(built)).toContain("for these 4 items");
+    expect(userText(built)).toContain("for these 2 items");
     expect(built.schema).toBe(COPY_SCHEMA);
     expect(built.maxTokens).toBe(24000);
   });
@@ -210,10 +208,8 @@ describe("buildCopyPrompt", () => {
     expect(userText(built)).toContain(intake.voiceSamples);
   });
 
-  it("batches all 12 weeks exactly once", () => {
-    expect(COPY_BATCHES.flat()).toEqual([
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-    ]);
+  it("batches all 4 weeks exactly once", () => {
+    expect(COPY_BATCHES.flat()).toEqual([1, 2, 3, 4]);
   });
 });
 
@@ -235,7 +231,7 @@ describe("cache breakpoints", () => {
       ]);
   });
 
-  it("keeps the cached prefix byte-identical across all five calls", () => {
+  it("keeps the cached prefix byte-identical across every call", () => {
     const intakes = [s1, s2, ...s3].map((p) => p.blocks[0]!.text);
     expect(intakes[0]).toContain("Here is the business.");
     expect(new Set(intakes).size).toBe(1);
