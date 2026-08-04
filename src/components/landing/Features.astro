@@ -9,49 +9,49 @@ const body = "mt-2 text-[length:var(--text-sm)] text-ink-soft";
 <section id="features" class="section section-dim scroll-mt-20">
   <div class="wrap">
     <div class="section-head">
-      <p class="eyebrow">Features</p>
-      <h2>Built different</h2>
+      <p class="eyebrow">Built different</p>
+      <h2>Six decisions that shaped the product.</h2>
     </div>
 
-    <div class="card-grid sm:grid-cols-2 lg:grid-cols-3">
+    {
+      /* All-arbitrary breakpoints: see WhoItsFor.astro — a named `sm:` variant
+         would out-order `min-[980px]:` and win at desktop widths. */
+    }
+    <div class="card-grid min-[640px]:grid-cols-2 min-[980px]:grid-cols-3">
       <div class={tile}>
         <h3 class={title}>Plans that fit your constraints</h3>
         <p class={body}>
-          Budget and hours are hard inputs. €400 a month and 4 hours a week gets
-          a plan you can actually execute, not an agency fantasy.
+          €400/month and 4 hours a week gets a plan you can actually execute,
+          not an agency fantasy.
         </p>
       </div>
 
       <div class={tile}>
         <h3 class={title}>Decisions, not just content</h3>
         <p class={body}>
-          Kampa picks 2-3 channels and tells you why it rejected the others. No
-          more guessing where to post.
+          Kampa picks 2–3 channels and tells you why it rejected the others.
         </p>
       </div>
 
       <div class={tile}>
         <h3 class={title}>Copy in your voice</h3>
         <p class={body}>
-          Paste a few of your real posts; every asset is written to sound like
-          you, not like AI slop.
+          Paste a few real posts; every asset is written to sound like you, not
+          AI slop.
         </p>
       </div>
 
       <div class={tile}>
         <h3 class={title}>Live cost meter</h3>
         <p class={body}>
-          See tokens and euros as you go. A full campaign costs about €1. Jasper
-          charges €69 a month for less.
+          See tokens and euros as you go. A full campaign costs about €1.
         </p>
       </div>
 
       <div class={tile}>
         <h3 class={title}>Nothing leaves your browser</h3>
         <p class={body}>
-          No account, no server, no database. Your business data and API key
-          stay on your machine; the only network call is to Anthropic. The code
-          is <a
+          No account, no server, no database. The code is <a
             href={GITHUB_URL}
             rel="noopener"
             class="text-violet-ink font-medium underline underline-offset-4"
@@ -63,8 +63,19 @@ const body = "mt-2 text-[length:var(--text-sm)] text-ink-soft";
       <div class={tile}>
         <h3 class={title}>Own your plan</h3>
         <p class={body}>
-          Export Markdown, PDF, calendar file. No lock-in, no seat license, no
-          vendor.
+          Export Markdown, PDF, calendar file. No lock-in, no seat license.
+        </p>
+      </div>
+
+      {
+        /* Seventh cell, full width: the differentiator gets its own band rather
+           than a peer slot in the grid. */
+      }
+      <div class={`${tile} bg-paper-dim col-span-full`}>
+        <h3 class={title}>Risk-checked before you launch</h3>
+        <p class={body}>
+          Every channel gets a continue / reduce / avoid call and the reason
+          behind it — not just a plan, a second opinion on it.
         </p>
       </div>
     </div>

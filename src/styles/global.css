@@ -696,6 +696,53 @@
     letter-spacing: -0.02em;
   }
 
+  /* ============ ring gauge (signature element) ============
+     The gradient stroke references the single <defs> in Base.astro
+     (stroke="url(#kgrad)") — never duplicate the gradient id per ring. */
+  .gauge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .gauge > svg {
+    transform: rotate(-90deg);
+  }
+  .gauge .track {
+    stroke: color-mix(in oklab, var(--ink) 9%, transparent);
+  }
+  .band-dark .gauge .track {
+    stroke: rgb(255 255 255 / 0.14);
+  }
+  .gauge .val {
+    position: absolute;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+  .gauge .val b {
+    display: block;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .band-dark .gauge .val b {
+    color: #fff;
+  }
+  /* --ink-soft, not --ink-faint: this label is text (DESIGN.md §2). */
+  .gauge .val i {
+    display: block;
+    font-style: normal;
+    font-size: 0.59375rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .band-dark .gauge .val i {
+    color: var(--dark-ink-soft);
+  }
+
   /* ============ bars ============ */
   .bar-track {
     height: 8px;
@@ -720,6 +767,11 @@
     align-items: center;
     gap: 12px;
     font-size: 0.8125rem;
+  }
+  /* wider value column — "€59–69/mo" wraps in the default 3.5rem.
+     Declared before the small-screen override so that still wins. */
+  .bar-row-wide {
+    grid-template-columns: 7.5rem 1fr 5.625rem;
   }
   @media (max-width: 520px) {
     .bar-row {
@@ -853,11 +905,17 @@
     }
   }
 
-  /* ============ sticky CTA (JS-free) ============ */
+  /* ============ sticky CTA (JS-free) ============
+     Off-screen by default and revealed by a scroll-driven animation once the
+     page has scrolled past the fold — no scroll listener, no script. Browsers
+     without animation-timeline never run the animation, so they simply never
+     show the bar (progressive enhancement, not a broken layout). */
   .sticky-cta {
-    position: sticky;
+    position: fixed;
+    inset-inline: 0;
     bottom: 0;
     z-index: 40;
+    transform: translateY(120%);
     background: color-mix(in oklab, var(--dark) 92%, transparent);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
@@ -868,6 +926,23 @@
   ) {
     .sticky-cta {
       background: var(--dark);
+    }
+  }
+  @supports (animation-timeline: scroll()) {
+    @keyframes sticky-cta-in {
+      from {
+        transform: translateY(120%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+    .sticky-cta {
+      animation-name: sticky-cta-in;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+      animation-timeline: scroll();
+      animation-range: 80vh 100vh;
     }
   }
   .sticky-cta .wrap {

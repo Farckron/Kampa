@@ -1,4 +1,6 @@
 ---
+import Ring from "./Ring.astro";
+
 interface Props {
   /** The /faq page supplies its own <h1>, so it turns this <h2> off. */
   heading?: boolean;
@@ -13,36 +15,36 @@ const base = import.meta.env.BASE_URL;
 // Single source of truth: rendered as the accordion and as FAQPage JSON-LD.
 const faqs = [
   {
-    q: "Is it really free?",
-    a: "The software is free and open source — no account, no subscription, no upsell. The only cost is the AI itself: you bring your own Claude API key and pay Anthropic directly for what the campaign uses, which is usually around €1. That money never passes through us.",
-  },
-  {
-    q: "What's a Claude API key and how do I get one?",
-    a: "It's a token from Anthropic that lets Kampa talk to Claude on your behalf. You create an account in the Anthropic console, add a small amount of credit, and generate a key. It takes about five minutes, and that credit is the only money involved.",
-    link: {
-      href: base + "guide/api-key",
-      label: "Read the step-by-step guide to getting a key.",
-    },
-  },
-  {
     q: "Is my API key safe?",
-    a: "Kampa runs entirely in your browser and has no server, so there is nowhere for us to send your key even if we wanted to. It's held in sessionStorage and cleared when you close the tab, unless you choose to remember it on this device, and the only address it is ever sent to is api.anthropic.com. Even so, do the sensible thing and create a dedicated key with a spend cap, so a mistake can't cost more than you decided. The code is open source if you'd rather check than take our word for it.",
+    a: "Kampa has no server, so there's nowhere for us to send your key even if we wanted to. It's held in sessionStorage, cleared when you close the tab, and only ever sent to api.anthropic.com. Set a spend cap on the key and a mistake can't cost more than you decided. The code is open source — check it yourself.",
     link: {
       href: base + "guide/api-key",
       label: "The guide shows how to set a spend cap.",
     },
   },
   {
-    q: "What exactly do I get?",
-    a: "A 90-day plan for your business: which channels to use, which ones we rejected and why, how to split your budget across them, and a week-by-week calendar of what to publish and when. Every task comes with copy you can paste straight into a post, an email or a listing. Export the whole thing as Markdown or PDF, and the calendar as an .ics file for Google or Apple Calendar.",
+    q: "Is it really free?",
+    a: "The software is free and open source — no account, no subscription, no upsell. The only cost is the AI itself, usually around €1, paid straight to Anthropic.",
   },
   {
-    q: "Why not just use ChatGPT?",
-    a: "You can, and you'll get advice that sounds reasonable. What a blank chat box won't do is keep asking until it actually knows your budget, your hours and your city, then commit to a set of channels and tell you what it ruled out. Kampa runs a fixed interview and hands back a dated, structured, exportable plan instead of a conversation you have to reassemble yourself.",
+    q: "What's a Claude API key and how do I get one?",
+    a: "A token from Anthropic that lets Kampa talk to Claude on your behalf. Create an account in the Anthropic console, add a little credit, generate a key — about five minutes.",
+    link: {
+      href: base + "guide/api-key",
+      label: "Read the step-by-step guide to getting a key.",
+    },
+  },
+  {
+    q: "What exactly do I get?",
+    a: "A 30-day plan: which channels to use and which were rejected, a budget split, a week-by-week calendar with ready-to-paste copy. Export as Markdown, PDF, or .ics.",
+  },
+  {
+    q: "Does Kampa just write content, or does it assess risk too?",
+    a: "Both. General AI tools stop at generating posts and copy. Kampa also scores the plan itself against your budget, hours and market data, flags which channels are likely to waste money, and tells you whether to continue, reduce or avoid each one — before you spend anything.",
   },
   {
     q: "Does it work for my type of business?",
-    a: "It's built for small businesses selling to real customers: local services, shops, cafes and restaurants, online stores, freelancers and solo consultants. If your decisions are about a modest budget, limited hours and a handful of channels, it fits. It's a weaker fit for enterprise marketing, long B2B sales cycles, or anything that needs a media-buying team.",
+    a: "Built for local services, shops, cafés, online stores, freelancers and solo consultants. Weaker fit for enterprise marketing or long B2B sales cycles.",
   },
 ];
 
@@ -74,8 +76,8 @@ const faqSchema = {
     {
       heading && (
         <div class="section-head">
-          <p class="eyebrow">FAQ</p>
-          <h2>Questions, answered</h2>
+          <p class="eyebrow">Questions, answered</p>
+          <h2>Everything before you type in an API key.</h2>
         </div>
       )
     }
@@ -83,32 +85,7 @@ const faqSchema = {
     <div
       class="card-dim mb-9 grid items-start gap-5 p-[26px_28px] sm:grid-cols-[56px_1fr]"
     >
-      <svg
-        width="56"
-        height="56"
-        viewBox="0 0 56 56"
-        class="-rotate-90"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <circle
-          cx="28"
-          cy="28"
-          r="23"
-          fill="none"
-          stroke-width="6"
-          stroke="color-mix(in oklab, var(--ink) 9%, transparent)"></circle>
-        <circle
-          cx="28"
-          cy="28"
-          r="23"
-          fill="none"
-          stroke-width="6"
-          stroke-linecap="round"
-          stroke="url(#kgrad)"
-          stroke-dasharray="144"
-          stroke-dashoffset="14"></circle>
-      </svg>
+      <Ring size={56} r={23} sw={6} dash={144} offset={14} />
       <div>
         <TrustHeading class="text-[length:var(--text-h3)]">
           {trust.q}

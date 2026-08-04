@@ -1,4 +1,6 @@
 ---
+import Ring from "./Ring.astro";
+
 const base = import.meta.env.BASE_URL;
 
 const channels = [
@@ -22,31 +24,35 @@ const channels = [
       class="text-ink-soft mt-[22px] max-w-[480px] text-[length:var(--text-lead)]"
     >
       Kampa interviews you like a strategist — your business, your budget, your
-      hours — then builds a complete 90-day campaign: channel plan, weekly
-      calendar, ready-to-paste copy. Free software. You pay Anthropic ~€1 per
-      campaign.
+      hours — then builds a complete 30-day campaign and checks it for risk
+      before you spend a euro.
     </p>
 
     <div class="mt-8 flex flex-wrap items-center gap-3.5">
       <a class="btn btn-grad" href={base + "app"}>
         Start a campaign <span aria-hidden="true">→</span>
       </a>
-      <a class="btn btn-ghost" href={base + "app?demo=1"}>See a sample plan</a>
+      <a class="btn btn-ghost" href="#samples">See a sample plan</a>
     </div>
 
     <p class="text-ink-soft mt-5 text-[13px]">
       No signup. No servers. Your data and API key never leave your browser.
+      Free software — you pay Anthropic ~€1 per campaign.
     </p>
   </div>
 
-  <!-- Decorative mockup of a finished campaign package. -->
+  {
+    /* Proof, not a screenshot: a finished campaign package, enlarged, as the
+       first thing seen. Decorative — every figure in it is stated in prose
+       elsewhere on the page. */
+  }
   <div class="card p-[26px]" aria-hidden="true">
     <div class="flex items-start justify-between gap-4">
       <div>
         <span
-          class="font-mono text-[length:var(--text-mono-label)] font-semibold tracking-[0.09em] text-ink-soft uppercase"
+          class="text-ink-soft font-mono text-[length:var(--text-mono-label)] font-semibold tracking-[0.09em] uppercase"
         >
-          90-day campaign
+          30-day campaign
         </span>
         <p
           class="font-display mt-1.5 text-[19px] font-semibold tracking-[-0.02em]"
@@ -55,37 +61,9 @@ const channels = [
         </p>
       </div>
 
-      <div
-        class="relative inline-flex flex-none items-center justify-center"
-        style="width:64px;height:64px"
-      >
-        <svg width="64" height="64" viewBox="0 0 64 64" class="-rotate-90">
-          <circle
-            cx="32"
-            cy="32"
-            r="26"
-            fill="none"
-            stroke-width="7"
-            stroke="color-mix(in oklab, var(--ink) 9%, transparent)"></circle>
-          <circle
-            cx="32"
-            cy="32"
-            r="26"
-            fill="none"
-            stroke-width="7"
-            stroke-linecap="round"
-            stroke="url(#kgrad)"
-            stroke-dasharray="163"
-            stroke-dashoffset="38"></circle>
-        </svg>
-        <span class="absolute text-center font-mono font-semibold">
-          <b class="block text-xl tracking-tight">€1</b>
-          <span
-            class="text-ink-soft block text-[9.5px] tracking-[.08em] uppercase"
-            >cost</span
-          >
-        </span>
-      </div>
+      <Ring size={64} r={26} sw={7} dash={163} offset={38}>
+        <b>€1</b><i>cost</i>
+      </Ring>
     </div>
 
     <ul class="mt-5 flex flex-col gap-[11px] text-[14.5px]">
@@ -103,11 +81,12 @@ const channels = [
 
     <div class="mt-5 flex flex-wrap gap-2">
       <span class="chip">+40 followers/mo</span>
-      <span class="chip chip-grad">≤ 4 h/week</span>
+      <span class="chip">≤ 4 h/week</span>
+      <span class="chip chip-grad">1 risk flagged</span>
     </div>
 
     <p class="text-ink-soft mt-4 text-[length:var(--text-xs)]">
-      You watch every cent: a full campaign costs about €1 in Claude API usage.
+      + company &amp; market risk charts, included in every plan
     </p>
   </div>
 </section>

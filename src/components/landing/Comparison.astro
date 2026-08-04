@@ -1,45 +1,30 @@
 ---
-const columns = [
-  "Kampa",
-  "ChatGPT free",
-  "Jasper",
-  "HubSpot Campaign Assistant",
-];
+const columns = ["Kampa", "ChatGPT free", "Jasper", "HubSpot"];
 
 const rows = [
   {
-    label: "Complete 90-day campaign package",
-    cells: [
-      "yes",
-      "blank prompt, you assemble",
-      "assets only, no strategy",
-      "landing page + email + ad copy only",
-    ],
+    label: "Complete 30-day package",
+    cells: ["Yes", "Blank prompt", "Assets only", "Partial"],
   },
   {
-    label: "Plans within your budget & hours",
-    cells: ["yes", "if you know to ask", "no", "no"],
+    label: "Flags risk before you spend",
+    cells: ["Yes", "No", "No", "No"],
+  },
+  {
+    label: "Fits your budget & hours",
+    cells: ["Yes", "If you ask", "No", "No"],
   },
   {
     label: "Cost",
-    cells: [
-      "~€1/campaign (your API key)",
-      "free but unstructured",
-      "€59-69/mo",
-      "free, but funnels to €20-890/mo",
-    ],
+    cells: ["~€1/campaign", "Free, unstructured", "€59–69/mo", "€20–890/mo"],
   },
   {
-    label: "Signup required",
-    cells: ["none", "account", "account + card", "HubSpot account"],
+    label: "Data stored on their servers",
+    cells: ["No — browser only", "Yes", "Yes", "Yes"],
   },
   {
-    label: "Your data stored on their servers",
-    cells: ["no — browser only", "yes", "yes", "yes"],
-  },
-  {
-    label: "Export you own (md/PDF/ics)",
-    cells: ["yes", "copy-paste", "limited", "limited"],
+    label: "Export you own",
+    cells: ["md / PDF / ics", "Copy-paste", "Limited", "Limited"],
   },
 ];
 ---
@@ -47,12 +32,13 @@ const rows = [
 <section class="section">
   <div class="wrap">
     <div class="section-head">
-      <p class="eyebrow">Comparison</p>
-      <h2>Why not just ChatGPT?</h2>
-      <p>Fair question. Here's the honest answer.</p>
+      <p class="eyebrow">Why not just ChatGPT?</p>
+      <h2>Fair question. Here's the honest answer.</h2>
     </div>
 
-    {/* overflow-x wrapper is mandatory — the body must never scroll sideways */}
+    {
+      /* overflow-x wrapper is mandatory — the body must never scroll sideways */
+    }
     <div
       class="overflow-x-auto"
       tabindex="0"
@@ -86,12 +72,6 @@ const rows = [
         </tbody>
       </table>
     </div>
-
-    <p class="mt-10 max-w-[680px] text-ink-soft">
-      You could build this yourself in ChatGPT with the right 15 prompts. Kampa
-      is those prompts, in the right order, with your constraints enforced and
-      the output packaged. That's the whole product — and it's why it's free.
-    </p>
   </div>
 </section>
 

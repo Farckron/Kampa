@@ -1,0 +1,106 @@
+---
+import Ring from "./Ring.astro";
+
+const base = import.meta.env.BASE_URL;
+
+const lines = [
+  { label: "Interview (8 questions)", amt: "~€0.20" },
+  { label: "Plan generation", amt: "~€0.70" },
+  { label: "Exports — md / PDF / ics", amt: "free" },
+];
+
+const miniFaq = [
+  { q: "Card on file with Kampa?", a: "No" },
+  { q: "Where does the money go?", a: "Straight to Anthropic" },
+  { q: "Can I cap spend?", a: "Yes — set a key spend limit" },
+];
+
+const competitors = [
+  { name: "Kampa", width: "2%", price: "~€1/mo*" },
+  { name: "Jasper", width: "70%", price: "€59–69/mo" },
+  { name: "HubSpot", width: "100%", price: "€20–890/mo" },
+];
+---
+
+<section id="pricing" class="section band-dark scroll-mt-20">
+  <div
+    class="wrap grid items-center gap-14 min-[980px]:grid-cols-[0.8fr_1.2fr]"
+  >
+    <div>
+      <p class="eyebrow">Pricing</p>
+      <h2 class="text-[length:var(--text-h2)] leading-[var(--lh-h2)]">
+        Free software.<br />About €1 in your own API usage.
+      </h2>
+      <p class="mt-4 max-w-[420px]">
+        No tiers, no seats, no card on file with us. You bring a Claude API key
+        and pay Anthropic directly for what a campaign actually uses.
+      </p>
+      <a class="btn btn-grad mt-[26px]" href={base + "app"}>
+        Start a campaign <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div>
+      <div class="card p-[30px]">
+        <div class="mb-[22px] flex items-center gap-[22px]">
+          {
+            /* "per campaign" wraps to three lines inside a 78px ring otherwise */
+          }
+          <Ring
+            size={78}
+            r={32}
+            sw={8}
+            dash={201}
+            offset={48}
+            valClass="[&_i]:whitespace-nowrap"
+          >
+            <b>~€1</b><i>per campaign</i>
+          </Ring>
+          <div class="data-row flex-1 border-t-0 py-0">
+            <span>Kampa the software</span><span class="amt">€0</span>
+          </div>
+        </div>
+
+        {
+          lines.map((line) => (
+            <div class="data-row">
+              <>
+                <span>{line.label}</span>
+                <span class="amt">{line.amt}</span>
+              </>
+            </div>
+          ))
+        }
+
+        <dl class="mt-[26px] flex flex-col gap-3">
+          {
+            miniFaq.map((item) => (
+              <div class="border-dark-line flex justify-between gap-3 border-t pt-3 text-[13.5px]">
+                <dt class="text-[color:var(--dark-ink-soft)]">{item.q}</dt>
+                <dd class="font-semibold">{item.a}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      {
+        /* Same figures as the comparison table, drawn. Decorative: each bar is
+           labelled with its own price in text. */
+      }
+      <div class="mt-[22px] flex flex-col gap-[18px]">
+        {
+          competitors.map((row) => (
+            <div class="bar-row bar-row-wide">
+              <span>{row.name}</span>
+              <div class="bar-track">
+                <div class="bar-fill" style={`width:${row.width}`} />
+              </div>
+              <span class="font-mono">{row.price}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

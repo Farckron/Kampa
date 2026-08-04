@@ -1,0 +1,59 @@
+---
+/**
+ * Ring gauge — the signature element (DESIGN.md). The arc is decorative (hidden
+ * from assistive tech) but the value inside it stays real text, so "Low —
+ * overall risk" is still announced. The gradient stroke references the single
+ * #kgrad def in Base.astro; never duplicate a gradient id per ring.
+ * `dash`/`offset` are the mockup's literal values, not a computed percentage.
+ */
+interface Props {
+  size: number;
+  r: number;
+  sw: number;
+  dash: number;
+  offset: number;
+  /** extra classes on the centred value (e.g. a scale or font-size bump) */
+  valClass?: string;
+  class?: string;
+}
+const {
+  size,
+  r,
+  sw,
+  dash,
+  offset,
+  valClass,
+  class: cls,
+} = Astro.props as Props;
+const c = size / 2;
+---
+
+<span class:list={["gauge", cls]} style={`width:${size}px;height:${size}px`}>
+  <svg
+    width={size}
+    height={size}
+    viewBox={`0 0 ${size} ${size}`}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <circle class="track" cx={c} cy={c} r={r} fill="none" stroke-width={sw}
+    ></circle>
+    <circle
+      cx={c}
+      cy={c}
+      r={r}
+      fill="none"
+      stroke-width={sw}
+      stroke-linecap="round"
+      stroke="url(#kgrad)"
+      stroke-dasharray={dash}
+      stroke-dashoffset={offset}></circle>
+  </svg>
+  {
+    Astro.slots.has("default") && (
+      <span class:list={["val", valClass]}>
+        <slot />
+      </span>
+    )
+  }
+</span>

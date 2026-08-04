@@ -6,9 +6,11 @@ const steps = [
   },
   {
     title: "Get your campaign",
-    body: "A complete 90-day plan: 2-3 channels chosen for your constraints (and why the rest were rejected), a budget split, a weekly calendar, and ready-to-paste copy.",
-    caption:
-      "You watch every cent: a full campaign costs about €1 in Claude API usage.",
+    body: "A complete 30-day plan: 2–3 channels chosen for your constraints (and why the rest were rejected), a budget split, a weekly calendar, ready-to-paste copy — plus charts breaking down company risk and market risk, so you see the numbers behind every call, not just the verdict.",
+  },
+  {
+    title: "Check the risks",
+    body: "Before you spend anything, Kampa scores the plan against your market and flags what's likely to waste budget — a channel that doesn't fit your audience, a rejected competitor's move, a timing clash — with a plain recommendation: continue, reduce, or avoid.",
   },
   {
     title: "Export and run it",
@@ -20,14 +22,14 @@ const steps = [
 <section id="how-it-works" class="section section-dim scroll-mt-20">
   <div class="wrap">
     <div class="section-head">
-      <p class="eyebrow">Three steps</p>
-      <h2>How it works</h2>
+      <p class="eyebrow">How it works</p>
+      <h2>Three steps, about fifteen minutes.</h2>
     </div>
 
     <ol class="flex flex-col">
       {
         steps.map((step, i) => (
-          <li class="grid grid-cols-[60px_1fr] gap-6 border-t border-line py-[34px] last:border-b sm:grid-cols-[90px_1fr]">
+          <li class="border-line grid grid-cols-[60px_1fr] gap-6 border-t py-[34px] last:border-b sm:grid-cols-[90px_1fr]">
             <div
               class="grad-text font-display text-[2.125rem] leading-none font-bold tracking-[-0.02em]"
               aria-hidden="true"
@@ -39,11 +41,6 @@ const steps = [
                 {step.title}
               </h3>
               <p class="text-ink-soft mt-2 max-w-[560px]">{step.body}</p>
-              {step.caption && (
-                <p class="border-line text-ink-soft mt-4 border-t pt-3.5 text-[length:var(--text-sm)]">
-                  {step.caption}
-                </p>
-              )}
             </div>
           </li>
         ))

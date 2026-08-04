@@ -1,0 +1,70 @@
+---
+// Icons are inline SVG from the mockup: decorative, so aria-hidden. The two
+// accent strokes are decoration on a white card, not text — base accents are
+// correct here (DESIGN.md §2).
+const cards = [
+  {
+    title: "Coffee shops & cafés",
+    body: "Local reach, GBP reviews, a weekly offer worth posting.",
+    icon: `<path d="M8 15h20v9a9 9 0 0 1-9 9h-2a9 9 0 0 1-9-9v-9Z" stroke="currentColor" stroke-width="2"/><path d="M28 18h3a4 4 0 0 1 0 8h-3" stroke="currentColor" stroke-width="2"/><path d="M13 9c0 2-2 2-2 4M20 9c0 2-2 2-2 4" stroke="var(--coral)" stroke-width="2" stroke-linecap="round"/>`,
+  },
+  {
+    title: "Hair & beauty salons",
+    body: "Booking-driven, map-first, tight service radius.",
+    icon: `<path d="M10 8c8 0 14 8 22 22M32 8c-4 4-9 9-9 9M12 30c4-4 9-9 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="8" r="2.4" fill="var(--violet)"/><circle cx="32" cy="8" r="2.4" fill="var(--orange)"/>`,
+  },
+  {
+    title: "Online boutiques",
+    body: "Content that compounds — Pinterest, email, patient growth.",
+    icon: `<path d="M10 15l2-6h16l2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 15h22v13a3 3 0 0 1-3 3H12a3 3 0 0 1-3-3V15Z" stroke="currentColor" stroke-width="2"/><path d="M15 19a5 5 0 0 0 10 0" stroke="var(--coral)" stroke-width="2" stroke-linecap="round"/>`,
+  },
+  {
+    title: "Freelancers & consultants",
+    body: "One person, no budget for an agency, a few hours a week.",
+    icon: `<rect x="8" y="10" width="24" height="16" rx="2" stroke="currentColor" stroke-width="2"/><path d="M6 30h28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 16h8M16 20h5" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"/>`,
+  },
+];
+---
+
+<section id="who" class="section scroll-mt-20">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Who it's for</p>
+      <h2>Built for the owner who does their own marketing.</h2>
+      <p>
+        Not an agency, not a marketing department — you, with a business, a
+        budget and a few hours a week.
+      </p>
+    </div>
+
+    {
+      /* All-arbitrary breakpoints on purpose: Tailwind emits arbitrary media
+         variants after every named one, so mixing `sm:` with `min-[980px]:`
+         lets the 640px rule win at 1440px. */
+    }
+    <div
+      class="grid gap-[var(--gap-grid)] min-[640px]:grid-cols-2 min-[980px]:grid-cols-4"
+    >
+      {
+        cards.map((card) => (
+          <div class="card p-[26px_22px]">
+            <svg
+              width="38"
+              height="38"
+              viewBox="0 0 40 40"
+              fill="none"
+              class="text-ink mb-[18px] block"
+              aria-hidden="true"
+              focusable="false"
+              set:html={card.icon}
+            />
+            <h3 class="text-[length:var(--text-h4)]">{card.title}</h3>
+            <p class="text-ink-soft mt-2 text-[length:var(--text-sm)]">
+              {card.body}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

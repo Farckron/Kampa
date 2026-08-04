@@ -1,39 +1,50 @@
 ---
 import { getCollection } from "astro:content";
+import Ring from "./Ring.astro";
 
 const base = import.meta.env.BASE_URL;
 const samples = await getCollection("samples");
 
 // ponytail: three hardcoded slugs — the collection has three entries and the
 // teasers are hand-written per sample. A generator would be more code, not less.
+// The find() below is the guard: rename a sample and the build fails loudly.
 const cards = [
   {
     slug: "riga-coffee-shop",
+    title: "Coffee shop",
+    risk: "Risk check: low — 1 channel avoided",
+    riskClass: "text-violet-ink",
     teasers: [
-      "Instagram — €35 boosts at a 3 km radius, one dated morning offer per push",
-      "Google Business Profile — weekly posts, reviews pushed from 62 to 90",
-      "Rejected: TikTok, Google Ads, delivery apps — reach 20 seats can't serve",
+      "Instagram — €35 boosts at a 3 km radius, one dated offer per push",
+      "Google Business Profile — weekly posts, reviews 62 → 90",
+      "Rejected: TikTok, Google Ads, delivery apps",
     ],
   },
   {
     slug: "hair-salon",
+    title: "Hair salon",
+    risk: "Risk check: medium — 1 channel reduced",
+    riskClass: "text-coral-ink",
     teasers: [
-      "Instagram — €120/month boosted across Jelgava plus 10 km, nothing wider",
-      "Google Business Profile — two thirds of first bookings start on the map",
-      "Rejected: TikTok, paid search, mailbox flyers — wrong ages or unmeasurable",
+      "Instagram — €120/mo boosted across Jelgava + 10 km",
+      "Google Business Profile — 2/3 of first bookings start on the map",
+      "Rejected: TikTok, paid search, mailbox flyers",
     ],
   },
   {
     slug: "ecommerce-boutique",
+    title: "Online boutique",
+    risk: "Risk check: 1 high-risk channel avoided",
+    riskClass: "text-orange-ink",
     teasers: [
-      "Pinterest — a photo shot in August is still sending clicks in March",
-      "Email — the only asset that compounds on €700 and six hours a week",
-      "Rejected: Meta ads, TikTok, marketplaces — CPA lands above gross margin",
+      "Pinterest — a photo shot in August still sends clicks in March",
+      "Email — the only asset that compounds on €700 and 6h/week",
+      "Rejected: Meta ads, TikTok, marketplaces",
     ],
   },
 ].map((card) => ({
   ...card,
-  data: samples.find((sample) => sample.id === card.slug)!.data,
+  href: base + "samples/" + samples.find((s) => s.id === card.slug)!.id,
   // Mockup bolds the channel name ahead of the em dash.
   lines: card.teasers.map((teaser) => {
     const [lead, ...rest] = teaser.split(" — ");
@@ -42,38 +53,44 @@ const cards = [
 }));
 ---
 
-<section id="samples" class="section">
+<section id="samples" class="section scroll-mt-20">
   <div class="wrap">
     <div class="section-head">
-      <p class="eyebrow">Samples</p>
-      <h2>See what you get</h2>
+      <p class="eyebrow">See what you get</p>
+      <h2>Three businesses, three budgets.</h2>
       <p>
-        Three businesses, three budgets. These are complete plans, not teasers —
-        open any of them and read the whole thing.
+        Complete plans, not teasers — open any of them and read the whole thing.
       </p>
     </div>
 
-    <div class="grid gap-[var(--gap-card)] md:grid-cols-3">
+    <div class="grid gap-[var(--gap-card)] min-[980px]:grid-cols-3">
       {
         cards.map((card) => (
-          <article class="card relative flex flex-col p-6 transition-colors hover:border-ink-soft">
-            <h3 class="text-[length:var(--text-h3)] leading-[var(--lh-h3)] text-balance">
-              {card.data.title}
-            </h3>
-            <p class="mt-3 text-[length:var(--text-sm)] leading-[1.5] text-ink-soft">
-              {card.data.business}
-            </p>
+          <article class="card hover:border-ink-soft relative flex flex-col p-6 transition-colors">
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-[length:var(--text-h3)] leading-[var(--lh-h3)] text-balance">
+                {card.title}
+              </h3>
+              <Ring
+                size={40}
+                r={16}
+                sw={5}
+                dash={100}
+                offset={24}
+                valClass="scale-[0.72]"
+              >
+                <b>€1</b>
+              </Ring>
+            </div>
 
-            <dl class="mt-5">
-              <div class="data-row">
-                <dt>Budget</dt>
-                <dd class="amt">€{card.data.budget} / mo</dd>
-              </div>
-              <div class="data-row">
-                <dt>Owner time</dt>
-                <dd class="amt">{card.data.hours} h / week</dd>
-              </div>
-            </dl>
+            <p
+              class:list={[
+                "mt-4 text-[length:var(--text-xs)] font-semibold",
+                card.riskClass,
+              ]}
+            >
+              {card.risk}
+            </p>
 
             <ul class="mt-[18px] flex flex-col gap-2.5 text-[length:var(--text-sm)]">
               {card.lines.map((line) => (
@@ -87,17 +104,11 @@ const cards = [
               ))}
             </ul>
 
-            <ul class="mt-5 flex flex-wrap gap-2">
-              {card.data.channels.map((channel) => (
-                <li class="chip">{channel}</li>
-              ))}
-            </ul>
-
             {/* Stretched link: the whole card is the tap target, but only
                 one link lands in the accessibility tree. */}
             <a
-              href={base + "samples/" + card.slug}
-              class="mt-auto inline-flex w-fit items-center gap-1.5 pt-6 text-[0.84375rem] font-semibold text-violet-ink after:absolute after:inset-0 after:content-[''] hover:underline"
+              href={card.href}
+              class="text-violet-ink mt-auto inline-flex w-fit items-center gap-1.5 pt-5 text-[0.84375rem] font-semibold after:absolute after:inset-0 after:content-[''] hover:underline"
             >
               Open full sample <span aria-hidden="true">→</span>
             </a>

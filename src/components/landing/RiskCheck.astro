@@ -1,0 +1,113 @@
+---
+import Ring from "./Ring.astro";
+
+const company = [
+  { label: "Budget concentration", width: "32%", level: "Low" },
+  { label: "Time capacity", width: "20%", level: "Low" },
+  { label: "Channel experience", width: "55%", level: "Med" },
+];
+
+const market = [
+  { label: "Local competition", width: "45%", level: "Med" },
+  { label: "Seasonality", width: "28%", level: "Low" },
+  { label: "Audience overlap", width: "62%", level: "Med" },
+];
+
+// Accent-coloured text, so the -ink twins (DESIGN.md §2) over the base tints.
+const calls = [
+  {
+    label: "Instagram boosts, 3 km radius",
+    call: "Continue",
+    pill: "continue",
+  },
+  {
+    label: "Google Business Profile posts",
+    call: "Continue",
+    pill: "continue",
+  },
+  { label: "Weekend delivery-app promo", call: "Reduce", pill: "reduce" },
+  { label: "TikTok, no existing following", call: "Avoid", pill: "avoid" },
+];
+
+const groups = [
+  { label: "Company risk", rows: company },
+  { label: "Market risk", rows: market },
+];
+---
+
+<section id="risk" class="section scroll-mt-20">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Risk check</p>
+      <h2>See the risk before you spend, not after.</h2>
+      <p>
+        Most AI tools stop at content. Kampa scores the plan itself — which
+        channels are safe to run, which are a gamble, and why — before a euro
+        leaves your account.
+      </p>
+    </div>
+
+    <div
+      class="card grid items-center gap-9 p-8 min-[980px]:grid-cols-[200px_1fr]"
+    >
+      <div class="text-center">
+        <Ring
+          size={150}
+          r={62}
+          sw={14}
+          dash={390}
+          offset={300}
+          class="mx-auto"
+          valClass="[&_b]:text-[30px]"
+        >
+          <b>Low</b><i>overall risk</i>
+        </Ring>
+        <p class="text-ink-soft mt-4 text-[13px]">
+          Riga coffee shop · 30-day plan
+        </p>
+      </div>
+
+      <div>
+        <div class="mb-7 grid gap-8 sm:grid-cols-2">
+          {
+            groups.map((group) => (
+              <div>
+                <p class="mono-label">{group.label}</p>
+                <div class="flex flex-col gap-[18px]">
+                  {group.rows.map((row) => (
+                    <div class="bar-row">
+                      <span>{row.label}</span>
+                      <div class="bar-track">
+                        <div class="bar-fill" style={`width:${row.width}`} />
+                      </div>
+                      <span class="font-mono text-[12px]">{row.level}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <p class="mono-label mb-2.5">Per-channel call</p>
+        {
+          calls.map((row, i) => (
+            /* .data-row's own :first-of-type reset misses here — the first
+               div in this column is the chart grid, not a row. */
+            <div class:list={["data-row", i === 0 && "border-t-0"]}>
+              <span class="font-semibold">{row.label}</span>
+              <span class={`pill pill-${row.pill}`}>{row.call}</span>
+            </div>
+          ))
+        }
+
+        <p class="text-ink-soft mt-[18px] text-[length:var(--text-sm)]">
+          These are the actual charts that ship inside your plan — not a
+          marketing claim. Company risk covers what's within your control
+          (budget, time, experience); market risk covers what isn't
+          (competition, timing, audience overlap).
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
