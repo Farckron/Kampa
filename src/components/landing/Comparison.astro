@@ -44,35 +44,28 @@ const rows = [
 ];
 ---
 
-<section class="px-6 py-24 sm:py-32">
-  <div class="mx-auto max-w-6xl">
-    <h2
-      class="max-w-3xl text-4xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-5xl"
-    >
-      Why not just ChatGPT?
-    </h2>
-    <p class="mt-5 max-w-prose text-lg text-neutral-600">
-      Fair question. Here's the honest answer.
-    </p>
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Comparison</p>
+      <h2>Why not just ChatGPT?</h2>
+      <p>Fair question. Here's the honest answer.</p>
+    </div>
 
+    {/* overflow-x wrapper is mandatory — the body must never scroll sideways */}
     <div
-      class="mt-12 overflow-x-auto rounded-xl border border-neutral-200 bg-white"
+      class="overflow-x-auto"
+      tabindex="0"
+      role="region"
+      aria-label="Comparison table"
     >
-      <table class="w-full min-w-3xl border-collapse text-left text-sm">
+      <table class="compare">
         <thead>
-          <tr class="border-b border-neutral-200">
-            <th scope="col" class="w-56 px-5 py-4">
-              <span class="sr-only">Capability</span>
-            </th>
+          <tr>
+            <th scope="col">Capability</th>
             {
               columns.map((name, i) => (
-                <th
-                  scope="col"
-                  class:list={[
-                    "px-5 py-4 font-semibold",
-                    i === 0 ? "text-primary bg-primary/5" : "text-neutral-500",
-                  ]}
-                >
+                <th scope="col" class:list={[i === 0 && "hi"]}>
                   {name}
                 </th>
               ))
@@ -82,24 +75,10 @@ const rows = [
         <tbody>
           {
             rows.map((row) => (
-              <tr class="border-b border-neutral-200 last:border-0">
-                <th
-                  scope="row"
-                  class="px-5 py-4 align-top font-semibold text-neutral-950"
-                >
-                  {row.label}
-                </th>
+              <tr>
+                <th scope="row">{row.label}</th>
                 {row.cells.map((cell, i) => (
-                  <td
-                    class:list={[
-                      "px-5 py-4 align-top",
-                      i === 0
-                        ? "bg-primary/5 font-medium text-neutral-950"
-                        : "text-neutral-600",
-                    ]}
-                  >
-                    {cell}
-                  </td>
+                  <td class:list={[i === 0 && "hi"]}>{cell}</td>
                 ))}
               </tr>
             ))
@@ -108,10 +87,64 @@ const rows = [
       </table>
     </div>
 
-    <p class="mt-10 max-w-prose text-base text-neutral-600">
+    <p class="mt-10 max-w-[680px] text-ink-soft">
       You could build this yourself in ChatGPT with the right 15 prompts. Kampa
       is those prompts, in the right order, with your constraints enforced and
       the output packaged. That's the whole product — and it's why it's free.
     </p>
   </div>
 </section>
+
+<style>
+  /* One-per-file layout: the comparison table is not a shared pattern, so it
+     lives here rather than in global.css. Values are contract §6.11. */
+  table.compare {
+    width: 100%;
+    min-width: 44rem;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+  table.compare th,
+  table.compare td {
+    padding: 14px 16px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--line);
+  }
+  table.compare thead th {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-label);
+    font-weight: 600;
+    letter-spacing: var(--tracking-th);
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  table.compare tbody th {
+    width: 34%;
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+  /* the Kampa column */
+  table.compare .hi {
+    background-color: color-mix(in oklab, var(--coral) 6%, transparent);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  table.compare thead th.hi {
+    background-image: var(--grad);
+    background-size: 100% 2px;
+    background-repeat: no-repeat;
+    background-position: top left;
+  }
+  @media (max-width: 640px) {
+    table.compare {
+      font-size: var(--text-xs);
+      min-width: 38rem;
+    }
+    table.compare th,
+    table.compare td {
+      padding: 12px 12px;
+    }
+  }
+</style>

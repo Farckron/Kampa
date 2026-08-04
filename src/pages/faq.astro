@@ -10,17 +10,24 @@ import Footer from "../components/landing/Footer.astro";
   description="How Kampa works, what a Claude API key costs, where your key is stored, and what you get out of a 90-day campaign plan."
 >
   <Nav />
-  <main>
-    <div class="mx-auto max-w-6xl px-6 pt-16">
-      <h1
-        class="max-w-3xl text-4xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-5xl"
-      >
-        Questions, answered
-      </h1>
-      <p class="mt-5 max-w-prose text-lg text-neutral-600">
-        What Kampa costs, what a Claude API key is, where your key lives, and
-        what you walk away with.
-      </p>
+  <main id="main" tabindex="-1" class="scroll-mt-[72px]">
+    {
+      /* Same 840px column as Faq.astro below, so the eyebrow, the h1 and the
+        accordion all share one left edge. */
+    }
+    <div class="wrap max-w-[840px] pt-16">
+      <div class="max-w-[640px]">
+        <p class="eyebrow">FAQ</p>
+        <h1
+          class="text-[length:var(--text-h1)] leading-[var(--lh-h1)] text-balance"
+        >
+          Questions, answered
+        </h1>
+        <p class="text-ink-soft mt-3.5 text-[length:var(--text-lead)]">
+          What Kampa costs, what a Claude API key is, where your key lives, and
+          what you walk away with.
+        </p>
+      </div>
     </div>
     {
       /* Canonical FAQ URL: this is the one page that carries the FAQPage JSON-LD. */

@@ -1,85 +1,117 @@
 ---
 const base = import.meta.env.BASE_URL;
+
+const channels = [
+  { name: "Instagram", cadence: "3 posts/week" },
+  { name: "Google Business Profile", cadence: "weekly" },
+  { name: "Email", cadence: "bi-weekly" },
+];
 ---
 
-<section class="px-6 py-24 sm:py-32">
-  <div class="mx-auto max-w-6xl text-center">
-    <h1
-      class="mx-auto max-w-4xl text-5xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-6xl lg:text-7xl"
-    >
-      A real marketing plan. For your budget. In 15 minutes.
+<section
+  class="wrap grid items-center gap-14 pt-[76px] pb-16 min-[980px]:grid-cols-[1.05fr_0.95fr]"
+>
+  <div>
+    <p class="eyebrow">AI campaign planner</p>
+
+    <h1 class="text-[length:var(--text-h1)] leading-[var(--lh-h1)]">
+      A real marketing plan.<br />For your budget.<br />In 15 minutes.
     </h1>
 
-    <p class="mx-auto mt-8 max-w-prose text-lg text-neutral-600">
+    <p
+      class="text-ink-soft mt-[22px] max-w-[480px] text-[length:var(--text-lead)]"
+    >
       Kampa interviews you like a strategist — your business, your budget, your
       hours — then builds a complete 90-day campaign: channel plan, weekly
       calendar, ready-to-paste copy. Free software. You pay Anthropic ~€1 per
       campaign.
     </p>
 
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-      <a
-        href={base + "app"}
-        class="bg-primary text-primary-foreground rounded-lg px-6 py-3 text-base font-semibold hover:opacity-90"
-      >
-        Start a campaign →
+    <div class="mt-8 flex flex-wrap items-center gap-3.5">
+      <a class="btn btn-grad" href={base + "app"}>
+        Start a campaign <span aria-hidden="true">→</span>
       </a>
-      <a
-        href={base + "app?demo=1"}
-        class="rounded-lg border border-neutral-200 px-6 py-3 text-base font-semibold text-neutral-950 hover:bg-neutral-50"
-      >
-        See a sample plan
-      </a>
+      <a class="btn btn-ghost" href={base + "app?demo=1"}>See a sample plan</a>
     </div>
 
-    <p class="mt-6 text-sm text-neutral-500">
+    <p class="text-ink-soft mt-5 text-[13px]">
       No signup. No servers. Your data and API key never leave your browser.
     </p>
+  </div>
 
-    <!-- Decorative mockup of a finished campaign package. -->
-    <div
-      aria-hidden="true"
-      class="mx-auto mt-16 max-w-3xl rounded-xl border border-neutral-200 bg-white p-6 text-left shadow-sm"
-    >
-      <div
-        class="flex items-center justify-between border-b border-neutral-200 pb-4 text-sm font-semibold text-neutral-950"
-      >
-        <span>90-day campaign — Riga coffee shop</span>
+  <!-- Decorative mockup of a finished campaign package. -->
+  <div class="card p-[26px]" aria-hidden="true">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <span
+          class="font-mono text-[length:var(--text-mono-label)] font-semibold tracking-[0.09em] text-ink-soft uppercase"
+        >
+          90-day campaign
+        </span>
+        <p
+          class="font-display mt-1.5 text-[19px] font-semibold tracking-[-0.02em]"
+        >
+          Riga coffee shop
+        </p>
       </div>
 
-      <div class="mt-5 grid gap-6 sm:grid-cols-[1fr_auto]">
-        <ul class="space-y-3 text-sm text-neutral-600">
-          <li class="flex items-center gap-3">
-            <span class="bg-primary size-1.5 shrink-0 rounded-full"></span>
-            Instagram · 3 posts/week
-          </li>
-          <li class="flex items-center gap-3">
-            <span class="bg-primary size-1.5 shrink-0 rounded-full"></span>
-            Google Business Profile · weekly
-          </li>
-          <li class="flex items-center gap-3">
-            <span class="bg-primary size-1.5 shrink-0 rounded-full"></span>
-            Email · bi-weekly
-          </li>
-        </ul>
-
-        <div class="flex flex-wrap gap-2 sm:flex-col sm:items-end">
+      <div
+        class="relative inline-flex flex-none items-center justify-center"
+        style="width:64px;height:64px"
+      >
+        <svg width="64" height="64" viewBox="0 0 64 64" class="-rotate-90">
+          <circle
+            cx="32"
+            cy="32"
+            r="26"
+            fill="none"
+            stroke-width="7"
+            stroke="color-mix(in oklab, var(--ink) 9%, transparent)"></circle>
+          <circle
+            cx="32"
+            cy="32"
+            r="26"
+            fill="none"
+            stroke-width="7"
+            stroke-linecap="round"
+            stroke="url(#kgrad)"
+            stroke-dasharray="163"
+            stroke-dashoffset="38"></circle>
+        </svg>
+        <span class="absolute text-center font-mono font-semibold">
+          <b class="block text-xl tracking-tight">€1</b>
           <span
-            class="rounded-full border border-neutral-200 px-3 py-1 text-xs font-medium text-neutral-600"
+            class="text-ink-soft block text-[9.5px] tracking-[.08em] uppercase"
+            >cost</span
           >
-            +40 followers/mo
-          </span>
-          <span
-            class="rounded-full border border-neutral-200 px-3 py-1 text-xs font-medium text-neutral-600"
-          >
-            ≤ 4 h/week
-          </span>
-        </div>
+        </span>
       </div>
     </div>
 
-    <p class="mt-16 text-xs tracking-widest text-neutral-500 uppercase">
-      BUILT FOR SMALL BUSINESSES THAT DO THEIR OWN MARKETING
+    <ul class="mt-5 flex flex-col gap-[11px] text-[14.5px]">
+      {
+        channels.map((channel) => (
+          <li class="flex items-baseline gap-2.5">
+            <span class="mt-0 size-[5px] flex-none -translate-y-0.5 rounded-full bg-[image:var(--grad)]" />
+            <span>
+              <b class="font-semibold">{channel.name}</b> — {channel.cadence}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-5 flex flex-wrap gap-2">
+      <span class="chip">+40 followers/mo</span>
+      <span class="chip chip-grad">≤ 4 h/week</span>
+    </div>
+
+    <p class="text-ink-soft mt-4 text-[length:var(--text-xs)]">
+      You watch every cent: a full campaign costs about €1 in Claude API usage.
     </p>
   </div>
 </section>
+
+<div class="stripband">
+  <p>Built for small businesses that do their own marketing</p>
+</div>

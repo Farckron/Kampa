@@ -4,9 +4,10 @@ import Nav from "../components/landing/Nav.astro";
 import Footer from "../components/landing/Footer.astro";
 import { GITHUB_URL } from "../lib/site";
 
-const h2 = "mt-14 text-xl font-bold tracking-tight text-neutral-950";
-const p = "mt-4 text-base leading-7 text-neutral-700";
-const a = "text-primary font-medium underline underline-offset-2";
+const h2 =
+  "mt-14 border-t border-line pt-12 text-[length:var(--text-h2-doc)] scroll-mt-20";
+const p = "mt-4 text-[length:var(--text-body)] leading-[1.7] text-ink-soft";
+const a = "text-violet-ink font-medium underline underline-offset-2";
 ---
 
 <Base
@@ -15,50 +16,55 @@ const a = "text-primary font-medium underline underline-offset-2";
 >
   <Nav />
 
-  <main class="mx-auto max-w-3xl px-6 pt-16 pb-24">
-    <h1 class="text-4xl font-extrabold tracking-tight text-neutral-950">
-      Terms
-    </h1>
-    <p class="mt-4 text-lg text-neutral-500">Effective 25 July 2026.</p>
+  <main id="main" tabindex="-1" class="wrap scroll-mt-[72px] pt-16 pb-24">
+    <article class="max-w-[65ch]">
+      <p class="eyebrow">Legal</p>
+      <h1 class="text-[length:var(--text-h1)] leading-[var(--lh-h1)]">Terms</h1>
+      <p class="text-ink-soft mt-3.5 text-[length:var(--text-lead)]">
+        Effective 25 July 2026.
+      </p>
 
-    <h2 class={h2}>What Kampa is</h2>
-    <p class={p}>
-      Kampa is free, <a class={a} href={GITHUB_URL} rel="noopener"
-        >open-source</a
-      > software that runs entirely in your browser. It is provided as-is. There is
-      no subscription, no account, and no support contract behind it.
-    </p>
+      <h2 class={h2}>What Kampa is</h2>
+      <p class={p}>
+        Kampa is free, <a class={a} href={GITHUB_URL} rel="noopener"
+          >open-source</a
+        > software that runs entirely in your browser. It is provided as-is. There
+        is no subscription, no account, and no support contract behind it.
+      </p>
 
-    <h2 class={h2}>Your responsibilities</h2>
-    <p class={p}>
-      Your Anthropic account is yours, your API key is yours, and the costs it
-      runs up are yours. Kampa cannot see or control your spending.
-    </p>
-    <p class={p}>
-      Review what the AI writes before you publish it. Marketing claims, prices,
-      discounts, and legal compliance in your country are your call, not the
-      model's. Treat every generated campaign as a first draft from a fast
-      intern.
-    </p>
+      <h2 class={h2}>Your responsibilities</h2>
+      <p class={p}>
+        Your Anthropic account is yours, your API key is yours, and the costs it
+        runs up are yours. Kampa cannot see or control your spending.
+      </p>
+      <p class={p}>
+        Review what the AI writes before you publish it. Marketing claims,
+        prices, discounts, and legal compliance in your country are your call,
+        not the model's. Treat every generated campaign as a first draft from a
+        fast intern.
+      </p>
 
-    <h2 class={h2}>No warranty</h2>
-    <p class={p}>
-      Kampa comes with no warranty of any kind. We do not guarantee that it is
-      fit for your purpose, that its output is accurate, or that the site stays
-      available.
-    </p>
+      <h2 class={h2}>No warranty</h2>
+      <p class={p}>
+        Kampa comes with no warranty of any kind. We do not guarantee that it is
+        fit for your purpose, that its output is accurate, or that the site
+        stays available.
+      </p>
 
-    <h2 class={h2}>Liability</h2>
-    <p class={p}>
-      To the extent permitted by law, we are not liable for any damages arising
-      from your use of Kampa, including lost revenue, lost data, or API costs.
-    </p>
+      <h2 class={h2}>Liability</h2>
+      <p class={p}>
+        To the extent permitted by law, we are not liable for any damages
+        arising from your use of Kampa, including lost revenue, lost data, or
+        API costs.
+      </p>
 
-    <h2 class={h2}>Changes</h2>
-    <p class={p}>
-      These terms may change. The effective date at the top tells you when they
-      last did. Continued use of Kampa means you accept the current version.
-    </p>
+      <h2 class={h2}>Changes</h2>
+      <p class={p}>
+        These terms may change. The effective date at the top tells you when
+        they last did. Continued use of Kampa means you accept the current
+        version.
+      </p>
+    </article>
   </main>
 
   <Footer />

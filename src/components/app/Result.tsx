@@ -1,8 +1,5 @@
 import * as React from "react";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,29 +12,41 @@ const euro = (n: number) => `€${n.toLocaleString("en-IE")}`;
 
 function Empty({ what }: { what: string }) {
   return (
-    <p className="py-10 text-center text-sm text-muted-foreground">
-      No {what} yet.
-    </p>
+    <p className="text-ink-soft py-10 text-center text-sm">No {what} yet.</p>
   );
 }
 
 function SectionHeader({ title, stage }: { title: string; stage: GenStage }) {
   const { state, dispatch } = useWizard();
   return (
-    <div className="mb-5 flex items-center justify-between gap-4">
-      <h2 className="font-heading text-lg font-medium">{title}</h2>
+    <div className="border-line mb-8 flex items-center justify-between gap-4 border-b pb-5">
+      <h2 className="font-heading text-[length:var(--text-h2-doc)] leading-tight">
+        {title}
+      </h2>
       {!state.demo && (
-        <Button
-          variant="outline"
-          size="sm"
+        <button
+          type="button"
+          className="btn btn-ghost btn-sm shrink-0"
           onClick={() => {
             dispatch({ type: "REGENERATE", stage });
             dispatch({ type: "BACK_TO_GENERATION" });
           }}
         >
           Regenerate
-        </Button>
+        </button>
       )}
+    </div>
+  );
+}
+
+/** Verdict-banner stat: mono value over a mono label. */
+function VStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <b className="block font-mono text-[19px] font-semibold">{value}</b>
+      <span className="text-ink-soft text-[10px] tracking-[0.05em] uppercase">
+        {label}
+      </span>
     </div>
   );
 }
@@ -45,103 +54,114 @@ function SectionHeader({ title, stage }: { title: string; stage: GenStage }) {
 function StrategyTab({ strategy }: { strategy: Strategy | null }) {
   if (!strategy) return <Empty what="strategy" />;
   const total = strategy.budgetSplit.reduce((sum, b) => sum + b.eur, 0);
+  const share = (eur: number) => (total > 0 ? (eur / total) * 100 : 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <SectionHeader title="Strategy" stage="strategy" />
 
-      <p className="text-base leading-relaxed">{strategy.positioning}</p>
+      <div className="card flex flex-wrap items-center gap-7 bg-[image:var(--grad-wash)] p-[22px_26px]">
+        <p className="min-w-[220px] flex-1 text-[length:var(--text-lead)] leading-relaxed">
+          {strategy.positioning}
+        </p>
+        <div className="flex flex-none gap-7">
+          <VStat label="Channels" value={String(strategy.chosen.length)} />
+          <VStat label="Rejected" value={String(strategy.rejected.length)} />
+          {total > 0 && <VStat label="Budget" value={euro(total)} />}
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Who this is for</CardTitle>
-        </CardHeader>
-        <CardContent className="leading-relaxed text-muted-foreground">
-          {strategy.icp}
-        </CardContent>
-      </Card>
+      <section className="card p-[22px_24px]">
+        <h3 className="mono-label">Who this is for</h3>
+        <p className="text-ink-soft leading-relaxed">{strategy.icp}</p>
+      </section>
 
       <section>
-        <h3 className="mb-3 text-sm font-medium">Chosen channels</h3>
-        <ul className="space-y-3">
+        <h3 className="mono-label">Chosen channels</h3>
+        <div className="space-y-3.5">
           {strategy.chosen.map((c) => (
-            <li key={c.channel} className="flex gap-3">
-              <span
-                aria-hidden="true"
-                className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
-              />
-              <p className="leading-relaxed">
-                <span className="font-medium">{c.channel}</span> — {c.reason}
+            <div key={c.channel} className="card p-[22px_24px]">
+              <h4 className="font-heading text-[length:var(--text-h4)]">
+                {c.channel}
+              </h4>
+              <p className="text-ink-soft mt-2 text-[length:var(--text-sm)] leading-relaxed">
+                {c.reason}
               </p>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
 
-      <section>
-        <h3 className="mb-3 text-sm font-medium text-muted-foreground">
-          Rejected
-        </h3>
-        <ul className="space-y-2 text-sm text-muted-foreground">
+      <section className="card p-[20px_22px]">
+        <h3 className="mono-label">Rejected</h3>
+        <div>
           {strategy.rejected.map((c) => (
-            <li key={c.channel} className="leading-relaxed">
-              <span className="font-medium">{c.channel}</span> — {c.reason}
-            </li>
+            <div
+              key={c.channel}
+              className="data-row flex-col items-start gap-1 sm:flex-row sm:items-center"
+            >
+              <span className="font-semibold">{c.channel}</span>
+              <span className="text-ink-soft sm:max-w-[60%] sm:text-right">
+                {c.reason}
+              </span>
+            </div>
           ))}
-        </ul>
-      </section>
-
-      <section>
-        <h3 className="mb-3 text-sm font-medium">Budget split</h3>
-        <div className="overflow-x-auto rounded-xl border border-neutral-200">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-neutral-200 text-left text-muted-foreground">
-                <th className="px-4 py-2 font-medium">Item</th>
-                <th className="px-4 py-2 text-right font-medium">EUR</th>
-              </tr>
-            </thead>
-            <tbody>
-              {strategy.budgetSplit.map((b) => (
-                <tr key={b.item} className="border-b border-neutral-200">
-                  <td className="px-4 py-2">{b.item}</td>
-                  <td className="px-4 py-2 text-right tabular-nums">
-                    {euro(b.eur)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="font-medium">
-                <td className="px-4 py-2">Total</td>
-                <td className="px-4 py-2 text-right tabular-nums">
-                  {euro(total)}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
         </div>
       </section>
 
       <section>
-        <h3 className="mb-3 text-sm font-medium">What to measure</h3>
-        <div className="grid gap-3 sm:grid-cols-2">
+        <h3 className="mono-label">Budget split</h3>
+        <div className="card space-y-3.5 p-[22px_24px]">
+          {strategy.budgetSplit.map((b) => (
+            <div key={b.item} className="bar-row">
+              <span>{b.item}</span>
+              <div className="bar-track">
+                <div
+                  className="bar-fill"
+                  style={{ width: `${share(b.eur).toFixed(1)}%` }}
+                />
+              </div>
+              <span className="text-right font-mono font-semibold">
+                {euro(b.eur)}
+              </span>
+            </div>
+          ))}
+          <div className="border-line mt-1 flex items-center justify-between border-t-2 pt-3.5 text-[length:var(--text-sm)] font-semibold">
+            <span>Total</span>
+            <span className="font-mono">{euro(total)}</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3 className="mono-label">What to measure</h3>
+        <div className="card-grid grid-cols-1 sm:grid-cols-2">
           {strategy.kpis.map((k) => (
-            <Card key={k.name} size="sm">
-              <CardHeader>
-                <CardTitle>{k.name}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-1 text-sm">
-                <p>{k.target}</p>
-                <p className="text-muted-foreground">{k.where}</p>
-              </CardContent>
-            </Card>
+            <div key={k.name} className="p-[18px_20px]">
+              <h4 className="mono-label mb-2">{k.name}</h4>
+              <p className="text-[length:var(--text-sm)] font-semibold">
+                {k.target}
+              </p>
+              <p className="text-ink-soft mt-1 text-[length:var(--text-xs)]">
+                {k.where}
+              </p>
+            </div>
           ))}
         </div>
       </section>
     </div>
   );
 }
+
+const TAGS = ["tag-ig", "tag-gbp", "tag-em"] as const;
+
+/** Tag colour is decoration only — the channel name carries the meaning.
+ *  Hashing keeps one channel the same colour down the whole calendar. */
+const tagClass = (channel: string): string =>
+  TAGS[[...channel].reduce((n, ch) => n + ch.charCodeAt(0), 0) % TAGS.length]!;
+
+const TH =
+  "text-ink-soft pr-3.5 pb-2.5 text-left font-mono text-[length:var(--text-mono-xs)] font-semibold tracking-[0.06em] uppercase";
 
 function CalendarTab({
   calendar,
@@ -158,15 +178,32 @@ function CalendarTab({
   return (
     <div>
       <SectionHeader title="12-week calendar" stage="calendar" />
-      <div className="overflow-x-auto rounded-xl border border-neutral-200">
-        <table className="w-full min-w-[42rem] text-sm">
+      {/* tabindex makes the scroll box reachable by keyboard (Safari won't
+          focus a scroll container on its own); the role gives it a name. */}
+      <div
+        className="overflow-x-auto"
+        tabIndex={0}
+        role="region"
+        aria-label="12-week calendar"
+      >
+        <table className="w-full min-w-[42rem] border-collapse text-[length:var(--text-sm)]">
           <thead>
-            <tr className="border-b border-neutral-200 text-left text-muted-foreground">
-              <th className="px-4 py-2 font-medium">Week</th>
-              <th className="px-4 py-2 font-medium">Channel</th>
-              <th className="px-4 py-2 font-medium">Asset</th>
-              <th className="px-4 py-2 font-medium">Working title</th>
-              <th className="px-4 py-2 text-right font-medium">Time</th>
+            <tr>
+              <th scope="col" className={TH}>
+                Week
+              </th>
+              <th scope="col" className={TH}>
+                Channel
+              </th>
+              <th scope="col" className={TH}>
+                Asset
+              </th>
+              <th scope="col" className={TH}>
+                Working title
+              </th>
+              <th scope="col" className={TH + " text-right"}>
+                Time
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -174,19 +211,29 @@ function CalendarTab({
               <tr
                 key={`${r.week}-${r.channel}-${r.title}`}
                 className={
-                  // month break: heavier rule every 4 weeks
-                  i > 0 && r.week % 4 === 1 && rows[i - 1]!.week !== r.week
-                    ? "border-t border-neutral-300"
-                    : "border-t border-neutral-100"
+                  i === 0
+                    ? ""
+                    : // month break: heavier rule every 4 weeks
+                      i > 0 && r.week % 4 === 1 && rows[i - 1]!.week !== r.week
+                      ? "border-line border-t-2"
+                      : "border-line border-t"
                 }
               >
-                <td className="px-4 py-2 tabular-nums">{r.week}</td>
-                <td className="px-4 py-2">{r.channel}</td>
-                <td className="px-4 py-2 text-muted-foreground">
+                <td className="py-3 pr-3.5 align-top">
+                  <span className="text-ink-soft font-mono font-bold">
+                    {r.week}
+                  </span>
+                </td>
+                <td className="py-3 pr-3.5 align-top">
+                  <span className={"tag " + tagClass(r.channel)}>
+                    {r.channel}
+                  </span>
+                </td>
+                <td className="text-ink-soft py-3 pr-3.5 align-top">
                   {r.assetType}
                 </td>
-                <td className="px-4 py-2">{r.title}</td>
-                <td className="px-4 py-2 text-right tabular-nums">
+                <td className="py-3 pr-3.5 align-top">{r.title}</td>
+                <td className="py-3 text-right align-top font-mono font-semibold">
                   {r.minutes} min
                 </td>
               </tr>
@@ -194,11 +241,15 @@ function CalendarTab({
           </tbody>
         </table>
       </div>
-      <p className="mt-3 text-sm text-muted-foreground">
-        {totalHours.toFixed(1)} hours over {weeks} weeks (
-        {(totalHours / weeks).toFixed(1)} h/week)
-        {hours !== null && ` — you said you have ${hours} h/week.`}
-      </p>
+      <div className="callout mt-5">
+        {/* one flex item — a bare text node next to an expression would become
+            two, and the callout's gap would split the sentence. */}
+        <p>
+          {totalHours.toFixed(1)} hours over {weeks} weeks (
+          {(totalHours / weeks).toFixed(1)} h/week)
+          {hours !== null && ` — you said you have ${hours} h/week.`}
+        </p>
+      </div>
     </div>
   );
 }
@@ -238,15 +289,20 @@ function CopyButton({ body }: { body: string }) {
     "idle",
   );
   return (
-    <div className="flex items-center gap-2 print:hidden">
-      {result === "failed" && (
-        <span className="text-xs text-muted-foreground">
-          Select and copy manually
-        </span>
-      )}
-      <Button
-        variant="outline"
-        size="sm"
+    <div className="flex items-center gap-2.5 print:hidden">
+      <span role="status" aria-live="polite">
+        {result === "failed" && (
+          <span className="text-ink-soft text-[length:var(--text-xs)]">
+            Select and copy manually
+          </span>
+        )}
+      </span>
+      <button
+        type="button"
+        className={
+          "btn btn-sm shrink-0 " +
+          (result === "copied" ? "btn-primary" : "btn-ghost")
+        }
         onClick={() => {
           void copyText(body).then((ok) => {
             setResult(ok ? "copied" : "failed");
@@ -255,7 +311,7 @@ function CopyButton({ body }: { body: string }) {
         }}
       >
         {result === "copied" ? "Copied" : "Copy"}
-      </Button>
+      </button>
     </div>
   );
 }
@@ -267,28 +323,33 @@ function CopyTab({ copy }: { copy: CopyAsset[] | null }) {
   return (
     <div>
       <SectionHeader title="Copy" stage="copy" />
-      <div className="space-y-8">
+      <div className="space-y-9">
         {weeks.map((week) => (
           <section key={week}>
-            <h3 className="mb-3 text-sm font-medium text-muted-foreground">
-              Week {week}
-            </h3>
-            <div className="space-y-3">
+            <h3 className="mono-label">Week {week}</h3>
+            <div className="space-y-4">
               {copy
                 .filter((a) => a.week === week)
                 .map((a) => (
-                  <Card key={`${a.week}-${a.channel}-${a.title}`}>
-                    <CardHeader className="grid-cols-[1fr_auto] items-center">
-                      <div className="space-y-1">
-                        <Badge variant="outline">{a.channel}</Badge>
-                        <CardTitle>{a.title}</CardTitle>
+                  <div
+                    key={`${a.week}-${a.channel}-${a.title}`}
+                    className="card p-[22px_24px]"
+                  >
+                    <div className="flex items-center justify-between gap-3.5">
+                      <div className="min-w-0">
+                        <h4 className="font-heading text-[length:var(--text-h4)]">
+                          {a.title}
+                        </h4>
+                        <p className="text-ink-soft mt-1 font-mono text-[length:var(--text-mono-label)] tracking-[0.06em] uppercase">
+                          {a.channel} · Week {a.week}
+                        </p>
                       </div>
                       <CopyButton body={a.body} />
-                    </CardHeader>
-                    <CardContent className="text-sm leading-relaxed whitespace-pre-wrap">
+                    </div>
+                    <p className="bg-paper-dim mt-3.5 rounded-[var(--radius-input)] p-[16px_18px] text-[length:var(--text-body-app)] leading-relaxed whitespace-pre-wrap">
                       {a.body}
-                    </CardContent>
-                  </Card>
+                    </p>
+                  </div>
                 ))}
             </div>
           </section>
@@ -360,99 +421,91 @@ function ExportTab() {
   };
 
   return (
-    <div className="space-y-8">
-      <h2 className="font-heading text-lg font-medium">Export</h2>
-      <div className="grid gap-3 sm:grid-cols-3">
-        <Card size="sm">
-          <CardHeader>
-            <CardTitle>Markdown (.md)</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <p className="text-sm text-muted-foreground">
-              The whole plan as one text file — strategy, calendar and copy —
-              ready to paste into Notion, Obsidian or a doc.
-            </p>
-            <span title={incomplete} className="inline-block">
-              <Button
-                size="sm"
-                disabled={incomplete !== undefined}
-                onClick={downloadMarkdown}
-              >
-                Download .md
-              </Button>
-            </span>
-          </CardContent>
-        </Card>
+    <div className="space-y-9">
+      <h2 className="font-heading border-line border-b pb-5 text-[length:var(--text-h2-doc)] leading-tight">
+        Export
+      </h2>
+      {/* One visible reason for all three disabled buttons — a `title` needs a
+          hover and most screen readers never announce it. */}
+      <div role="status">
+        {incomplete !== undefined && <p className="callout">{incomplete}</p>}
+      </div>
+      <div className="grid gap-3.5 sm:grid-cols-3">
+        <div className="card flex flex-col gap-3.5 p-[22px_24px]">
+          <h3 className="mono-label mb-0">Markdown (.md)</h3>
+          <p className="text-ink-soft text-[length:var(--text-sm)] leading-relaxed">
+            The whole plan as one text file — strategy, calendar and copy —
+            ready to paste into Notion, Obsidian or a doc.
+          </p>
+          <button
+            type="button"
+            className="btn btn-primary btn-sm mt-auto self-start"
+            disabled={incomplete !== undefined}
+            onClick={downloadMarkdown}
+          >
+            Download .md
+          </button>
+        </div>
 
-        <Card size="sm">
-          <CardHeader>
-            <CardTitle>PDF (print)</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <p className="text-sm text-muted-foreground">
-              A print-friendly layout you can hand to a co-founder or a client
-              without them needing an account.
-            </p>
-            <span title={incomplete} className="inline-block">
-              <Button
-                size="sm"
-                disabled={incomplete !== undefined}
-                onClick={() => window.print()}
-              >
-                Print / save as PDF
-              </Button>
-            </span>
-            <p className="text-xs text-muted-foreground">
-              Use your browser&rsquo;s Save as PDF.
-            </p>
-          </CardContent>
-        </Card>
+        <div className="card flex flex-col gap-3.5 p-[22px_24px]">
+          <h3 className="mono-label mb-0">PDF (print)</h3>
+          <p className="text-ink-soft text-[length:var(--text-sm)] leading-relaxed">
+            A print-friendly layout you can hand to a co-founder or a client
+            without them needing an account.
+          </p>
+          <button
+            type="button"
+            className="btn btn-primary btn-sm mt-auto self-start"
+            disabled={incomplete !== undefined}
+            onClick={() => window.print()}
+          >
+            Print / save as PDF
+          </button>
+          <p className="text-ink-soft text-[length:var(--text-xs)]">
+            Use your browser&rsquo;s Save as PDF.
+          </p>
+        </div>
 
-        <Card size="sm">
-          <CardHeader>
-            <CardTitle>Calendar (.ics)</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <p className="text-sm text-muted-foreground">
-              Every calendar row as a dated task, so the plan lands in Google
-              Calendar instead of a tab you forget.
+        <div className="card flex flex-col gap-3.5 p-[22px_24px]">
+          <h3 className="mono-label mb-0">Calendar (.ics)</h3>
+          <p className="text-ink-soft text-[length:var(--text-sm)] leading-relaxed">
+            Every calendar row as a dated task, so the plan lands in Google
+            Calendar instead of a tab you forget.
+          </p>
+          <div className="space-y-1">
+            <Label htmlFor="ics-start">Campaign start (a Monday)</Label>
+            <Input
+              id="ics-start"
+              type="date"
+              value={start}
+              onChange={(e) => {
+                const picked = fromDateInput(e.target.value);
+                if (picked !== null) setStart(toDateInput(mondayOf(picked)));
+              }}
+            />
+            <p className="text-ink-soft text-[length:var(--text-xs)]">
+              Any date you pick snaps back to the Monday of that week.
             </p>
-            <div className="space-y-1">
-              <Label htmlFor="ics-start">Campaign start (a Monday)</Label>
-              <Input
-                id="ics-start"
-                type="date"
-                value={start}
-                onChange={(e) => {
-                  const picked = fromDateInput(e.target.value);
-                  if (picked !== null) setStart(toDateInput(mondayOf(picked)));
-                }}
-              />
-              <p className="text-xs text-muted-foreground">
-                Any date you pick snaps back to the Monday of that week.
-              </p>
-            </div>
-            <span title={incomplete} className="inline-block">
-              <Button
-                size="sm"
-                disabled={incomplete !== undefined}
-                onClick={downloadIcs}
-              >
-                Download .ics
-              </Button>
-            </span>
-          </CardContent>
-        </Card>
+          </div>
+          <button
+            type="button"
+            className="btn btn-primary btn-sm mt-auto self-start"
+            disabled={incomplete !== undefined}
+            onClick={downloadIcs}
+          >
+            Download .ics
+          </button>
+        </div>
       </div>
 
-      <div className="border-t border-neutral-200 pt-6">
-        <h3 className="mb-1 text-sm font-medium">Start over</h3>
-        <p className="mb-3 text-sm text-muted-foreground">
+      <div className="border-line border-t pt-7">
+        <h3 className="mono-label mb-1.5">Start over</h3>
+        <p className="text-ink-soft mb-3.5 text-[length:var(--text-sm)]">
           Clears this plan, your answers and the stored key from this browser.
         </p>
-        <Button
-          variant="outline"
-          className="border-destructive/40 text-destructive hover:bg-destructive/10"
+        <button
+          type="button"
+          className="btn btn-ghost text-coral-ink border-[color-mix(in_oklab,var(--coral)_45%,transparent)] hover:bg-[var(--coral-tint)]"
           onClick={() => {
             if (!window.confirm("Delete this plan and start over?")) return;
             clearAll();
@@ -460,11 +513,16 @@ function ExportTab() {
           }}
         >
           Start over
-        </Button>
+        </button>
       </div>
     </div>
   );
 }
+
+/** Report nav: mono/uppercase label, 44px tap target, gradient underline when
+ *  active (the `line` variant supplies the ::after bar). */
+const TAB =
+  "min-h-11 px-4 font-mono text-[length:var(--text-mono-label)] font-semibold tracking-[0.08em] uppercase after:bg-[image:var(--grad)]";
 
 export function Result() {
   const { state, dispatch } = useWizard();
@@ -472,49 +530,68 @@ export function Result() {
   return (
     <div className="space-y-6 print:space-y-0">
       {state.demo && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-neutral-200 px-4 py-3 text-sm print:hidden">
-          <p>
+        <div className="callout callout-violet flex-wrap items-center justify-between gap-3.5 print:hidden">
+          <p className="text-ink text-[length:var(--text-sm)]">
             This is the demo plan (Riga coffee shop). Your own plan takes ~15
             minutes.
           </p>
-          <Button size="sm" onClick={() => dispatch({ type: "RESET" })}>
+          <button
+            type="button"
+            className="btn btn-grad btn-sm shrink-0"
+            onClick={() => dispatch({ type: "RESET" })}
+          >
             Start with my key
-          </Button>
+          </button>
         </div>
       )}
 
       <Tabs defaultValue="strategy" className="print:hidden">
-        <TabsList>
-          <TabsTrigger value="strategy">Strategy</TabsTrigger>
-          <TabsTrigger value="calendar">Calendar</TabsTrigger>
-          <TabsTrigger value="copy">Copy</TabsTrigger>
-          <TabsTrigger value="export">Export</TabsTrigger>
+        {/* h-auto! beats the list's `group-data-horizontal:h-8`, which would
+            otherwise cap this nav at 32px. */}
+        {/* max-w-full + shrink-0 children: the strip scrolls itself on narrow
+            screens instead of widening the whole report. */}
+        <TabsList
+          variant="line"
+          className="h-auto! max-w-full overflow-x-auto [&>*]:shrink-0"
+        >
+          <TabsTrigger value="strategy" className={TAB}>
+            Strategy
+          </TabsTrigger>
+          <TabsTrigger value="calendar" className={TAB}>
+            Calendar
+          </TabsTrigger>
+          <TabsTrigger value="copy" className={TAB}>
+            Copy
+          </TabsTrigger>
+          <TabsTrigger value="export" className={TAB}>
+            Export
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="strategy" className="pt-6">
+        <TabsContent value="strategy" className="pt-8">
           <StrategyTab strategy={state.campaign.strategy} />
         </TabsContent>
-        <TabsContent value="calendar" className="pt-6">
+        <TabsContent value="calendar" className="pt-8">
           <CalendarTab
             calendar={state.campaign.calendar}
             hours={state.intake.hours}
           />
         </TabsContent>
-        <TabsContent value="copy" className="pt-6">
+        <TabsContent value="copy" className="pt-8">
           <CopyTab copy={state.campaign.copy} />
         </TabsContent>
-        <TabsContent value="export" className="pt-6">
+        <TabsContent value="export" className="pt-8">
           <ExportTab />
         </TabsContent>
       </Tabs>
 
       {/* Print flow: the tabs collapse to one stacked document. */}
       <div className="hidden space-y-10 print:block">
-        <div className="border-b border-neutral-300 pb-4">
-          <p className="font-heading text-xl font-medium">
+        <div className="border-line border-b pb-4">
+          <p className="font-heading text-xl font-semibold">
             {state.intake.sell || "90-day marketing campaign"}
           </p>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-ink-soft mt-1 font-mono text-[length:var(--text-mono-label)] tracking-[0.06em] uppercase">
             90-day marketing campaign · {toDateInput(new Date())} · made with
             Kampa
           </p>

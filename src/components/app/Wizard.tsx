@@ -1,7 +1,5 @@
 import * as React from "react";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import type { ApiError } from "@/lib/anthropic";
 
 import { CostMeter } from "./CostMeter";
@@ -9,7 +7,7 @@ import { demoCampaign } from "./demo-campaign";
 import { runStageReal } from "./engine";
 import { Gate } from "./Gate";
 import { Generation } from "./Generation";
-import { Intake } from "./Intake";
+import { Intake, stepTitle } from "./Intake";
 import { mockRunStage } from "./mock";
 import { Result } from "./Result";
 import * as storage from "./storage";
@@ -23,24 +21,49 @@ function Header() {
   const { state, dispatch } = useWizard();
   const model = MODELS.find((m) => m.id === state.model);
 
+  const sub =
+    state.phase === "gate"
+      ? "Before you start"
+      : state.phase === "intake"
+        ? stepTitle(state.intakeStep)
+        : state.phase === "generation"
+          ? "Building your campaign"
+          : "Your campaign";
+
   return (
-    <header className="border-b border-neutral-200 print:hidden">
-      <div className="mx-auto flex h-16 max-w-3xl items-center justify-between gap-4 px-6">
-        <a
-          href={base}
-          className="text-xl font-bold tracking-tight text-neutral-950 lowercase"
-        >
-          kampa
-        </a>
-        <div className="flex items-center gap-3">
-          {model && <Badge variant="outline">{model.label}</Badge>}
+    <header className="bar-blur sticky top-0 z-50 h-16 border-b border-line print:hidden">
+      <div className="flex h-full items-center justify-between gap-4 px-5 sm:px-7">
+        <div className="flex min-w-0 items-center gap-3">
+          <img
+            src={base + "favicon.svg"}
+            width="22"
+            height="22"
+            alt=""
+            className="shrink-0"
+          />
+          {/* The bar is 64px tall: the title must never wrap, and the phase
+              sub-line is dropped on the narrowest screens rather than
+              spilling out of the bar. */}
+          <div className="min-w-0">
+            <h1 className="truncate text-[1rem] leading-tight">
+              Campaign wizard
+            </h1>
+            <p className="mt-px truncate font-mono text-[0.75rem] text-ink-soft max-[479px]:hidden">
+              {sub}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          {model && (
+            <span className="badge-mono max-sm:hidden">{model.label}</span>
+          )}
           {/* Present in every key-mode phase so it never looks like the key
               silently vanished; disabled rather than hidden when there is
               nothing to clear. */}
           {!state.demo && (
-            <Button
-              variant="outline"
-              size="sm"
+            <button
+              type="button"
+              className="btn btn-ghost btn-sm"
               disabled={!state.keyPresent}
               title="Clear the stored API key from this browser"
               onClick={() => {
@@ -49,8 +72,11 @@ function Header() {
               }}
             >
               Clear key
-            </Button>
+            </button>
           )}
+          <a className="btn btn-ghost btn-sm" href={base}>
+            <span aria-hidden="true">←</span> Back to site
+          </a>
         </div>
       </div>
     </header>
@@ -77,19 +103,21 @@ function ErrorBanner({
   return (
     <div
       role="alert"
-      className="mb-4 rounded-xl border border-destructive bg-destructive/5 p-4"
+      className="mb-6 rounded-[var(--radius)] border border-destructive bg-destructive/5 p-[18px_20px]"
     >
-      <p className="text-sm text-neutral-900">{error.userMessage}</p>
+      <p className="text-[length:var(--text-body-app)] text-ink">
+        {error.userMessage}
+      </p>
       {error.retryAfterSec !== undefined && (
-        <p className="mt-1 text-sm text-neutral-600 tabular-nums">
+        <p className="mt-1 text-[length:var(--text-sm)] text-ink-soft tabular-nums">
           {left > 0 ? `Try again in ${left}s.` : "You can try again now."}
         </p>
       )}
-      <div className="mt-3 flex gap-2">
+      <div className="mt-3.5 flex flex-wrap gap-2">
         {error.kind === "auth" && (
-          <Button
-            variant="outline"
-            size="sm"
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
             onClick={() => {
               storage.clearKey();
               onDismiss();
@@ -97,11 +125,15 @@ function ErrorBanner({
             }}
           >
             Re-enter key
-          </Button>
+          </button>
         )}
-        <Button variant="outline" size="sm" onClick={onDismiss}>
+        <button
+          type="button"
+          className="btn btn-ghost btn-sm"
+          onClick={onDismiss}
+        >
           Dismiss
-        </Button>
+        </button>
       </div>
     </div>
   );
@@ -153,10 +185,16 @@ function Shell() {
   return (
     <>
       <Header />
-      <main className="mx-auto w-full max-w-3xl px-6 py-10">
-        {/* The design has no visible page title, but the document still needs
-            one h1 above the h2s each phase renders. */}
-        <h1 className="sr-only">Kampa campaign wizard</h1>
+      {/* The page h1 lives in the sticky topbar; every phase renders h2s. */}
+      {/* The report gets the wide 1180px shell (contract §8.3); every other
+          phase is the 640px form column. */}
+      <main
+        id="main"
+        tabIndex={-1}
+        className={
+          state.phase === "result" ? "wrap pt-9 pb-25" : "wrap-form pt-12 pb-25"
+        }
+      >
         {state.phase === "gate" && <Gate />}
         {state.phase === "intake" && <Intake />}
         {state.phase === "generation" && (

@@ -6,9 +6,11 @@ import { GITHUB_URL } from "../lib/site";
 
 const base = import.meta.env.BASE_URL;
 
-const h2 = "mt-14 text-xl font-bold tracking-tight text-neutral-950";
-const p = "mt-4 text-base leading-7 text-neutral-700";
-const a = "text-primary font-medium underline underline-offset-2";
+const h2 =
+  "mt-14 border-t border-line pt-12 text-[length:var(--text-h2-doc)] scroll-mt-20";
+const p = "mt-4 text-[length:var(--text-body)] leading-[1.7] text-ink-soft";
+const a = "text-violet-ink font-medium underline underline-offset-2";
+const strong = "font-semibold text-ink";
 ---
 
 <Base
@@ -17,78 +19,81 @@ const a = "text-primary font-medium underline underline-offset-2";
 >
   <Nav />
 
-  <main class="mx-auto max-w-3xl px-6 pt-16 pb-24">
-    <h1 class="text-4xl font-extrabold tracking-tight text-neutral-950">
-      Privacy
-    </h1>
-    <p class="mt-4 text-lg text-neutral-500">
-      What happens to your key, your answers, and your campaigns.
-    </p>
+  <main id="main" tabindex="-1" class="wrap scroll-mt-[72px] pt-16 pb-24">
+    <article class="max-w-[65ch]">
+      <p class="eyebrow">Legal</p>
+      <h1 class="text-[length:var(--text-h1)] leading-[var(--lh-h1)]">
+        Privacy
+      </h1>
+      <p class="text-ink-soft mt-3.5 text-[length:var(--text-lead)]">
+        What happens to your key, your answers, and your campaigns.
+      </p>
 
-    <h2 class={h2}>The short version</h2>
-    <p class={p}>
-      We run no servers, create no accounts, and store nothing about you. There
-      is no database with your name in it, because there is no database. The
-      rest of this page explains what that means concretely.
-    </p>
+      <h2 class={h2}>The short version</h2>
+      <p class={p}>
+        We run no servers, create no accounts, and store nothing about you.
+        There is no database with your name in it, because there is no database.
+        The rest of this page explains what that means concretely.
+      </p>
 
-    <h2 class={h2}>Your API key</h2>
-    <p class={p}>
-      Your Anthropic API key stays in your browser. By default it lives in
-      sessionStorage, which the browser clears when you close the tab. It moves
-      to localStorage only if you tick <strong
-        class="font-semibold text-neutral-950">remember on this device</strong
-      >. Either way it never reaches us: the key is sent only to
-      api.anthropic.com over HTTPS, straight from your browser. Hitting <strong
-        class="font-semibold text-neutral-950">Clear key</strong
-      >
-      removes it from storage.
-    </p>
-    <p class={p}>
-      Create a spend-capped key anyway. It costs you nothing and puts a hard
-      ceiling on any surprise. See the <a
-        class={a}
-        href={base + "guide/api-key"}>API key guide</a
-      >.
-    </p>
+      <h2 class={h2}>Your API key</h2>
+      <p class={p}>
+        Your Anthropic API key stays in your browser. By default it lives in
+        sessionStorage, which the browser clears when you close the tab. It
+        moves to localStorage only if you tick <strong class={strong}
+          >remember on this device</strong
+        >. Either way it never reaches us: the key is sent only to
+        api.anthropic.com over HTTPS, straight from your browser. Hitting <strong
+          class={strong}>Clear key</strong
+        >
+        removes it from storage.
+      </p>
+      <p class={p}>
+        Create a spend-capped key anyway. It costs you nothing and puts a hard
+        ceiling on any surprise. See the <a
+          class={a}
+          href={base + "guide/api-key"}>API key guide</a
+        >.
+      </p>
 
-    <h2 class={h2}>Your campaign data</h2>
-    <p class={p}>
-      The answers you type and the campaigns Kampa generates live in your
-      browser's storage only. They are never uploaded to us. When you export a
-      campaign, the file is downloaded to your machine like any other download.
-      Clearing your browser storage deletes the lot, so export anything you want
-      to keep.
-    </p>
+      <h2 class={h2}>Your campaign data</h2>
+      <p class={p}>
+        The answers you type and the campaigns Kampa generates live in your
+        browser's storage only. They are never uploaded to us. When you export a
+        campaign, the file is downloaded to your machine like any other
+        download. Clearing your browser storage deletes the lot, so export
+        anything you want to keep.
+      </p>
 
-    <h2 class={h2}>What Anthropic sees</h2>
-    <p class={p}>
-      Kampa sends your prompts to Anthropic's API to generate campaigns, so
-      Anthropic processes that text under their own terms. Read <a
-        class={a}
-        href="https://www.anthropic.com/legal/privacy"
-        rel="noopener">Anthropic's privacy policy</a
-      > before you paste anything confidential.
-    </p>
+      <h2 class={h2}>What Anthropic sees</h2>
+      <p class={p}>
+        Kampa sends your prompts to Anthropic's API to generate campaigns, so
+        Anthropic processes that text under their own terms. Read <a
+          class={a}
+          href="https://www.anthropic.com/legal/privacy"
+          rel="noopener">Anthropic's privacy policy</a
+        > before you paste anything confidential.
+      </p>
 
-    <h2 class={h2}>What we see</h2>
-    <p class={p}>
-      Nothing. No analytics, no cookies, no tracking pixels, no logs. The site
-      is a folder of static files, and it has no code that reports back to us.
-      Kampa is <a class={a} href={GITHUB_URL} rel="noopener">open source</a>, so
-      you can check that claim yourself instead of taking our word for it.
-    </p>
+      <h2 class={h2}>What we see</h2>
+      <p class={p}>
+        Nothing. No analytics, no cookies, no tracking pixels, no logs. The site
+        is a folder of static files, and it has no code that reports back to us.
+        Kampa is <a class={a} href={GITHUB_URL} rel="noopener">open source</a>,
+        so you can check that claim yourself instead of taking our word for it.
+      </p>
 
-    <h2 class={h2}>Hosting</h2>
-    <p class={p}>
-      Those static files are served by GitHub Pages. GitHub may log standard web
-      requests, such as your IP address and browser, the way any web host does.
-      That is between you and them: see the <a
-        class={a}
-        href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
-        rel="noopener">GitHub Privacy Statement</a
-      >.
-    </p>
+      <h2 class={h2}>Hosting</h2>
+      <p class={p}>
+        Those static files are served by GitHub Pages. GitHub may log standard
+        web requests, such as your IP address and browser, the way any web host
+        does. That is between you and them: see the <a
+          class={a}
+          href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+          rel="noopener">GitHub Privacy Statement</a
+        >.
+      </p>
+    </article>
   </main>
 
   <Footer />

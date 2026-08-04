@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { Button } from "@/components/ui/button";
 import { CheckIcon } from "@/components/ui/icons";
 import { estimateEur } from "@/lib/cost";
 import { checkBudget, checkHours } from "./engine";
@@ -34,20 +33,29 @@ const STATUS_TEXT: Record<Status, string> = {
   stale: "Out of date — regenerate",
 };
 
-function StatusIcon({ status }: { status: Status }) {
+/** Mockup's fetch-list tick: numbered while waiting, gradient check once done. */
+function Tick({ status, step }: { status: Status; step: number }) {
   if (status === "running")
     return (
       <span
         aria-hidden="true"
-        className="inline-block size-4 animate-spin rounded-full border-2 border-neutral-200 border-t-primary"
+        className="border-line border-t-violet inline-block size-5 animate-spin rounded-full border-2"
       />
     );
-  if (status === "done") return <CheckIcon className="size-4 text-primary" />;
+  if (status === "done")
+    return (
+      <span
+        aria-hidden="true"
+        className="inline-flex size-5 items-center justify-center rounded-full bg-[image:var(--grad-strong)] text-white"
+      >
+        <CheckIcon className="size-3" />
+      </span>
+    );
   if (status === "stale")
     return (
       <span
         aria-hidden="true"
-        className="inline-flex size-4 items-center justify-center rounded-full border border-amber-600 text-[10px] leading-none font-semibold text-amber-700"
+        className="border-coral-ink text-coral-ink inline-flex size-5 items-center justify-center rounded-full border font-mono text-[11px] leading-none font-semibold"
       >
         !
       </span>
@@ -55,8 +63,10 @@ function StatusIcon({ status }: { status: Status }) {
   return (
     <span
       aria-hidden="true"
-      className="inline-block size-4 rounded-full border border-neutral-300"
-    />
+      className="border-line text-ink-soft inline-flex size-5 items-center justify-center rounded-full border font-mono text-[11px] leading-none font-semibold"
+    >
+      {step}
+    </span>
   );
 }
 
@@ -71,7 +81,7 @@ function Preview({ text }: { text: string }) {
     <pre
       ref={ref}
       data-testid="stream-preview"
-      className="max-h-40 overflow-y-auto rounded-lg bg-neutral-50 p-3 font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap text-neutral-600"
+      className="bg-paper-dim text-ink-soft max-h-40 overflow-y-auto rounded-[var(--radius-input)] p-3.5 font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap"
     >
       {text}
     </pre>
@@ -116,28 +126,28 @@ export function Generation({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
-        <p className="text-sm text-neutral-600">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <p className="text-ink-soft text-[length:var(--text-sm)]">
           Generate each part in order. You can change your answers at any time.
         </p>
-        <Button
-          variant="outline"
-          size="sm"
+        <button
+          type="button"
+          className="btn btn-ghost btn-sm"
           disabled={running !== null}
           onClick={() => dispatch({ type: "START_INTAKE" })}
         >
           Edit answers
-        </Button>
+        </button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-neutral-200 p-3">
-        <span className="text-sm text-neutral-600" id="gen-model-label">
+      <div className="card flex flex-wrap items-center gap-2.5 p-4">
+        <span className="mono-label mb-0" id="gen-model-label">
           Model
         </span>
         <div
           role="group"
           aria-labelledby="gen-model-label"
-          className="flex flex-wrap gap-1"
+          className="flex flex-wrap gap-2"
         >
           {MODELS.map((m) => (
             <button
@@ -147,91 +157,95 @@ export function Generation({
               aria-pressed={state.model === m.id}
               title={`${m.blurb} — €${m.inPerMTok}/€${m.outPerMTok} per million tokens`}
               onClick={() => dispatch({ type: "SET_MODEL", model: m.id })}
-              className={
-                "rounded-lg border px-3 py-1.5 text-sm transition-colors disabled:opacity-50 " +
-                (state.model === m.id
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-neutral-200 text-neutral-700 hover:border-neutral-300")
-              }
+              className="chip-toggle disabled:pointer-events-none disabled:opacity-50"
             >
               {m.label.replace(" (recommended)", "")}
             </button>
           ))}
         </div>
-        <span className="text-xs text-neutral-500">
+        <span className="text-ink-soft text-[length:var(--text-xs)]">
           Applies to the next stage you generate.
         </span>
       </div>
 
-      {STAGES.map(({ id, label, desc }) => {
+      {STAGES.map(({ id, label, desc }, i) => {
         const status = statusOf(id);
         const pending = status === "pending";
         const estimate = estimateEur(state.model, id).toFixed(2);
         return (
           <section
             key={id}
-            className="rounded-xl border border-neutral-200 p-4"
+            className="card p-[22px_24px]"
             aria-labelledby={`stage-${id}-title`}
           >
             <div className="flex items-start justify-between gap-4">
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-3.5">
                 <span className="mt-0.5">
-                  <StatusIcon status={status} />
+                  <Tick status={status} step={i + 1} />
                 </span>
                 <div>
                   <h2
                     id={`stage-${id}-title`}
-                    className="text-base leading-snug font-medium"
+                    className="text-[length:var(--text-h3)] leading-snug"
                   >
                     {label}
                   </h2>
-                  <p className="mt-1 text-sm text-neutral-600">{desc}</p>
-                  <p className="mt-1 text-xs text-neutral-500">
+                  <p className="text-ink-soft mt-1.5 text-[length:var(--text-sm)] leading-relaxed">
+                    {desc}
+                  </p>
+                  <p className="text-ink-soft mt-2.5 font-mono text-[length:var(--text-mono-label)] font-semibold tracking-[0.06em] uppercase">
                     {STATUS_TEXT[status]} · ~€{estimate} estimate
                   </p>
                 </div>
               </div>
-              <Button
-                variant={pending ? "default" : "outline"}
-                size="sm"
+              <button
+                type="button"
+                className={
+                  "btn btn-sm shrink-0 " + (pending ? "btn-grad" : "btn-ghost")
+                }
                 disabled={running !== null || !unlocked(id)}
                 onClick={() => runStage(id)}
               >
                 {pending ? "Generate" : "Regenerate"}
-              </Button>
+              </button>
             </div>
 
             {status === "running" && (
-              <div
-                role="status"
-                aria-live="polite"
-                className="mt-4 space-y-2 border-t border-neutral-200 pt-4"
-              >
-                <span className="sr-only">Generating {label}</span>
-                {preview === "" ? (
-                  <>
-                    <div className="h-3 w-full animate-pulse rounded bg-neutral-100" />
-                    <div className="h-3 w-5/6 animate-pulse rounded bg-neutral-100" />
-                    <div className="h-3 w-2/3 animate-pulse rounded bg-neutral-100" />
-                  </>
-                ) : (
-                  <Preview text={preview} />
-                )}
+              <div className="border-line mt-4 border-t pt-4">
+                {/* The live region announces the stage only. The preview is
+                    aria-hidden: it changes on every streamed token, and inside
+                    a live region that re-announces the raw model output for the
+                    whole generation. */}
+                <span role="status" aria-live="polite" className="sr-only">
+                  Generating {label}
+                </span>
+                <div aria-hidden="true" className="space-y-2">
+                  {preview === "" ? (
+                    <>
+                      <div className="bg-paper-dim h-3 w-full animate-pulse rounded" />
+                      <div className="bg-paper-dim h-3 w-5/6 animate-pulse rounded" />
+                      <div className="bg-paper-dim h-3 w-2/3 animate-pulse rounded" />
+                    </>
+                  ) : (
+                    <Preview text={preview} />
+                  )}
+                </div>
               </div>
             )}
 
             {warning[id] !== undefined && status !== "running" && (
-              <div className="mt-4 flex flex-col gap-3 rounded-lg border border-amber-500 bg-amber-50 p-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-amber-900">{warning[id]}</p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="shrink-0"
+              <div className="mt-4 flex bg-[var(--coral-tint)] flex-col gap-3 rounded-[var(--radius-input)] border border-[color-mix(in_oklab,var(--coral)_45%,transparent)] p-3.5 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-coral-ink text-[length:var(--text-sm)]">
+                  {warning[id]}
+                </p>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm shrink-0"
                   disabled={running !== null}
                   onClick={() => runStage(id)}
                 >
                   Regenerate
-                </Button>
+                </button>
               </div>
             )}
           </section>
@@ -239,13 +253,13 @@ export function Generation({
       })}
 
       {allDone && (
-        <Button
-          size="lg"
-          className="w-full"
+        <button
+          type="button"
+          className="btn btn-grad w-full"
           onClick={() => dispatch({ type: "TO_RESULT" })}
         >
           View my campaign
-        </Button>
+        </button>
       )}
     </div>
   );

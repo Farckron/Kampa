@@ -13,28 +13,34 @@ const pages = [
 const legal = [
   { label: "Privacy", href: base + "privacy" },
   { label: "Terms", href: base + "terms" },
+  { label: "GitHub", href: GITHUB_URL },
 ];
+
+const linkClass =
+  "text-ink-soft hover:text-ink flex items-center py-1.5 text-[14px] [@media(pointer:coarse)]:min-h-11";
 ---
 
-<footer class="border-t border-neutral-200">
-  <div class="mx-auto max-w-6xl px-6 pt-20 pb-10">
-    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-      <div class="lg:col-span-2">
-        <p class="text-2xl font-extrabold tracking-tight text-neutral-950">
-          kampa
+<footer class="section-dim">
+  <div class="wrap pt-14 pb-10">
+    <div class="grid gap-10 min-[980px]:grid-cols-[1.6fr_1fr_1fr]">
+      <div>
+        <p
+          class="font-display flex items-center gap-2.5 text-[18px] font-bold tracking-[-0.02em] lowercase"
+        >
+          <img src={base + "favicon.svg"} width="22" height="22" alt="" />kampa
         </p>
-        <p class="mt-3 max-w-xs text-sm text-neutral-500">
+        <p class="text-ink-soft mt-3 max-w-[260px] text-[13.8px]">
           Free AI campaign planner for small businesses.
         </p>
       </div>
 
       <div>
-        <h2 class="text-sm font-semibold text-neutral-950">Pages</h2>
-        <ul class="mt-4 space-y-3 text-sm text-neutral-500">
+        <h2 class="mono-label">Pages</h2>
+        <ul>
           {
             pages.map((link) => (
               <li>
-                <a class="hover:text-primary" href={link.href}>
+                <a class={linkClass} href={link.href}>
                   {link.label}
                 </a>
               </li>
@@ -44,31 +50,31 @@ const legal = [
       </div>
 
       <div>
-        <h2 class="text-sm font-semibold text-neutral-950">Legal</h2>
-        <ul class="mt-4 space-y-3 text-sm text-neutral-500">
+        <h2 class="mono-label">Legal</h2>
+        <ul>
           {
             legal.map((link) => (
               <li>
-                <a class="hover:text-primary" href={link.href}>
+                <a class={linkClass} href={link.href} rel="noopener">
                   {link.label}
                 </a>
               </li>
             ))
           }
-          <li>
-            <a class="hover:text-primary" href={GITHUB_URL} rel="noopener"
-              >GitHub</a
-            >
-          </li>
         </ul>
       </div>
     </div>
 
-    <p class="mt-16 text-sm text-neutral-500">© 2026 Kampa.</p>
+    <p class="border-line text-ink-soft mt-11 border-t pt-[22px] text-[12.5px]">
+      © 2026 Kampa.
+    </p>
   </div>
 
   <div class="overflow-hidden" aria-hidden="true">
-    <p class="text-[18vw] leading-none font-extrabold text-neutral-100">
+    <p
+      class="font-display text-[18vw] leading-[0.8] font-bold tracking-[-0.04em] lowercase"
+      style="color: color-mix(in oklab, var(--ink) 6%, transparent)"
+    >
       kampa
     </p>
   </div>

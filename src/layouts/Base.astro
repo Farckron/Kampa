@@ -21,7 +21,14 @@ const ogImage = new URL(base + "og.png", Astro.site);
       rel="preload"
       as="font"
       type="font/woff2"
-      href={base + "fonts/schibsted-grotesk-latin-variable.woff2"}
+      href={base + "fonts/inter-latin-var.woff2"}
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href={base + "fonts/space-grotesk-latin-var.woff2"}
       crossorigin
     />
     <link rel="icon" type="image/svg+xml" href={base + "favicon.svg"} />
@@ -43,7 +50,31 @@ const ogImage = new URL(base + "og.png", Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="generator" content={Astro.generator} />
   </head>
-  <body class="bg-white text-neutral-950 antialiased">
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    {
+      /* One shared gradient for every inline SVG on the page (ring gauges,
+        charts). Referenced as stroke="url(#kgrad)" / fill="url(#kgrad)". */
+    }
+    <svg
+      width="0"
+      height="0"
+      aria-hidden="true"
+      focusable="false"
+      style="position:absolute"
+    >
+      <defs>
+        <linearGradient id="kgrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#7c4dff"></stop>
+          <stop offset="55%" stop-color="#e0637f"></stop>
+          <stop offset="100%" stop-color="#fb8a3c"></stop>
+        </linearGradient>
+      </defs>
+    </svg>
+    {
+      /* #main lives on each page's own <main> (with scroll-mt-[72px] to clear
+        the sticky header) so "Skip to content" actually skips the nav. */
+    }
     <slot />
   </body>
 </html>

@@ -8,10 +8,17 @@ import Base from "../layouts/Base.astro";
   noindex
 >
   <main
-    class="mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center gap-4 text-center"
+    id="main"
+    tabindex="-1"
+    class="wrap flex min-h-[72vh] scroll-mt-[72px] flex-col items-center justify-center gap-4 py-24 text-center"
   >
-    <h1 class="text-6xl font-bold">404</h1>
-    <p>That page doesn't exist.</p>
-    <a href={import.meta.env.BASE_URL} class="underline">Back to Kampa</a>
+    <p class="eyebrow mb-0">Page not found</p>
+    <h1 class="text-[length:var(--text-h1)] leading-[var(--lh-h1)]">404</h1>
+    <p class="text-ink-soft text-[length:var(--text-lead)]">
+      That page doesn't exist.
+    </p>
+    <a href={import.meta.env.BASE_URL} class="btn btn-primary mt-2"
+      >Back to Kampa</a
+    >
   </main>
 </Base>

@@ -46,6 +46,15 @@ const faqs = [
   },
 ];
 
+// Layout only: the biggest trust blocker is promoted out of the accordion into
+// a callout (contract §8.1.9). Same approved copy, still in the JSON-LD below.
+const TRUST_Q = "Is my API key safe?";
+const trust = faqs.find((item) => item.q === TRUST_Q)!;
+const accordion = faqs.filter((item) => item.q !== TRUST_Q);
+
+// Keeps the document outline valid on /faq, where this section has no <h2>.
+const TrustHeading = heading ? "h3" : "h2";
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -60,58 +69,89 @@ const faqSchema = {
 };
 ---
 
-<section class="px-6 py-24 sm:py-32">
-  <div class="mx-auto max-w-6xl">
+<section id="faq" class="section">
+  <div class="wrap max-w-[840px]">
     {
       heading && (
-        <h2 class="text-4xl font-extrabold tracking-tight text-balance text-neutral-950 sm:text-5xl">
-          Questions, answered
-        </h2>
+        <div class="section-head">
+          <p class="eyebrow">FAQ</p>
+          <h2>Questions, answered</h2>
+        </div>
       )
     }
+
+    <div
+      class="card-dim mb-9 grid items-start gap-5 p-[26px_28px] sm:grid-cols-[56px_1fr]"
+    >
+      <svg
+        width="56"
+        height="56"
+        viewBox="0 0 56 56"
+        class="-rotate-90"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <circle
+          cx="28"
+          cy="28"
+          r="23"
+          fill="none"
+          stroke-width="6"
+          stroke="color-mix(in oklab, var(--ink) 9%, transparent)"></circle>
+        <circle
+          cx="28"
+          cy="28"
+          r="23"
+          fill="none"
+          stroke-width="6"
+          stroke-linecap="round"
+          stroke="url(#kgrad)"
+          stroke-dasharray="144"
+          stroke-dashoffset="14"></circle>
+      </svg>
+      <div>
+        <TrustHeading class="text-[length:var(--text-h3)]">
+          {trust.q}
+        </TrustHeading>
+        <p class="mt-2 text-[length:var(--text-sm)] text-ink-soft">{trust.a}</p>
+        {
+          trust.link && (
+            <p class="mt-3 text-[length:var(--text-sm)]">
+              <a
+                href={trust.link.href}
+                class="text-violet-ink font-semibold underline-offset-2 hover:underline"
+              >
+                {trust.link.label}
+              </a>
+            </p>
+          )
+        }
+      </div>
+    </div>
 
     {
       /* ponytail: native <details> — zero JS, keyboard and screen-reader ready */
     }
-    <div
-      class:list={["max-w-3xl border-t border-neutral-200", heading && "mt-12"]}
-    >
-      {
-        faqs.map((item) => (
-          <details class="group border-b border-neutral-200">
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-base font-medium text-neutral-950 [&::-webkit-details-marker]:hidden">
-              {item.q}
-              <svg
-                class="size-5 shrink-0 text-neutral-400 transition-transform duration-200 group-open:rotate-180"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </summary>
-
-            <div class="pb-6 text-neutral-600">
-              <p class="max-w-prose">{item.a}</p>
-              {item.link && (
-                <p class="mt-3">
-                  <a
-                    href={item.link.href}
-                    class="text-primary font-medium hover:underline"
-                  >
-                    {item.link.label}
-                  </a>
-                </p>
-              )}
-            </div>
-          </details>
-        ))
-      }
-    </div>
+    {
+      accordion.map((item) => (
+        <details class="acc">
+          <summary>{item.q}</summary>
+          <div class="acc-body">
+            <p>{item.a}</p>
+            {item.link && (
+              <p class="mt-3">
+                <a
+                  href={item.link.href}
+                  class="text-violet-ink font-semibold underline-offset-2 hover:underline"
+                >
+                  {item.link.label}
+                </a>
+              </p>
+            )}
+          </div>
+        </details>
+      ))
+    }
   </div>
 
   {

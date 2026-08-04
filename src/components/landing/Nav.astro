@@ -6,69 +6,37 @@ const base = import.meta.env.BASE_URL;
 const links = [
   { label: "How it works", href: base + "#how-it-works" },
   { label: "FAQ", href: base + "faq" },
-  { label: "Blog", href: base + "blog" },
 ];
+
+const linkClass = "text-[14.5px] font-medium text-ink-soft hover:text-ink";
 ---
 
-<header class="sticky top-0 z-50 border-b border-neutral-200 bg-white">
-  <nav
-    class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-6"
-    aria-label="Main"
-  >
+<header class="bar-blur border-line sticky top-0 z-50 border-b">
+  <nav class="wrap flex h-[72px] items-center justify-between gap-5">
     <a
       href={base}
-      class="text-xl font-bold tracking-tight text-neutral-950 lowercase"
-      >kampa</a
+      class="font-display flex items-center gap-2.5 text-[19px] font-bold tracking-[-0.02em] lowercase"
     >
+      <img src={base + "favicon.svg"} width="26" height="26" alt="" />kampa
+    </a>
 
-    {
-      /* ponytail: CSS-only mobile menu — hidden checkbox + label, no client JS */
-    }
-    <input
-      id="nav-toggle"
-      type="checkbox"
-      class="peer sr-only"
-      aria-label="Menu"
-    />
-
-    <label
-      for="nav-toggle"
-      class="-mr-2 cursor-pointer rounded-md p-2 text-neutral-950 md:hidden"
-    >
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        aria-hidden="true"
-      >
-        <path d="M4 7h16M4 12h16M4 17h16"></path>
-      </svg>
-    </label>
-
-    <div
-      class="flex items-center gap-8 max-md:absolute max-md:inset-x-0 max-md:top-full max-md:hidden max-md:flex-col max-md:items-start max-md:gap-5 max-md:border-b max-md:border-neutral-200 max-md:bg-white max-md:px-6 max-md:py-6 max-md:peer-checked:flex"
-    >
+    <div class="hidden items-center gap-[30px] min-[980px]:flex">
       {
         links.map((link) => (
-          <a
-            href={link.href}
-            class="text-sm font-medium text-neutral-700 hover:text-neutral-950"
-          >
+          <a href={link.href} class={linkClass}>
             {link.label}
           </a>
         ))
       }
+    </div>
 
+    <div class="flex items-center gap-3">
       <a
         href={githubUrl}
         target="_blank"
         rel="noopener"
         aria-label="GitHub"
-        class="text-neutral-700 hover:text-neutral-950"
+        class="text-ink-soft hover:text-ink hidden min-h-11 min-w-11 items-center justify-center rounded-full min-[980px]:inline-flex"
       >
         <svg
           width="20"
@@ -84,11 +52,62 @@ const links = [
       </a>
 
       <a
-        href={base + "app"}
-        class="bg-primary text-primary-foreground inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold hover:opacity-90"
+        class="btn btn-ghost btn-sm hidden min-[980px]:inline-flex"
+        href={base + "blog"}>Blog</a
       >
-        Open the app
-      </a>
+      <a class="btn btn-primary btn-sm" href={base + "app"}>Open the app</a>
+
+      {
+        /* ponytail: native <details> disclosure — no client JS, and it is
+           absent above 980px so it adds no desktop tab stop. */
+      }
+      <details class="min-[980px]:hidden">
+        <summary
+          class="text-ink -mr-2 inline-flex min-h-11 min-w-11 cursor-pointer list-none items-center justify-center rounded-full [&::-webkit-details-marker]:hidden"
+        >
+          <span class="sr-only">Menu</span>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+        </summary>
+
+        {
+          /* Opaque, not .bar-blur: a backdrop-filter nested inside the
+             blurred header never composites, so the panel read straight
+             through onto the hero. */
+        }
+        <div
+          class="bg-paper border-line absolute inset-x-0 top-full flex flex-col items-start gap-1 border-b px-[var(--pad-wrap-x)] py-4"
+        >
+          {
+            [...links, { label: "Blog", href: base + "blog" }].map((link) => (
+              <a
+                href={link.href}
+                class={`${linkClass} flex min-h-11 items-center`}
+              >
+                {link.label}
+              </a>
+            ))
+          }
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noopener"
+            class={`${linkClass} flex min-h-11 items-center`}
+          >
+            GitHub
+          </a>
+        </div>
+      </details>
     </div>
   </nav>
 </header>

@@ -9,14 +9,18 @@ export function CostMeter() {
   return (
     <aside
       aria-label="Session usage"
-      className="mt-8 rounded-xl border border-neutral-200 bg-white p-3 text-xs sm:fixed sm:right-4 sm:bottom-4 sm:z-40 sm:mt-0 sm:w-56"
+      className="card mt-8 w-full max-w-[17rem] p-4 print:hidden"
     >
-      <p className="font-medium text-neutral-900">This session</p>
-      <p className="mt-1 text-neutral-600">
-        {fmt(state.tokensIn)} in · {fmt(state.tokensOut)} out ·{" "}
-        <span className="text-neutral-900">€{state.costEur.toFixed(2)}</span>
+      <p className="mono-label mb-0">This session</p>
+      <p aria-live="polite" className="mt-1.5 flex items-baseline gap-1.5">
+        <span className="font-display text-[1.25rem] leading-none font-bold tracking-[-0.02em]">
+          €{state.costEur.toFixed(2)}
+        </span>
+        <span className="font-mono text-[length:var(--text-xs)] text-ink-soft tabular-nums">
+          {fmt(state.tokensIn)} in · {fmt(state.tokensOut)} out
+        </span>
       </p>
-      <p className="mt-1 text-[11px] leading-snug text-neutral-500">
+      <p className="mt-2 text-[length:var(--text-xs)] leading-snug text-ink-soft">
         Real usage, billed by Anthropic to your key.
       </p>
     </aside>

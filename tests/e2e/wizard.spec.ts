@@ -385,11 +385,23 @@ test("model is selectable on gate and switchable during generation", async ({
   await opus.click();
   await expect(opus).toHaveAttribute("data-state", "checked");
   await expect(page.locator("header")).toContainText("Best strategy");
-  // visual feedback: the selected card border carries the accent color
-  const border = await page
-    .locator('label[for="claude-opus-5"]')
-    .evaluate((el) => getComputedStyle(el).borderColor);
-  expect(border).toContain("0.508");
+  // visual feedback: the selected card border carries the accent color, the
+  // unselected ones keep the hairline. Compared, not hardcoded — the accent
+  // token is a design decision, this test only guards that selection shows.
+  const borderOf = (id: string) =>
+    page
+      .locator(`label[for="${id}"]`)
+      .evaluate((el) => getComputedStyle(el).borderColor);
+  const [selected, sonnet, haiku] = await Promise.all([
+    borderOf("claude-opus-5"),
+    borderOf("claude-sonnet-5"),
+    borderOf("claude-haiku-4-5"),
+  ]);
+  // Every unselected card keeps one and the same hairline, and only the
+  // selected one departs from it — so the difference is caused by selection,
+  // not by one card happening to be styled differently.
+  expect(sonnet).toBe(haiku);
+  expect(selected).not.toBe(sonnet);
 
   // through to generation with a fake key, switch model there
   await page.getByLabel("Your Anthropic API key").fill(KEY);

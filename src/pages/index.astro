@@ -10,6 +10,8 @@ import Faq from "../components/landing/Faq.astro";
 import FinalCta from "../components/landing/FinalCta.astro";
 import Footer from "../components/landing/Footer.astro";
 
+const base = import.meta.env.BASE_URL;
+
 const appSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -32,14 +34,40 @@ const appSchema = {
   description="Answer 8 questions, get a complete 90-day marketing campaign: channel plan, weekly calendar, ready-to-paste copy. Free — bring your own Claude API key."
 >
   <Nav />
-  <main>
-    <Hero />
-    <HowItWorks />
-    <Features />
-    <Comparison />
-    <Samples />
-    <Faq />
-    <FinalCta />
+  <main id="main" tabindex="-1" class="scroll-mt-[72px]">
+    {
+      /* The hero fills the fold (justify-between drops the stripband onto the
+         fold line) so the sticky CTA in the wrapper below starts off-screen
+         instead of covering "How it works" at scroll 0. */
+    }
+    <div class="flex min-h-[calc(100svh-72px)] flex-col justify-between">
+      <Hero />
+    </div>
+    {
+      /* Everything below the hero shares one wrapper so the sticky CTA can pin
+         to the viewport bottom without a scroll listener (design contract §7). */
+    }
+    <div>
+      <HowItWorks />
+      <Samples />
+      <Features />
+      <Comparison />
+      <Faq />
+      <FinalCta />
+
+      <div class="sticky-cta">
+        <div class="wrap">
+          <p class="msg">
+            Free software. You pay Anthropic ~€1 per campaign.<span
+              >No signup.</span
+            >
+          </p>
+          <a class="btn btn-grad btn-sm" href={base + "app"}>
+            Start a campaign <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </main>
   <Footer />
   <script
@@ -47,4 +75,12 @@ const appSchema = {
     type="application/ld+json"
     set:html={JSON.stringify(appSchema)}
   />
+  <style is:global>
+    /* The pinned CTA covers the bottom ~65px of the viewport while scrolling,
+       so anchor jumps and keyboard focus must stop short of it. :has() keeps
+       this to pages that actually carry the bar. */
+    :root:has(.sticky-cta) {
+      scroll-padding-bottom: 5rem;
+    }
+  </style>
 </Base>

@@ -1,17 +1,126 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   FONTS — self-hosted, /public/fonts. Never add a font CDN.
+   latin-ext comes FIRST so the browser keeps it for ā/č/ē/ģ/ī/ķ/ļ/ņ/š/ū/ž.
+   The url() stays root-absolute: the Vite/Tailwind pipeline rewrites it to
+   /Kampa/fonts/… in dist/. Do not "fix" it to a relative path.
+--------------------------------------------------------------------------- */
 @font-face {
-  font-family: "Schibsted Grotesk";
+  font-family: "Space Grotesk";
   font-style: normal;
-  font-weight: 400 900;
+  font-weight: 300 700;
   font-display: swap;
-  src: url("/fonts/schibsted-grotesk-latin-variable.woff2") format("woff2");
+  src: url("/fonts/space-grotesk-latin-ext-var.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/fonts/space-grotesk-latin-var.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-latin-ext-var.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-latin-var.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/plex-mono-500-latin-ext.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/plex-mono-500-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/plex-mono-600-latin-ext.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/plex-mono-600-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
 
 @theme inline {
-  --font-sans:
-    "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-heading: var(--font-sans);
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-heading: var(--font-display);
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --color-paper: var(--paper);
+  --color-paper-dim: var(--paper-dim);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-violet: var(--violet);
+  --color-coral: var(--coral);
+  --color-orange: var(--orange);
+  --color-violet-ink: var(--violet-ink);
+  --color-coral-ink: var(--coral-ink);
+  --color-orange-ink: var(--orange-ink);
+  --color-dark: var(--dark);
+  --color-dark-line: var(--dark-line);
+
+  --shadow-card: var(--shadow-card);
+  --radius-pill: var(--radius-pill);
+
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -53,49 +162,781 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* ---- ink & paper ---- */
+  --ink: oklch(0.1985 0.0119 285.26); /* #15151b */
+  --ink-soft: oklch(0.5319 0.0031 286.29); /* #6c6c6e */
+  --ink-faint: oklch(0.587 0.003 286.31); /* #7c7c7e — non-text only */
+  --paper: oklch(0.982 0.0041 91.45); /* #faf9f6 */
+  --paper-dim: oklch(0.952 0.0083 91.48); /* #f1efe9 */
+  --line: oklch(0.9069 0.0029 84.56); /* #e1e0de */
+  --line-a: color-mix(in oklab, var(--ink) 11%, transparent);
+
+  /* ---- brand accents ---- */
+  --violet: oklch(0.5786 0.2468 288.24); /* #7c4dff */
+  --coral: oklch(0.6608 0.1575 8.49); /* #e0637f */
+  --orange: oklch(0.7446 0.1634 51.66); /* #fb8a3c */
+  /* text-safe twins — required for any accent-colored TEXT */
+  --violet-ink: oklch(0.4965 0.2383 284.97); /* #5f35e0 */
+  --coral-ink: oklch(0.5087 0.1431 8.56); /* #a63a55 */
+  --orange-ink: oklch(0.5224 0.129 48.19); /* #a34e18 */
+  --violet-tint: color-mix(in oklab, var(--violet) 12%, transparent);
+  --coral-tint: color-mix(in oklab, var(--coral) 14%, transparent);
+  --orange-tint: color-mix(in oklab, var(--orange) 16%, transparent);
+  --violet-wash: color-mix(in oklab, var(--violet) 6%, transparent);
+
+  /* ---- the gradient ---- */
+  --grad-angle: 100deg;
+  --grad: linear-gradient(
+    var(--grad-angle),
+    var(--violet) 0%,
+    var(--coral) 55%,
+    var(--orange) 100%
+  );
+  /* the ONLY gradient allowed under white text */
+  --grad-strong: linear-gradient(
+    var(--grad-angle),
+    var(--violet-ink) 0%,
+    var(--coral-ink) 55%,
+    var(--orange-ink) 100%
+  );
+  --grad-wash: linear-gradient(
+    var(--grad-angle),
+    color-mix(in oklab, var(--violet) 7%, transparent),
+    color-mix(in oklab, var(--coral) 6%, transparent),
+    color-mix(in oklab, var(--orange) 7%, transparent)
+  );
+
+  /* ---- dark band ---- */
+  --dark: oklch(0.18 0.0102 285.33); /* #111116 */
+  --dark-line: color-mix(in oklab, white 12%, transparent);
+  --dark-ink-soft: color-mix(in oklab, white 78%, transparent);
+
+  /* ---- shadcn/Tailwind semantic tokens ---- */
+  --background: var(--paper);
+  --foreground: var(--ink);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: var(--ink);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.508 0.105 165.6);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.508 0.105 165.6);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --secondary: var(--paper-dim);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-dim);
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--paper-dim);
+  --accent-foreground: var(--ink);
+  --destructive: var(--coral-ink);
+  --border: var(--line);
+  /* --input is the *only* indicator of an unfocused field/checkbox/radio, so it
+     must clear WCAG 1.4.11 (3:1) as a UI component — it is NOT a hairline.
+     Measured: 3.54:1 on #fff, 3.36:1 on --paper, 3.08:1 on --paper-dim.
+     Decorative hairlines use --border / --line (1.3:1) and that is fine. */
+  --input: oklch(0.6285 0.0031 286.29); /* #88888a */
+  --ring: var(--violet);
+
+  --chart-1: var(--violet);
+  --chart-2: var(--coral);
+  --chart-3: var(--orange);
+  --chart-4: var(--ink-faint);
+  --chart-5: var(--paper-dim);
+
+  --radius: 0.875rem; /* 14px */
+  --radius-input: 0.625rem; /* 10px */
+  --radius-chip: 0.5rem; /* 8px */
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 2px color-mix(in oklab, var(--ink) 4%, transparent);
+
+  --wrap: 1180px;
+  --wrap-doc: 960px;
+  --wrap-form: 640px;
+
+  --sidebar: var(--paper-dim);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: var(--paper-dim);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--violet);
+
+  /* ---- type scale ---- */
+  --text-h1: clamp(2.375rem, 1.55rem + 3.4vw, 3.25rem); /* 38 → 52px */
+  --text-h2: clamp(1.625rem, 1.2rem + 1.75vw, 2.125rem); /* 26 → 34px */
+  --text-h2-doc: clamp(1.375rem, 1.2rem + 0.72vw, 1.625rem); /* 22 → 26px */
+  --text-h3: clamp(1.0625rem, 0.96rem + 0.42vw, 1.21875rem); /* 17 → 19.5px */
+  --text-h4: 1.03125rem; /* 16.5px */
+  --text-lead: clamp(1rem, 0.95rem + 0.22vw, 1.09375rem); /* 16 → 17.5px */
+  --text-body: 1rem;
+  --text-body-app: 0.96875rem; /* 15.5px */
+  --text-sm: 0.8625rem; /* 13.8px */
+  --text-xs: 0.78125rem; /* 12.5px */
+  --text-mono-label: 0.71875rem; /* 11.5px */
+  --text-mono-xs: 0.65625rem; /* 10.5px */
+
+  --lh-h1: 1.06;
+  --lh-h2: 1.15;
+  --lh-h3: 1.25;
+  --lh-body: 1.55;
+  --lh-tight: 1.35;
+  --tracking-display: -0.02em;
+  --tracking-label: 0.12em;
+  --tracking-th: 0.06em;
+
+  /* ---- spacing ---- */
+  --pad-section: clamp(3.5rem, 2rem + 6vw, 6rem); /* 56 → 96px */
+  --pad-wrap-x: clamp(1.25rem, 0.6rem + 2.6vw, 2rem); /* 20 → 32px */
+  --gap-card: 1.375rem;
+  --gap-grid: 1.25rem;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
+    @apply border-border;
   }
   html {
-    @apply font-sans;
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    /* clears the sticky bottom CTA bar on anchor/focus scroll */
+    scroll-padding-bottom: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--foreground);
+  }
+  a {
+    color: inherit;
+  }
+  :focus-visible {
+    outline: 2px solid var(--violet);
+    outline-offset: 2px;
+  }
+  .band-dark :focus-visible {
+    outline-color: #fff;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--violet) 22%, transparent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   NAMED CLASSES.
+   In @layer components (not unlayered): unlayered CSS would *beat* Tailwind
+   utilities, so `class="btn px-8"` would ignore px-8. components sits above
+   base and below utilities, which is the intent of the design contract.
+--------------------------------------------------------------------------- */
+@layer components {
+  /* ============ layout ============ */
+  .wrap {
+    max-width: var(--wrap);
+    margin-inline: auto;
+    padding-inline: var(--pad-wrap-x);
+  }
+  .wrap-doc {
+    max-width: var(--wrap-doc);
+    margin-inline: auto;
+    padding-inline: var(--pad-wrap-x);
+  }
+  .wrap-form {
+    max-width: var(--wrap-form);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+  .section {
+    padding-block: var(--pad-section);
+  }
+  .section-dim {
+    background: var(--paper-dim);
+  }
+
+  .section-head {
+    max-width: 640px;
+    margin-bottom: 52px;
+  }
+  .section-head h2 {
+    font-size: var(--text-h2);
+    line-height: var(--lh-h2);
+  }
+  .section-head > p {
+    margin: 14px 0 0;
+    color: var(--ink-soft);
+    font-size: var(--text-lead);
+  }
+
+  /* skip link — first focusable node in Base.astro */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: var(--radius-pill);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    left: 16px;
+    top: 16px;
+  }
+
+  /* ============ eyebrow + mono label ============ */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-label);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--grad);
+    flex: none;
+  }
+  .band-dark .eyebrow {
+    color: var(--dark-ink-soft);
+  }
+
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-label);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 14px;
+  }
+
+  /* ============ card ============ */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+  }
+  .card-dim {
+    background: var(--paper-dim);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  /* Hairlines live on the cells, not on a background showing through 1px
+     gaps: an odd item count would otherwise leave the trailing empty cell
+     as a solid --line block. */
+  .card-grid {
+    display: grid;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .card-grid > * {
+    background: var(--card);
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+    margin: -1px 0 0 -1px;
+  }
+
+  /* ============ buttons ============ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.90625rem;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--ink);
+    transition:
+      background-color 0.15s,
+      border-color 0.15s,
+      opacity 0.15s;
+  }
+  .btn-sm {
+    padding: 9px 16px;
+    font-size: 0.84375rem;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: #000;
+  }
+  .btn-grad {
+    background: var(--grad-strong);
+    color: #fff;
+    border-color: transparent;
+  }
+  .btn-grad:hover {
+    filter: saturate(1.12) brightness(1.06);
+  }
+  .btn-ghost {
+    border-color: var(--line);
+    color: var(--ink);
+    background: transparent;
+  }
+  .btn-ghost:hover {
+    border-color: var(--ink-soft);
+    background: var(--paper-dim);
+  }
+  .band-dark .btn-ghost {
+    border-color: var(--dark-line);
+    color: #fff;
+  }
+  .band-dark .btn-ghost:hover {
+    background: rgb(255 255 255 / 0.07);
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  /* Solid buttons get a grey *fill* instead of a fade: white-on-ink at any
+     opacity reads as "faded ink" and drops to 2.6:1 (primary) / 1.9:1 (grad).
+     Flat --ink-soft keeps the label at 5.24:1 and still reads as off. */
+  .btn-primary:disabled,
+  .btn-primary[aria-disabled="true"],
+  .btn-grad:disabled,
+  .btn-grad[aria-disabled="true"] {
+    opacity: 1;
+    background: var(--ink-soft);
+    color: #fff;
+  }
+  @media (pointer: coarse) {
+    .btn {
+      min-height: 44px;
+    }
+    .btn-sm {
+      min-height: 44px;
+      padding-block: 11px;
+    }
+  }
+
+  /* ============ chips, pills, tags, badges ============ */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--paper-dim);
+    border-radius: var(--radius-chip);
+    padding: 9px 12px;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .chip-grad {
+    background: linear-gradient(
+      var(--grad-angle),
+      color-mix(in oklab, var(--violet) 14%, transparent),
+      color-mix(in oklab, var(--orange) 14%, transparent)
+    );
+  }
+
+  .chip-toggle {
+    padding: 8px 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--line);
+    font-size: 0.8125rem;
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .chip-toggle:hover {
+    border-color: var(--ink-soft);
+  }
+  .chip-toggle[aria-pressed="true"],
+  .chip-toggle.is-on {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  @media (pointer: coarse) {
+    .chip-toggle {
+      min-height: 44px;
+    }
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-size: 0.71875rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+  }
+  .pill-continue {
+    background: var(--violet-tint);
+    color: var(--violet-ink);
+  }
+  .pill-reduce {
+    background: var(--coral-tint);
+    color: var(--coral-ink);
+  }
+  .pill-avoid {
+    background: var(--orange-tint);
+    color: var(--orange-ink);
+  }
+  .pill-neutral {
+    background: color-mix(in oklab, var(--ink) 6%, transparent);
+    color: var(--ink-soft);
+  }
+
+  .badge-mono {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    background: var(--violet-tint);
+    color: var(--violet-ink);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    padding: 4px 9px;
+    border-radius: 7px;
+    margin: 2px 4px 2px 0;
+  }
+  .tag-ig {
+    background: color-mix(in oklab, var(--violet) 10%, transparent);
+    color: var(--violet-ink);
+  }
+  .tag-gbp {
+    background: var(--coral-tint);
+    color: var(--coral-ink);
+  }
+  .tag-em {
+    background: var(--orange-tint);
+    color: var(--orange-ink);
+  }
+
+  /* ============ stats ============ */
+  .stat {
+    padding: 20px;
+  }
+  .stat .big {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.625rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .stat .lbl {
+    margin-top: 6px;
+    font-size: var(--text-xs);
+    color: var(--ink-soft);
+  }
+  .snap {
+    padding: 18px 20px;
+  }
+  .snap .k {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .snap .v {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1875rem;
+    margin-top: 6px;
+    letter-spacing: -0.02em;
+  }
+
+  /* ============ bars ============ */
+  .bar-track {
+    height: 8px;
+    border-radius: 5px;
+    background: color-mix(in oklab, var(--ink) 8%, transparent);
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    background: var(--grad);
+  }
+  .bar-fill-flat {
+    background: var(--ink-faint);
+  }
+  .band-dark .bar-track {
+    background: rgb(255 255 255 / 0.09);
+  }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 9.375rem 1fr 3.5rem;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.8125rem;
+  }
+  @media (max-width: 520px) {
+    .bar-row {
+      grid-template-columns: 1fr auto;
+    }
+    .bar-row .bar-track {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ============ gradient rules & bands ============ */
+  .rule-grad {
+    border: 0;
+    height: 2px;
+    background: var(--grad);
+    border-radius: 2px;
+    margin: 0;
+  }
+  .edge-grad {
+    background-image: var(--grad);
+    background-repeat: no-repeat;
+    background-size: 4px 100%;
+    background-position: left center;
+    padding-left: calc(1.75rem + 4px);
+  }
+  .grad-text {
+    background-image: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+    .grad-text {
+      color: var(--violet-ink);
+      background: none;
+    }
+  }
+  .band-dark {
+    background: var(--dark);
+    color: #fff;
+  }
+  .band-dark h1,
+  .band-dark h2,
+  .band-dark h3 {
+    color: #fff;
+  }
+  .band-dark p {
+    color: var(--dark-ink-soft);
+  }
+  .band-dark .card {
+    background: rgb(255 255 255 / 0.05);
+    border-color: var(--dark-line);
+    box-shadow: none;
+  }
+
+  /* ============ data rows ============ */
+  .data-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+    font-size: var(--text-sm);
+  }
+  .data-row:first-of-type {
+    border-top: none;
+  }
+  .data-row .amt {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+  .band-dark .data-row {
+    border-color: var(--dark-line);
+  }
+
+  /* ============ accordion (native, JS-free) ============ */
+  .acc {
+    border-top: 1px solid var(--line);
+  }
+  .acc:last-of-type {
+    border-bottom: 1px solid var(--line);
+  }
+  .acc > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 22px 0;
+    min-height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    font-weight: 600;
+    font-size: 0.96875rem;
+    color: var(--ink);
+  }
+  .acc > summary::-webkit-details-marker {
+    display: none;
+  }
+  .acc > summary::after {
+    content: "+";
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--ink-soft);
+    flex: none;
+    line-height: 1;
+  }
+  .acc[open] > summary::after {
+    content: "–";
+  }
+  .acc .acc-body {
+    padding: 0 0 24px;
+    color: var(--ink-soft);
+    font-size: 0.925rem;
+    max-width: 680px;
+  }
+
+  /* ============ translucent bars ============ */
+  .bar-blur {
+    background: color-mix(in oklab, var(--paper) 88%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  @supports not (
+    (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+  ) {
+    .bar-blur {
+      background: var(--paper);
+    }
+  }
+
+  /* ============ sticky CTA (JS-free) ============ */
+  .sticky-cta {
+    position: sticky;
+    bottom: 0;
+    z-index: 40;
+    background: color-mix(in oklab, var(--dark) 92%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+  }
+  @supports not (
+    (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+  ) {
+    .sticky-cta {
+      background: var(--dark);
+    }
+  }
+  .sticky-cta .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 14px;
+  }
+  .sticky-cta .msg {
+    color: #fff;
+    font-size: 0.875rem;
+  }
+  .sticky-cta .msg span {
+    color: rgb(255 255 255 / 0.62);
+    margin-left: 8px;
+  }
+  @media (max-width: 640px) {
+    .sticky-cta .msg {
+      display: none;
+    }
+    .sticky-cta .wrap {
+      justify-content: center;
+    }
+  }
+
+  /* ============ misc ============ */
+  .stripband {
+    border-block: 1px solid var(--line);
+    padding-block: 20px;
+    text-align: center;
+  }
+  .stripband p {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .divider-or {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-block: 28px;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-label);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .divider-or::before,
+  .divider-or::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .callout {
+    padding: 14px 16px;
+    border-radius: var(--radius-input);
+    background: var(--paper-dim);
+    font-size: var(--text-xs);
+    color: var(--ink-soft);
+    display: flex;
+    gap: 10px;
+  }
+  .callout-violet {
+    background: var(--violet-wash);
   }
 }
 
@@ -115,6 +956,8 @@
   header,
   nav,
   button,
+  .side,
+  .sticky-cta,
   [data-slot="tabs-list"],
   [data-print-hide] {
     display: none !important;
@@ -123,9 +966,11 @@
   main {
     max-width: none;
     padding: 0;
+    border-left: none;
   }
 
   [data-slot="card"],
+  .card,
   table,
   tr,
   li {
@@ -139,9 +984,42 @@
   }
 
   /* Ring/shadow tricks print as grey mush; a hairline reads better. */
-  [data-slot="card"] {
+  [data-slot="card"],
+  .card,
+  .card-dim {
     box-shadow: none;
     border: 1px solid #ccc;
+  }
+
+  section.rep {
+    border-bottom: 1px solid #ccc;
+    page-break-inside: auto;
+  }
+
+  /* Gradient text is invisible on paper. */
+  .grad-text,
+  .band-dark {
+    background: none !important;
+    color: #000 !important;
+    -webkit-text-fill-color: #000;
+  }
+
+  .bar-fill,
+  .tag,
+  .pill,
+  .badge-mono {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @supports not (print-color-adjust: exact) {
+    .bar-fill,
+    .tag,
+    .pill,
+    .badge-mono {
+      background: #e6e6e6 !important;
+      color: #000 !important;
+    }
   }
 
   a[href^="http"]::after {
@@ -155,5 +1033,13 @@
    custom variants exist; Radix actually emits data-state/data-orientation. */
 @custom-variant data-checked (&[data-state="checked"]);
 @custom-variant data-unchecked (&[data-state="unchecked"]);
+@custom-variant data-active (&[data-state="active"]);
 @custom-variant data-horizontal (&[data-orientation="horizontal"]);
 @custom-variant data-vertical (&[data-orientation="vertical"]);
+
+/* Kampa has no dark theme. Tailwind v4's stock `dark:` variant is
+   prefers-color-scheme based, so on a dark-mode OS the leftover `dark:`
+   utilities in src/components/ui/* would silently retheme the /app form
+   controls against a light-only site. Rebinding the variant to a `.dark`
+   class — which nothing ever sets — makes every one of them inert. */
+@custom-variant dark (&:where(.dark, .dark *));
