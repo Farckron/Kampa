@@ -2,7 +2,7 @@
 
 > Kampa is a free AI campaign planner for small businesses. It interviews you
 > in eight questions — what you sell, who buys it, your budget, your hours —
-> then builds a complete 90-day marketing campaign: channel plan with the
+> then builds a complete 30-day marketing campaign: channel plan with the
 > rejections explained, budget split, weekly calendar, and ready-to-paste copy.
 > The software is free and open source; you bring your own Claude API key and
 > pay Anthropic roughly €1 per campaign. It is a static site with no backend:
@@ -14,14 +14,14 @@
 - [/](/): Landing page — what Kampa builds, how it works, how it compares to
   ChatGPT and paid tools, FAQ.
 - [/app](/app): The planner itself — the 8-question interview and the generated
-  90-day campaign. Runs entirely client-side with your own API key.
+  30-day campaign. Runs entirely client-side with your own API key.
 - [/samples](/samples): Index of three complete sample campaign plans.
-- [/samples/riga-coffee-shop](/samples/riga-coffee-shop): 90-day plan for an
+- [/samples/riga-coffee-shop](/samples/riga-coffee-shop): 30-day plan for an
   owner-run specialty coffee shop in Riga — €400/month, 4 hours a week,
   Instagram + Google Business Profile + email.
-- [/samples/hair-salon](/samples/hair-salon): 90-day plan for a two-chair hair
+- [/samples/hair-salon](/samples/hair-salon): 30-day plan for a two-chair hair
   salon in Jelgava — €250/month, 3 hours a week, filling the midweek chairs.
-- [/samples/ecommerce-boutique](/samples/ecommerce-boutique): 90-day plan for a
+- [/samples/ecommerce-boutique](/samples/ecommerce-boutique): 30-day plan for a
   solo linen homeware boutique shipping across the EU — €700/month, 6 hours a
   week, Pinterest + email + Instagram.
 - [/faq](/faq): What it costs, what you get, where your API key lives, whether

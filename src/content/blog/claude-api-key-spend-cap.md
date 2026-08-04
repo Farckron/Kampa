@@ -31,7 +31,7 @@ This applies to every tool that asks you to bring your own API key, not just Kam
 
 ## What does a campaign actually cost?
 
-A full campaign plan in Kampa typically costs under €1 on the default model. A real test run, generating a complete 90-day plan for a small business, came in under €0.50.
+A full campaign plan in Kampa typically costs under €1 on the default model. A real test run, generating a complete 30-day plan for a small business, came in under €0.50.
 
 That number holds because the work is one long conversation, not a running service. You describe your business, your budget and your weekly hours, the model writes a plan, and the spending stops. There is no background usage, no polling, nothing accruing while the tab sits open. If you generate ten plans across a month while trying different angles, you are still comfortably inside a $10 cap.
 
@@ -51,4 +51,4 @@ Three rules cover almost everything.
 
 The [illustrated key guide](/Kampa/guide/api-key) walks through the same five steps with pictures of each console screen. If you have a different question first, such as what happens to your data or which model is used, the [FAQ](/Kampa/faq) is probably faster.
 
-Kampa is a free, open-source campaign planner that runs entirely in your browser. It takes your business description, your budget and the hours you can actually spend per week, and produces a 90-day marketing plan that respects both constraints instead of assuming an agency retainer. You bring your own Claude API key, so you pay Anthropic directly, usually under €1 per campaign, and nothing you type is stored on any server. Plans export as Markdown, PDF or calendar files. If you have a capped key, [open the app](/Kampa/app) and generate one.
+Kampa is a free, open-source campaign planner that runs entirely in your browser. It takes your business description, your budget and the hours you can actually spend per week, and produces a 30-day marketing plan that respects both constraints instead of assuming an agency retainer. You bring your own Claude API key, so you pay Anthropic directly, usually under €1 per campaign, and nothing you type is stored on any server. Plans export as Markdown, PDF or calendar files. If you have a capped key, [open the app](/Kampa/app) and generate one.

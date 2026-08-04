@@ -51,7 +51,7 @@ Week 3 is the physical thing. Order the loyalty cards, print the poster, brief w
 
 Week 4 is the read. Log the numbers against week 1, spend the €40 test budget on whatever moved, write the first email. Roughly three hours.
 
-Then repeat that rhythm for months two and three. Ninety days at €500 is €1,500, which is enough to see whether a channel works. Thirty days is not.
+That is one month, and it is the unit worth planning in: €500 buys enough to see which channel is worth another €500. Then repeat the rhythm, keeping what moved the number and cutting what did not.
 
 ## Where do owners waste the first €500?
 

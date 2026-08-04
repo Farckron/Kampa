@@ -1,7 +1,7 @@
 # Kampa
 
 **Free AI campaign planner for small businesses.** Answer 8 questions, get a
-complete 90-day marketing campaign — strategy with channel decisions (and
+complete 30-day marketing campaign — strategy with channel decisions (and
 rejections), a week-by-week calendar, and ready-to-paste copy in your own
 voice. Runs entirely in your browser with your own Claude API key.
 
@@ -41,10 +41,10 @@ Your API key and business data never leave your browser:
 1. **Demo first** — see a finished campaign for a Riga coffee shop without a
    key: [try the demo](https://farckron.github.io/Kampa/app?demo=1).
 2. **Intake** — 8 questions: what you sell, who buys, region, monthly budget,
-   weekly hours, current channels, your 90-day goal, samples of your writing.
+   weekly hours, current channels, your 30-day goal, samples of your writing.
 3. **Three generation stages**, each streamed live with a running cost meter:
    strategy (channels chosen *and rejected*, budget split, KPIs) →
-   12-week calendar (fits your stated hours) → copy for every planned asset.
+   4-week calendar (fits your stated hours) → copy for every planned asset.
 4. **Export** — Markdown, print-to-PDF, or `.ics` straight into your
    calendar. The plan is a file you own.
 
