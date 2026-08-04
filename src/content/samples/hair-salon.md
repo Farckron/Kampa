@@ -1,5 +1,5 @@
 ---
-title: "90-day plan: filling the midweek chairs"
+title: "30-day plan: filling the midweek chairs"
 business: "Two-chair hair salon in Jelgava, run by the owner and one stylist"
 budget: 250
 hours: 3
@@ -39,33 +39,25 @@ Who we are not chasing: students wanting a €12 trim, brides wanting a full wed
 
 | Line | Monthly | What it actually buys |
 | --- | --- | --- |
-| Meta boosted posts (Jelgava + 10 km, women 28-48) | €120 | 9 boosts of €40 across the 90 days, starting week 3, roughly 5,500 to 7,000 reach per boost |
+| Meta boosted posts (Jelgava + 10 km, women 28-48) | €120 | 3 boosts of €40 across the 30 days, starting week 2, roughly 5,500 to 7,000 reach per boost |
 | Tue-Thu "klusās dienas" discount, 10 slots x €5 | €50 | The €5 off midweek colour and cut, absorbed from margin |
 | Referral credit, 5 x €8 | €40 | €8 off the referrer's next visit when a named friend books |
 | Review thank-yous, ~25 x €1.10 | €28 | Coffee from the machine next door or a Laima bar for clients who leave a review |
 | Canva Pro | €12 | Reusable post templates so weekly content takes 20 minutes, not 60 |
 | **Total** | **€250** | |
 
-Acquisition maths behind this: 9 boosts of €40 is €360 of boost spend over 90 days, and at roughly €15 per first-time booking gives about 24 new clients, of whom 60 to 65 percent rebook within the window. That is the 15 recurring clients. The remaining midweek gap is closed by moving existing Saturday regulars, which costs nothing but the ask.
+Acquisition maths behind this: 3 boosts of €40 is €120 of boost spend over the 30 days, and at roughly €15 per first-time booking gives about 8 new clients, of whom 60 to 65 percent rebook inside the window. That is the 5 recurring clients. The rest of the midweek gap is closed by moving existing Saturday regulars, which costs nothing but the ask.
 
-## The 12 weeks
+## The four weeks
 
 Weekly baseline once the setup is done: two Instagram posts, one Facebook group appearance, review asks in the chair. Everything below fits inside 3 hours.
 
 | Week | Focus | Actions | Time |
 | --- | --- | --- | --- |
 | 1 | Fix the shopfront | Complete Google Business Profile: correct Tue-Thu hours, services with prices, 10 photos of real work. Photograph 8 finished clients on your phone by the window, no flash. | 2h 30m |
-| 2 | Ask the existing base | Message the 40 most regular clients personally about the Tue-Thu €5 discount and ask 10 of them for a Google review. Print 50 QR review cards to hand out with the receipt. | 3h |
+| 2 | Ask the existing base | Message the 40 most regular clients personally about the Tue-Thu €5 discount and ask 10 of them for a Google review. Print 50 QR review cards to hand out with the receipt. Boost the best photo already on the feed (€40). | 3h |
 | 3 | First boost live | Write and boost post 1 (€40): before/after root colour, caption ends with "Otrdien un trešdien vēl ir brīvas vietas". Reply to every comment within 24h. | 2h 30m |
-| 4 | Enter the groups | Join Jelgavnieki and Jelgavas mammas. Answer 3 hair questions with genuinely useful replies, no self-promotion. Post 2 to Instagram and boost it (€40). | 2h 40m |
-| 5 | Referral launch | Tell every client in the chair about the €8 referral credit and write it on the back of their next-appointment card. Boost the referral announcement (€40). | 2h 30m |
-| 6 | Midweek proof | Post a real Wednesday 15:00 slot as a Story with a booking link. Ask 8 more clients for reviews. Check the 30-day Google Insights numbers. Boost the week 3 before/after again, to a fresh audience (€40). | 2h 40m |
-| 7 | First group post | With moderator permission, one honest post in Jelgavnieki: three before/afters, prices stated, midweek availability named. Reply to every comment that evening. | 3h |
-| 8 | Double down | Boost the post that performed best in weeks 3 to 7 (€40) instead of making a new one. Post 2 to Instagram. | 2h |
-| 9 | Rebooking discipline | Every client leaves with the next appointment already in the book, offered Tue-Thu first. Add 5 fresh Google photos. Boost the best-performing photo of weeks 1 to 8 (€40). | 2h 40m |
-| 10 | Winter colour angle | Post a "roots before the holidays" series, three posts, and boost one (€40). Book the December weeks now while people are thinking about it. | 3h |
-| 11 | Second group appearance | Answer questions in the groups again, then a short post about holiday availability. Ask the 6 newest clients for reviews. Boost the holiday-availability post (€40). | 2h 40m |
-| 12 | Count and cut | Pull the three numbers below. Kill whichever of the three channels produced least, move its budget to the winner, repeat the 12 weeks. One last boost, on the best post of the quarter (€40). | 2h 10m |
+| 4 | Enter the groups | Join Jelgavnieki and Jelgavas mammas. Answer 3 hair questions with genuinely useful replies, no self-promotion. Post 2 to Instagram and boost it (€40). Tell every client in the chair about the €8 referral credit and write it on the back of their next-appointment card. | 3h |
 
 ## Copy you can paste
 
@@ -108,8 +100,8 @@ Weekly baseline once the setup is done: two Instagram posts, one Facebook group 
 
 ## How you'll know it's working
 
-**1. Tue-Thu chair occupancy: 42% now, 65% by week 12.** Two stylists, six appointment slots each per day, Tuesday to Thursday, is 36 slots a week. You currently fill about 15. Target is 24. Count it every Sunday evening from the appointment book, one number in a notebook, and do not average it across the whole week or you will hide the problem.
+**1. Tue-Thu chair occupancy: 42% now, 55% by week 4.** Two stylists, six appointment slots each per day, Tuesday to Thursday, is 36 slots a week. You currently fill about 15. Target is 20. Count it every Sunday evening from the appointment book, one number in a notebook, and do not average it across the whole week or you will hide the problem.
 
-**2. Google reviews: 11 now, 40 or more by week 12, rating not below 4.8.** Check the Google Business Profile app on your phone on the first of each month, and check "how people found you" in the same screen: discovery searches should roughly double from around 180 to 350 a month. If reviews stall below 25 by week 6, the ask in the chair is not happening and no budget change will fix that.
+**2. Google reviews: 11 now, 25 or more by week 4, rating not below 4.8.** Check the Google Business Profile app on your phone every Monday, and check "how people found you" in the same screen: discovery searches should climb from around 180 to 250 a month. If reviews stall below 16 by week 2, the ask in the chair is not happening and no budget change will fix that.
 
-**3. New recurring clients: 15 with a second visit inside the 90 days.** A first visit is not a client. Mark every new name in the book with an N and circle it when they come back a second time. Fifteen circles by week 12 is the goal. At €58 average ticket and 7.5 visits a year, those 15 are roughly €6,500 of annual revenue against €750 of spend.
+**3. New recurring clients: 5 with a second visit inside the 30 days.** A first visit is not a client. Mark every new name in the book with an N and circle it when they come back a second time. Five circles by week 4 is the goal. At €58 average ticket and 7.5 visits a year, those 5 are roughly €2,200 of annual revenue against €250 of spend.

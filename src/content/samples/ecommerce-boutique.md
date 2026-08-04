@@ -1,5 +1,5 @@
 ---
-title: "Linen homeware boutique — 90-day plan"
+title: "Linen homeware boutique — 30-day plan"
 business: "Online boutique selling linen homeware, shipped from Riga across the EU, run solo."
 budget: 700
 hours: 6
@@ -37,8 +37,8 @@ Not the target: anyone hunting a €25 linen tea towel, and anyone who needs it 
 
 | Line | €/month | Why |
 | --- | --- | --- |
-| Photography — half-day with a Riga stylist-photographer, monthly (weeks 1, 8, 11) | 200 | 90 usable stills per shoot; feeds Pinterest, email and IG for four weeks |
-| Creator gifting — 4 parcels at cost (COGS + Omniva/DPD), one wave a month (weeks 5, 9, 11) | 180 | 12 parcels over the 90 days: content rights + reach, no flat fees |
+| Photography — half-day with a Riga stylist-photographer (week 1) | 200 | 90 usable stills per shoot; feeds Pinterest, email and IG for four weeks |
+| Creator gifting — 4 parcels at cost (COGS + Omniva/DPD), one wave (week 4) | 180 | 4 parcels in the 30 days: content rights + reach, no flat fees |
 | First-order 10% code — capped | 150 | Covers ~€1,500 of discounted first orders; underspend rolls to props |
 | Props and set materials (Latvian ceramics, dried flax, oak boards) | 60 | Sets that don't repeat; rented look, owned photos |
 | Email platform, up to 2,500 contacts | 45 | Flows + segments; the one recurring tool |
@@ -46,26 +46,18 @@ Not the target: anyone hunting a €25 linen tea towel, and anyone who needs it 
 | Pinterest scheduling + image editing (annual plans, per month) | 25 | Batch-and-forget; 25 pins/week without daily logins |
 | **Total** | **700** | |
 
-## The 12 weeks
+## The four weeks
 
 | Week | Focus | Actions | Time |
 | --- | --- | --- | --- |
 | 1 | Shoot and inventory the assets | Half-day shoot: 6 core SKUs on oak + raw linen backdrop, 90 stills, 30 of them vertical 2:3. Cull to 45 keepers, name files by SKU + room. | 6 h — 3 shoot, 2 cull/edit, 1 file |
 | 2 | Welcome flow live | Write and build 3 emails: day 0 (code LINEN10 + how to measure your duvet), day 2 (the mill, with photos), day 6 (care: wash cold, line dry, it gets softer). Test all three on phone and desktop. | 6 h — 4 write/build, 1 QA, 1 pin batch |
 | 3 | Capture live | Site opt-in live: exit-intent on desktop, 12-second delay on mobile, offer = "Linen sizing card" PDF (EU + UK + US bed sizes, gsm guide). Add opt-in checkbox at checkout. | 5 h — 3 build PDF, 1 popup, 1 pins |
-| 4 | Pinterest rebuild | Cut 9 dead boards, keep 5: Linen bedding, Slow table, Small Baltic homes, Linen care, Studio diary. Upload 40 pins with keyworded descriptions (size + gsm + colour). Set the weekly 25-pin queue. | 6 h — 4 pin/write, 2 board copy |
-| 5 | First campaign + collab wave 1 | Campaign email "Why our duvet covers come in eleven sizes". Ship gifted parcels to 4 creators (2 DE, 1 NL, 1 SE), brief: one photo in their own bedroom, no script. | 6 h — 2 email, 2 outreach, 2 pins |
-| 6 | Instagram proof | Post the mill carousel (7 slides, loom to finished hem). Pin the sizing card in bio. Reply to every comment within 24 h — that is the whole engagement strategy. | 5 h — 2 shoot/edit, 1 write, 2 pins |
-| 7 | Read the data, cut the losers | Pull 30-day Pinterest outbound clicks by pin. Re-pin the top 5 formats, stop making the bottom 5. Fix the two product pages with the worst add-to-cart rate. | 6 h — 2 analysis, 2 page copy, 2 pins |
-| 8 | Second shoot, autumn set | Half-day shoot: bedding in low September light, plus 3 flat-lays for the napkin sets. 90 stills, 40 verticals. | 6 h — 3 shoot, 2 edit, 1 schedule |
-| 9 | Restock story + collab wave 2 | Campaign email "The linen we didn't ship" (the QC-reject story) + IG post from creator photos, with credit. Add a back-in-stock signup to the two sold-out SKUs. Ship 4 more gifted parcels (2 DE, 1 AT, 1 DK). | 6 h — 2 email, 1 IG, 1 build, 2 outreach |
-| 10 | Post-purchase + segment | Build the 2-email post-purchase flow: day 3 care reminder, day 21 review request with a photo ask. Insert cards arrive — start including them in every parcel. Segment the list: opened-but-never-bought gets a one-off "ask me anything about linen" plain-text email from Ieva. | 6 h — 3 build, 2 email, 1 pins |
-| 11 | Third shoot + collab wave 3 | Half-day shoot: the October pre-order set, layered beds and a candle-lit table, 90 stills, 40 verticals. Ship the last 4 gifted parcels (1 DE, 1 NL, 1 FI, 1 AT). | 6 h — 3 shoot, 2 edit, 1 outreach |
-| 12 | Close and set Q4 | October pre-order campaign to the full list, 48-hour early access for subscribers. Write the Q4 pin calendar. Log the numbers against the three KPIs below. | 6 h — 2 campaign, 2 calendar, 2 review |
+| 4 | Pinterest rebuild + collab wave | Cut 9 dead boards, keep 5: Linen bedding, Slow table, Small Baltic homes, Linen care, Studio diary. Upload 40 pins with keyworded descriptions (size + gsm + colour). Set the weekly 25-pin queue. Ship gifted parcels to 4 creators (2 DE, 1 NL, 1 SE), brief: one photo in their own bedroom, no script. | 6 h — 3 pin/write, 1 board copy, 2 outreach |
 
 ## Copy you can paste
 
-### Instagram caption — the mill carousel (Week 6)
+### Instagram caption — the mill carousel
 
 I drove to the mill on Tuesday to argue about thread count and came back with 40 metres of the 240 gsm and a photo of Aivars, who has run that loom for nineteen years.
 
@@ -75,7 +67,7 @@ Swipe for the loom, the raw flax, and the corner that took me three tries.
 
 Sizing card is in the bio if you are trying to work out whether your bed is 155×220 or 200×200. It matters more than the colour.
 
-### Instagram caption — customer photo (Week 9)
+### Instagram caption — customer photo
 
 Maike in Hamburg sent me this and asked if the wrinkles were normal.
 
@@ -85,7 +77,7 @@ If you are still deciding between oatmeal and the deep green: oatmeal hides ever
 
 Photo by @maike.wohnt, shared with her blessing. Thank you for the honest one.
 
-### Email — Week 9 campaign
+### Email — the restock campaign
 
 **Subject:** The linen we didn't ship
 **Preview text:** Eleven metres, one bad batch, and what I learned about the 240 gsm
@@ -112,8 +104,8 @@ Riga
 
 ## How you'll know it's working
 
-**1. Email list: 1,500 contacts by day 90.** Starting at 262. That means about 100 net new per week — roughly 175/month from the site opt-in (3.2% of ~5,500 sessions), 120 from the sizing-card landing page that Pinterest feeds, 90 from creator waves, 30 from checkout opt-in. Check in the email platform, Sunday evening, one number in a spreadsheet. Milestones: 680 by day 30, 1,080 by day 60. Miss day 30 by more than 80 and the problem is the popup offer, not the traffic.
+**1. Email list: 680 contacts by day 30.** Starting at 262. That means about 105 net new per week — roughly 175 from the site opt-in (3.2% of ~5,500 sessions), 120 from the sizing-card landing page that Pinterest feeds, 90 from the creator wave, 30 from checkout opt-in. Check in the email platform, Sunday evening, one number in a spreadsheet. Milestone: 470 by day 14. Miss it by more than 80 and the problem is the popup offer, not the traffic.
 
-**2. Pinterest outbound clicks: 2,800 in the trailing 30 days by day 90.** Currently 410. Check Pinterest Analytics → Outbound clicks, 30-day window, sorted by pin, every Monday. This is the leading indicator for everything else — if it is under 1,400 by day 60, the pins are wrong (bad crop, no keyword in the description) and week 7's cull needs to happen twice as hard.
+**2. Pinterest outbound clicks: 1,200 in the trailing 30 days by day 30.** Currently 410. Check Pinterest Analytics → Outbound clicks, 30-day window, sorted by pin, every Monday. This is the leading indicator for everything else — if it is under 700 by day 14, the pins are wrong (bad crop, no keyword in the description) and the week 4 rebuild needs to go deeper.
 
-**3. Revenue: €6,000 in month 3, with at least €2,100 attributed to email.** Currently €2,800/month. The path: ~6,200 sessions at 1.15% conversion is 71 orders, at the current €85 average order value that is €6,035. Check the store's analytics month-to-date every Monday alongside the email platform's attributed revenue (last click, 5-day window). If sessions hit target but conversion sits under 1.0%, the fix is product-page copy — sizes and gsm above the fold — not more traffic.
+**3. Revenue: €3,800 in month 1, with at least €1,000 attributed to email.** Currently €2,800/month. The path: ~3,900 sessions at 1.15% conversion is 45 orders, at the current €85 average order value that is €3,825. Check the store's analytics month-to-date every Monday alongside the email platform's attributed revenue (last click, 5-day window). If sessions hit target but conversion sits under 1.0%, the fix is product-page copy — sizes and gsm above the fold — not more traffic.
