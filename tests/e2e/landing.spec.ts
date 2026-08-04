@@ -25,7 +25,7 @@ test("sections appear in the designed order", async ({ page }) => {
 test("carries the mockup's section headlines", async ({ page }) => {
   for (const heading of [
     "Built for the owner who does their own marketing.",
-    "Three steps, about fifteen minutes.",
+    "Four steps, about fifteen minutes.",
     "See the risk before you spend, not after.",
     "Three businesses, three budgets.",
     "Six decisions that shaped the product.",
